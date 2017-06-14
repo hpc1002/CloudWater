@@ -1,13 +1,29 @@
 package com.it.cloudwater;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.content.Context;
 
-public class MainActivity extends AppCompatActivity {
+import com.it.cloudwater.base.BaseActivity;
+
+public class MainActivity extends BaseActivity {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void processLogic() {
+
+    }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    protected void loadViewLayout() {
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected Context getActivityContext() {
+        return this;
     }
 }
