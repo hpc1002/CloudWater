@@ -23,4 +23,9 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@color/white</item>
     </style>
+
+    <style name="TextStyle_title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
 </resources>
