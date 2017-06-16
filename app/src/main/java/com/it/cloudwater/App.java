@@ -3,6 +3,8 @@ package com.it.cloudwater;
 import android.app.Activity;
 import android.app.Application;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,18 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        initLeakCanary();
+    }
+    /**
+     * use LeakCanary to check mey leak
+     */
+    private void initLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
 

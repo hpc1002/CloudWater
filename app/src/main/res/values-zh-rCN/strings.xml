@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">CloudWater</string>
     <string name="app_home">首页</string>
-    <string name="app_course">课程</string>
-    <string name="app_community">社区</string>
+    <string name="app_order">订单</string>
+    <string name="app_water_ticket">水票</string>
     <string name="app_me">我的</string>
     <string name="app_login">登录</string>
     <string name="app_register">注册</string>

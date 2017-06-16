@@ -153,4 +153,5 @@
     <color name="rb_text_check">#ff5200</color>
     <color name="ad_color">#66000000</color>
     <color name="rb_check">#6600a3ed</color>
+    <color name="colorGray">#ccc</color>
 </resources>
