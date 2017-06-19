@@ -34,6 +34,7 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
     compile 'com.lzy.net:okgo:3.0.1'
     //以下三个选择添加，okrx和okrx2不能同时使用
     //    compile 'com.lzy.net:okrx:1.0.1'
