@@ -28,4 +28,12 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+    <!--首页底部tabstyle-->
+    <style name="ActivityTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginRight">15dp</item>
+    </style>
 </resources>
