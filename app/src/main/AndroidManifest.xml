@@ -20,9 +20,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -32,6 +30,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".user.CouponActivity" />
+        <activity android:name=".user.InvitationActivity" />
+        <activity android:name=".user.AddressActivity" />
+        <activity android:name=".user.BucketActivity" />
+        <activity android:name=".user.TicketActivity" />
+        <activity android:name=".user.MoreActivity"></activity>
     </application>
 
 </manifest>
