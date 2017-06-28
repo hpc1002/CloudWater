@@ -1,5 +1,6 @@
 package com.it.cloudwater.home.fragment;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,10 +8,12 @@ import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
+import com.it.cloudwater.commodity.DetailActivity;
 import com.it.cloudwater.constant.DataProvider;
 import com.it.cloudwater.home.adapter.BGABannerAdapter;
 import com.it.cloudwater.home.bean.BannerDto;
@@ -35,6 +38,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView recyclerViewCommend;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.next)
+    Button next;
     private ArrayList<BannerDto> bannerList;
 
     @Override
@@ -50,6 +55,12 @@ public class HomeFragment extends BaseFragment {
         hotPaint.setFakeBoldText(true);
         recyclerViewCommend.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerViewCommend.setHasFixedSize(true);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), DetailActivity.class));
+            }
+        });
     }
 
     @Override
@@ -67,6 +78,7 @@ public class HomeFragment extends BaseFragment {
             bannerTitle.add(bannerList.get(i).getBannerTitle());
             bannerImage.add(bannerList.get(i).getImageUrl());
         }
-        homeRecommendBanner.setData(bannerImage,bannerTitle);
+        homeRecommendBanner.setData(bannerImage, bannerTitle);
     }
+
 }

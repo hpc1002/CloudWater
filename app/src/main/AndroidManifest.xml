@@ -35,7 +35,11 @@
         <activity android:name=".user.AddressActivity" />
         <activity android:name=".user.BucketActivity" />
         <activity android:name=".user.TicketActivity" />
-        <activity android:name=".user.MoreActivity"></activity>
+        <activity android:name=".user.MoreActivity" />
+        <activity android:name=".commodity.DetailActivity" />
+        <activity android:name=".commodity.SubmitOrderActivity" />
+        <activity android:name=".pay.PayActivity" />
+        <activity android:name=".pay.PayDetailActivity"></activity>
     </application>
 
 </manifest>

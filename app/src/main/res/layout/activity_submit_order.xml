@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.it.cloudwater.commodity.SubmitOrderActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/rl_address"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x25"
+            android:text="收货地址"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/unit_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="￥26.00" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/unit_price"
+            android:text="数量2" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/total_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="订单合计:￥169.00" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/total_order"
+            android:background="@color/white"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="配送时间" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="1小时内配送" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+    <RelativeLayout
+        android:id="@+id/rl_invoice_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_invoice_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x25"
+            android:text="开发票抬头"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:id="@+id/rl_remarks"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_remarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x25"
+            android:text="备注"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:id="@+id/rl_ticket_use"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_ticket_use"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x25"
+            android:text="使用水票"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:text="本次使用0张" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:id="@+id/rl_discount"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x25"
+            android:text="优惠"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x25"
+            android:layout_toRightOf="@+id/tv_tag"
+            android:text="(-5.00)"
+            android:textColor="@color/red"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="共:204.00" />
+
+        <Button
+            android:id="@+id/btn_settlement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:text="去结算" />
+    </RelativeLayout>
+</LinearLayout>
