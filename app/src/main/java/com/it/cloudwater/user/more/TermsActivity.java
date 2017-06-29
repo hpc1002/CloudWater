@@ -1,10 +1,9 @@
-package com.it.cloudwater.user;
+package com.it.cloudwater.user.more;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,11 +13,7 @@ import com.it.cloudwater.base.BaseActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * 我的水桶
- */
-public class BucketActivity extends BaseActivity {
-
+public class TermsActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -32,12 +27,8 @@ public class BucketActivity extends BaseActivity {
     ImageView ivLeft;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.bucket_count)
-    TextView bucketCount;
-    @BindView(R.id.re_back_money)
-    TextView reBackMoney;
-    @BindView(R.id.btn_re_back)
-    Button btnReBack;
+    @BindView(R.id.terms_content)
+    TextView termsContent;
 
     @Override
     protected void processLogic() {
@@ -46,7 +37,7 @@ public class BucketActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        toolbarTitle.setText("我的水桶");
+        toolbarTitle.setText("服务条款");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +49,12 @@ public class BucketActivity extends BaseActivity {
 
     @Override
     protected void loadViewLayout() {
-        setContentView(R.layout.activity_bucket);
+        setContentView(R.layout.activity_terms);
     }
 
     @Override
     protected Context getActivityContext() {
         return this;
     }
+
 }

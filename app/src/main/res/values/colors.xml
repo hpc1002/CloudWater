@@ -156,4 +156,13 @@
     <color name="rb_check">#6600a3ed</color>
     <color name="colorGray">#ccc</color>
     <color name="course_name">#303C36</color><!--课程名称颜色 -->
+
+    <color name="course_name">#303C36</color><!--课程名称颜色 -->
+    <color name="course_learn_number">#878c89</color><!--课程学习人数颜色 -->
+    <color name="course_learn_state">#ff644e</color><!--课程学习人数颜色 -->
+    <color name="title_01">#44b336</color><!--课程学习人数颜色 -->
+    <color name="toolbar_search">#bdc7c0</color><!--课程学习人数颜色 -->
+    <color name="back_color">#f1f1f1</color><!--课程学习人数颜色 -->
+    <color name="zuidi_color">#c9caca</color><!--课程学习人数颜色 -->
+    <color name="lun_color">#E18878</color><!--一引导图颜色 -->
 </resources>

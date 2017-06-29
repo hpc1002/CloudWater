@@ -39,7 +39,10 @@
         <activity android:name=".commodity.DetailActivity" />
         <activity android:name=".commodity.SubmitOrderActivity" />
         <activity android:name=".pay.PayActivity" />
-        <activity android:name=".pay.PayDetailActivity"></activity>
+        <activity android:name=".pay.PayDetailActivity" />
+        <activity android:name=".user.more.FeedbackActivity" />
+        <activity android:name=".user.more.TermsActivity" />
+        <activity android:name=".user.more.AboutUsActivity"></activity>
     </application>
 
 </manifest>

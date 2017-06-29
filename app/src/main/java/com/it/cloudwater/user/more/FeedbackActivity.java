@@ -1,4 +1,4 @@
-package com.it.cloudwater.user;
+package com.it.cloudwater.user.more;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,10 +14,7 @@ import com.it.cloudwater.base.BaseActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * 我的水桶
- */
-public class BucketActivity extends BaseActivity {
+public class FeedbackActivity extends BaseActivity {
 
 
     @BindView(R.id.toolbar_title)
@@ -32,12 +29,10 @@ public class BucketActivity extends BaseActivity {
     ImageView ivLeft;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.bucket_count)
-    TextView bucketCount;
-    @BindView(R.id.re_back_money)
-    TextView reBackMoney;
-    @BindView(R.id.btn_re_back)
-    Button btnReBack;
+    @BindView(R.id.feed_content)
+    TextView feedContent;
+    @BindView(R.id.feedback_submit)
+    Button feedbackSubmit;
 
     @Override
     protected void processLogic() {
@@ -46,7 +41,7 @@ public class BucketActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        toolbarTitle.setText("我的水桶");
+        toolbarTitle.setText("意见反馈");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +53,12 @@ public class BucketActivity extends BaseActivity {
 
     @Override
     protected void loadViewLayout() {
-        setContentView(R.layout.activity_bucket);
+        setContentView(R.layout.activity_feedback);
     }
 
     @Override
     protected Context getActivityContext() {
         return this;
     }
+
 }
