@@ -1,6 +1,7 @@
 package com.it.cloudwater.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.it.cloudwater.App;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.home.fragment.FragmentController;
+import com.it.cloudwater.user.MessageActivity;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.utils.UIThread;
 
@@ -57,11 +59,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void setListener() {
         hometabRadio.setOnCheckedChangeListener(this);
+        tvRight.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_right:
+                startActivity(new Intent(HomeActivity.this, MessageActivity.class));
+                break;
+          default:
+              break;
+        }
 
     }
 
@@ -103,8 +113,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_home);
         controller = FragmentController.getInstance(this, R.id.frame_layout);
         controller.showFragment(0);
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
-        toolbarTitle= (TextView) findViewById(R.id.toolbar_title);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         toolbarTitle.setText("首页");
 
     }

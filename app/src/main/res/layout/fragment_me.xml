@@ -7,13 +7,13 @@
     <RelativeLayout
         android:id="@+id/rl_avatar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y460"
+        android:layout_height="@dimen/y410"
         android:background="@color/colorPrimary">
 
         <RelativeLayout
             android:id="@+id/rl_tag"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp">
 

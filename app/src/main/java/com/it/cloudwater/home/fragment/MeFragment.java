@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
+import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.user.BucketActivity;
 import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.MoreActivity;
@@ -80,6 +81,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         rlBucketMy.setOnClickListener(this);
         rlInventMy.setOnClickListener(this);
         rlMore.setOnClickListener(this);
+        rlAddressMy.setOnClickListener(this);
     }
 
     @Override
@@ -104,6 +106,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.rl_more:
                 intent = new Intent(getActivity(), MoreActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.rl_address_my:
+                intent = new Intent(getActivity(), AddressActivity.class);
                 startActivity(intent);
                 break;
             default:

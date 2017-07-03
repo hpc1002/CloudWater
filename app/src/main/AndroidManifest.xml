@@ -42,7 +42,8 @@
         <activity android:name=".pay.PayDetailActivity" />
         <activity android:name=".user.more.FeedbackActivity" />
         <activity android:name=".user.more.TermsActivity" />
-        <activity android:name=".user.more.AboutUsActivity"></activity>
+        <activity android:name=".user.more.AboutUsActivity" />
+        <activity android:name=".user.MessageActivity"></activity>
     </application>
 
 </manifest>

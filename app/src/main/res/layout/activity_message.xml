@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.it.cloudwater.user.AddressActivity">
+    tools:context="com.it.cloudwater.user.MessageActivity">
 
     <include layout="@layout/toolbar" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/address_recycler"
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/message_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_empty="@layout/view_empty"

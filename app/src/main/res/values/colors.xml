@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#fa6650</color>
+    <color name="colorPrimaryDark">#fa6650</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="title">#333338</color><!--标题色-->
+    <color name="word_second">#8F9095</color><!--次重要文字颜色-->
+    <color name="part_line">#DDDDDD</color><!--分割线颜色-->
+
     <color name="bag_gray_transparent">#00FFFFFF</color>
     <color name="text_color_context">#666666</color><!-- 字体颜色  标题灰色 -->
     <color name="window_gray">#f4f4f4</color>
@@ -155,7 +160,6 @@
     <color name="ad_color">#66000000</color>
     <color name="rb_check">#6600a3ed</color>
     <color name="colorGray">#ccc</color>
-    <color name="course_name">#303C36</color><!--课程名称颜色 -->
 
     <color name="course_name">#303C36</color><!--课程名称颜色 -->
     <color name="course_learn_number">#878c89</color><!--课程学习人数颜色 -->
