@@ -112,6 +112,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), AddressActivity.class);
                 startActivity(intent);
                 break;
+
             default:
                 break;
         }

@@ -37,6 +37,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_ali_pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -54,6 +55,7 @@
             android:text="支付宝" />
 
         <RadioButton
+            android:id="@+id/rb_ali"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -61,6 +63,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_wechat_pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -78,6 +81,7 @@
             android:text="微信" />
 
         <RadioButton
+            android:id="@+id/rb_wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

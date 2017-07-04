@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp" />
         <TextView
+            android:id="@+id/feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -27,6 +28,7 @@
             android:layout_height="30dp" />
 
         <TextView
+            android:id="@+id/terms_of_service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -35,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp" />
         <TextView
+            android:id="@+id/about_us"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -43,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp" />
         <TextView
+            android:id="@+id/find_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -51,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp" />
         <TextView
+            android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"

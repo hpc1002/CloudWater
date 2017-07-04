@@ -1,6 +1,7 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.user.more.AboutUsActivity;
+import com.it.cloudwater.user.more.FeedbackActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,7 +19,7 @@ import butterknife.ButterKnife;
 /**
  * 更多...
  */
-public class MoreActivity extends BaseActivity {
+public class MoreActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -30,6 +33,16 @@ public class MoreActivity extends BaseActivity {
     ImageView ivLeft;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.feedback)
+    TextView feedback;
+    @BindView(R.id.terms_of_service)
+    TextView termsOfService;
+    @BindView(R.id.about_us)
+    TextView aboutUs;
+    @BindView(R.id.find_password)
+    TextView findPassword;
+    @BindView(R.id.logout)
+    TextView logout;
 
     @Override
     protected void processLogic() {
@@ -46,6 +59,9 @@ public class MoreActivity extends BaseActivity {
                 finish();
             }
         });
+        feedback.setOnClickListener(this);
+        aboutUs.setOnClickListener(this);
+        termsOfService.setOnClickListener(this);
     }
 
     @Override
@@ -58,5 +74,16 @@ public class MoreActivity extends BaseActivity {
         return this;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.feedback:
+                startActivity(new Intent(MoreActivity.this, FeedbackActivity.class));
+                break;
+            case R.id.about_us:
+                startActivity(new Intent(MoreActivity.this, AboutUsActivity.class));
+                break;
 
+        }
+    }
 }
