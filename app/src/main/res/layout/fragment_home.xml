@@ -39,41 +39,9 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <View
-                            android:layout_width="@dimen/x8"
-                            android:layout_height="@dimen/y34"
-                            android:layout_alignParentLeft="true"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/colorPrimary"></View>
-
-                        <TextView
-                            android:id="@+id/hot_commend"
-                            style="@style/TextStyle_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp" />
-
-                        <TextView
-                            android:id="@+id/more_commend"
-                            style="@style/TextStyle_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:text="更多"
-                            android:textColor="@color/grey"
-                            android:textSize="13sp" />
-                    </RelativeLayout>
-
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
                         android:background="@color/grey"
                         android:visibility="invisible" />
 
@@ -84,11 +52,11 @@
 
                     </android.support.v7.widget.RecyclerView>
 
-                    <Button
-                        android:id="@+id/next"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NEXT" />
+                    <!--<Button-->
+                        <!--android:id="@+id/next"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="NEXT" />-->
                 </LinearLayout>
             </LinearLayout>
 
