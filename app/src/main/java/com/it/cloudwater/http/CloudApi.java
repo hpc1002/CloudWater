@@ -4,13 +4,11 @@ import android.util.Log;
 
 import com.it.cloudwater.App;
 import com.it.cloudwater.R;
-import com.it.cloudwater.bean.CourseRecommendBean;
 import com.it.cloudwater.constant.Constant;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
-import java.util.ArrayList;
 
 /**
  * Created by hpc on 2017/7/6.

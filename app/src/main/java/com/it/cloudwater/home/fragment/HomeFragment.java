@@ -1,17 +1,20 @@
 package com.it.cloudwater.home.fragment;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.adapter.CourseRecommendAdapter;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.CourseRecommendBean;
+import com.it.cloudwater.commodity.DetailActivity;
 import com.it.cloudwater.constant.DataProvider;
 import com.it.cloudwater.home.adapter.BGABannerAdapter;
 import com.it.cloudwater.home.bean.BannerDto;
@@ -35,8 +38,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView recyclerViewCommend;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
-    //    @BindView(R.id.next)
-//    Button next;
+    @BindView(R.id.next)
+    Button next;
     private ArrayList<BannerDto> bannerList;
     private ArrayList<CourseRecommendBean.RecommendData.Course.CourseData> recommendList;
 
@@ -50,12 +53,12 @@ public class HomeFragment extends BaseFragment {
         recyclerViewCommend.setFocusable(false);
         recyclerViewCommend.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerViewCommend.setHasFixedSize(true);
-//        next.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getActivity(), DetailActivity.class));
-//            }
-//        });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), DetailActivity.class));
+            }
+        });
 //        recyclerViewCommend.setAdapterWithProgress(adapter = new RecyclerArrayAdapter<CourseRecommendBean.RecommendData.Course.CourseData>(getActivity()) {
 //            @Override
 //            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
