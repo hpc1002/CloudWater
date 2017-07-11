@@ -1,10 +1,7 @@
 package com.it.cloudwater.user;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -14,18 +11,18 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
-import com.it.cloudwater.constant.Constant;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.CheckUtil;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import butterknife.BindView;
-import okhttp3.Call;
-import okhttp3.Response;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -51,8 +48,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @BindView(R.id.btn_login)
     Button btnLogin;
     private String phoneNumberInput;
-    private String smscodeInput;
-    private boolean b;
+    private String passwordInput;
+    private boolean isPhone;
+    private boolean isPwd;
 
     @Override
     protected void processLogic() {
@@ -84,8 +82,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         phoneNumberInput = etMobileNumber.getText().toString();
-        smscodeInput = etPassword.getText().toString();
-        b = CheckUtil.isMobile(phoneNumberInput);
+        passwordInput = etPassword.getText().toString();
+        isPhone = CheckUtil.isMobile(phoneNumberInput);
+        isPwd = CheckUtil.isPassword(passwordInput);
         Intent intent;
         switch (view.getId()) {
             case R.id.tv_right:
@@ -101,59 +100,63 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     ToastManager.show("手机号不能为空");
                     return;
                 }
-                if (!b) {
+                if (!isPhone) {
                     ToastManager.show("手机号输入不对");
                     return;
                 }
-                if (smscodeInput.equals("")) {
-                    ToastManager.show("验证码不能为空");
+                if (passwordInput.equals("")) {
+                    ToastManager.show("密码不能为空");
                     return;
                 }
-
-//                OkGo.post(Constant.LOGIN_URL)
-//                        .tag(this)
-//                        .params("phone", phoneNumberInput)
-//                        .params("sms_code", smscodeInput)
-//                        .params("sms_template_code", "login_message")
-//                        .execute(new StringCallback() {
-//                            @Override
-//                            public void onSuccess(String s, Call call, Response response) {
-//                                System.out.println("数据记录------------" + s);
-//                                try {
-//                                    JSONObject jsonObject = new JSONObject(s);
-//                                    JSONObject data = jsonObject.getJSONObject("data");
-//                                    int code = data.getInt("code");
-//                                    if (code == 103) {
-//                                        String msg = data.getString("msg");
-//                                        ToastManager.show(msg);
-//
-//                                    } else if (code == 1) {
-//                                        String token = data.getString("token");
-//                                        String userId = data.getString("id");
-//                                        StorageUtil.setKeyValue(LoginActivity.this, "token", token);
-//                                        StorageUtil.setKeyValue(LoginActivity.this, "userId", userId);
-//                                        startActivity(new Intent(LoginActivity.this, HomeTabActivity.class));
-//                                        ToastManager.show("登录成功");
-//                                    } else if (code == 104) {
-//                                        String msg = data.getString("msg");
-//                                        ToastManager.show(msg);
-//                                    }
-//
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onError(Call call, Response response, Exception e) {
-//                                super.onError(call, response, e);
-//                            }
-//
-//                        });
+                if (passwordInput.equals("")) {
+                    ToastManager.show("密码输入格式有误");
+                    return;
+                }
+                CloudApi.Login(0x001, phoneNumberInput, passwordInput, myCallBack);
             default:
                 break;
         }
     }
+
+    private MyCallBack myCallBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, String data) {
+            switch (what) {
+                case 0x001:
+                    try {
+                        JSONObject loginData = new JSONObject(data);
+                        String resCode = loginData.getString("resCode");
+                        if (resCode.equals("0")) {
+                            ToastManager.show("登录成功");
+                            JSONObject result = loginData.getJSONObject("result");
+                            int lId = result.getInt("lId");
+                            String strPassword = result.getString("strPassword");
+                            StorageUtil.setKeyValue(LoginActivity.this,"userId",lId+"");
+
+                        } else if (resCode.equals("1")) {
+                            String result = loginData.getString("result");
+                            ToastManager.show(result);
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onSuccessList(int what, List results) {
+
+        }
+
+        @Override
+        public void onFail(int what, Object result) {
+
+        }
+    };
 
     @Override
     protected void onDestroy() {

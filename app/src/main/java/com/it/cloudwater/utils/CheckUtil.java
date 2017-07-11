@@ -25,4 +25,15 @@ public class CheckUtil {
             return number.matches(num);
         }
     }
+
+    public static boolean isPassword(String password) {
+
+        String num = "^[0-9a-zA-Z]{6,}$";
+        if (TextUtils.isEmpty(password)) {
+            return false;
+        } else {
+            //matches():字符串是否在给定的正则表达式匹配
+            return password.matches(num);
+        }
+    }
 }

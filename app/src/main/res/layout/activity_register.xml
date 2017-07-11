@@ -140,7 +140,7 @@
             android:layout_toRightOf="@+id/tv_password"
             android:background="@null"
             android:textColor="@color/course_name"
-            android:hint="输入验证码"
+            android:hint="输入密码"
             android:inputType="number"
             android:textColorHint="@color/course_learn_number"
             android:textSize="14sp" />

@@ -17,6 +17,17 @@ public interface MyCallBack {
      */
     void onSuccess(int what, String result) ;
 
+//    /**
+//     * 成功只回掉结果
+//     * @param result
+//     */
+//    void onDataSuccess(String result) ;
+//
+//    /**
+//     * 失败只回调结果
+//     * @param result
+//     */
+//    void onDataError(Object result);
     /**
      * 成功的回调集合
      *

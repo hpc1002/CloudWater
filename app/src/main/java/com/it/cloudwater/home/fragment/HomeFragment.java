@@ -7,13 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.it.cloudwater.R;
-import com.it.cloudwater.adapter.CourseRecommendAdapter;
+import com.it.cloudwater.adapter.GoodListAdapter;
 import com.it.cloudwater.base.BaseFragment;
-import com.it.cloudwater.bean.CourseRecommendBean;
+import com.it.cloudwater.base.BaseQuickAdapter;
+import com.it.cloudwater.bean.GoodsListBean;
 import com.it.cloudwater.commodity.DetailActivity;
 import com.it.cloudwater.constant.DataProvider;
 import com.it.cloudwater.home.adapter.BGABannerAdapter;
@@ -38,10 +38,10 @@ public class HomeFragment extends BaseFragment {
     RecyclerView recyclerViewCommend;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
-    @BindView(R.id.next)
-    Button next;
+    //    @BindView(R.id.next)
+//    Button next;
     private ArrayList<BannerDto> bannerList;
-    private ArrayList<CourseRecommendBean.RecommendData.Course.CourseData> recommendList;
+    private ArrayList<GoodsListBean.Result.DataList> goodList;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
@@ -53,21 +53,15 @@ public class HomeFragment extends BaseFragment {
         recyclerViewCommend.setFocusable(false);
         recyclerViewCommend.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerViewCommend.setHasFixedSize(true);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), DetailActivity.class));
-            }
-        });
-//        recyclerViewCommend.setAdapterWithProgress(adapter = new RecyclerArrayAdapter<CourseRecommendBean.RecommendData.Course.CourseData>(getActivity()) {
+//        next.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-//                return new RecommendViewholder(parent);
+//            public void onClick(View v) {
+//                startActivity(new Intent(getActivity(), LoginActivity.class));
 //            }
 //        });
 
 
-        CloudApi.getRecommendData(0x001, myCallBack);
+        CloudApi.getGoodsListData(0x001, 1, 4, myCallBack);
 
     }
 
@@ -76,12 +70,20 @@ public class HomeFragment extends BaseFragment {
         public void onSuccess(int what, String result) {
             switch (what) {
                 case 0x001:
-                    if (recommendList == null) {
-                        recommendList = new ArrayList<>();
+                    if (goodList == null) {
+                        goodList = new ArrayList<>();
                     }
                     parseData(result);
-                    CourseRecommendAdapter adapter = new CourseRecommendAdapter(R.layout.item_pub_course, recommendList);
+                    GoodListAdapter adapter = new GoodListAdapter(R.layout.item_goods, goodList);
                     recyclerViewCommend.setAdapter(adapter);
+                    adapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Intent intent = new Intent(getActivity(), DetailActivity.class);
+                            intent.putExtra("goodsLid", goodList.get(position).lId+"");
+                            startActivity(intent);
+                        }
+                    });
             }
         }
 
@@ -97,11 +99,11 @@ public class HomeFragment extends BaseFragment {
     };
 
     private void parseData(String json) {
-        CourseRecommendBean courseRecommendBean = new Gson().fromJson(json, CourseRecommendBean.class);
-        System.out.println(courseRecommendBean);
-        for (int i = 0, size = courseRecommendBean.data.size(); i < size; i++) {
-            recommendList.add(courseRecommendBean.data.get(i).course.data);
+        GoodsListBean goodsListBean = new Gson().fromJson(json, GoodsListBean.class);
+        for (int i = 0, size = goodsListBean.result.dataList.size(); i < size; i++) {
+            goodList.add(goodsListBean.result.dataList.get(i));
         }
+
     }
 
     @Override
