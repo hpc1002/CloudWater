@@ -2,7 +2,6 @@ package com.it.cloudwater.user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,9 +11,9 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.user.more.AboutUsActivity;
 import com.it.cloudwater.user.more.FeedbackActivity;
+import com.it.cloudwater.user.more.FindPasswordActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 更多...
@@ -62,6 +61,7 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
         feedback.setOnClickListener(this);
         aboutUs.setOnClickListener(this);
         termsOfService.setOnClickListener(this);
+        findPassword.setOnClickListener(this);
     }
 
     @Override
@@ -76,14 +76,18 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.feedback:
                 startActivity(new Intent(MoreActivity.this, FeedbackActivity.class));
                 break;
             case R.id.about_us:
                 startActivity(new Intent(MoreActivity.this, AboutUsActivity.class));
                 break;
-
+            case R.id.find_password:
+                startActivity(new Intent(MoreActivity.this, FindPasswordActivity.class));
+                break;
+            default:
+                break;
         }
     }
 }

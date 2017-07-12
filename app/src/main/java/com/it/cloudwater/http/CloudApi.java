@@ -79,6 +79,26 @@ public class CloudApi {
                     }
                 });
     }
+    public static void ChangePassword(final int what, String phone, String password, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.CHANGE_PASSWORD_URL)
+                .tag(App.getInstance())
+                .params("strMobile", phone)
+                .params("strPassword", password)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        myCallBack.onSuccess(what, body);
+                        Log.i(TAG, "onSuccess: " + response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
 
     public static void getGoodsListData(final int what, final Integer nPage, final Integer nMaxNum, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.GOODS_LIST_URL)
