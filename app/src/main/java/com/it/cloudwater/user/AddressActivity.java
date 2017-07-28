@@ -1,15 +1,14 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.util.LogTime;
 import com.it.cloudwater.R;
 import com.it.cloudwater.adapter.CheckAdapter;
 import com.it.cloudwater.base.BaseActivity;
@@ -45,6 +44,7 @@ public class AddressActivity extends BaseActivity {
     private ArrayList<CheckBean> datalist;
     private CheckAdapter mAdapter;
     private static final String TAG = "AddressActivity";
+
     @Override
     protected void processLogic() {
 
@@ -53,6 +53,8 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void setListener() {
         toolbarTitle.setText("我的地址");
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText("新增");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +70,7 @@ public class AddressActivity extends BaseActivity {
                 .build();
         datalist = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            datalist.add(new CheckBean("雪花女神龙", "盘丝洞"+i, i, true));
+            datalist.add(new CheckBean("雪花女神龙", "盘丝洞" + i, i, true));
         }
         addressRecycler.setAdapter(mAdapter = new CheckAdapter(params, datalist) {
             @Override
@@ -80,7 +82,14 @@ public class AddressActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseViewHolder vh, int position) {
                 CheckBean checkedData = datalist.get(position);
-                ToastManager.show("position" + position + "iscClicked"+checkedData.address);
+                Intent intent = new Intent();
+                //把返回数据存入Intent
+                intent.putExtra("result", "雪花女神龙");
+                AddressActivity.this.setResult(RESULT_OK, intent);
+                //关闭Activity
+                AddressActivity.this.finish();
+                //设置返回数据
+                ToastManager.show("position" + position + "iscClicked" + checkedData.address);
             }
         });
     }

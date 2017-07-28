@@ -12,6 +12,7 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.user.BucketActivity;
+import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.MoreActivity;
 import com.it.cloudwater.widget.RoundedCornerImageView;
@@ -82,6 +83,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         rlInventMy.setOnClickListener(this);
         rlMore.setOnClickListener(this);
         rlAddressMy.setOnClickListener(this);
+        rlCouponMy.setOnClickListener(this);
     }
 
     @Override
@@ -110,6 +112,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.rl_address_my:
                 intent = new Intent(getActivity(), AddressActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.rl_coupon_my:
+                intent = new Intent(getActivity(), CouponActivity.class);
                 startActivity(intent);
                 break;
 
