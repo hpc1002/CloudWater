@@ -180,4 +180,22 @@ public class CloudApi {
                     }
                 });
     }
+
+    public static void getAreaList(final int what, final MyCallBack myCallBack) {
+        OkGo.<String>get(Constant.AREA_LIST_URL)
+                .tag(App.getInstance())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+
+    }
 }

@@ -65,7 +65,7 @@ public class AddAddressActivity extends BaseActivity {
 
     @Override
     protected void processLogic() {
-
+        CloudApi.getAreaList(0x001, myCallBack);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class AddAddressActivity extends BaseActivity {
                 params.put("lUserid", "lUserid");
                 params.put("lShopId", "lShopId");
                 JSONObject jsonObject = new JSONObject(params);
-                CloudApi.addAddress(0x001, jsonObject, myCallBack);
+//                CloudApi.addAddress(0x001, jsonObject, myCallBack);
             }
         });
     }
@@ -98,7 +98,19 @@ public class AddAddressActivity extends BaseActivity {
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
         public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+               /* {
+                        "result": [
+                        "东城区",
+                        "西城区"
+                        ],
+                        "resCode": "0"
+                }*/
+                    String body = result.body();
 
+                    break;
+            }
         }
 
         @Override
