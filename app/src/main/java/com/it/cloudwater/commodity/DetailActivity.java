@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,11 +16,14 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.widget.button.AnimShopButton;
+import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -53,6 +57,8 @@ public class DetailActivity extends BaseActivity {
     TextView commodityIntroduction;
     @BindView(R.id.order_submit)
     Button orderSubmit;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
     private String goodsLid;
     private static final String TAG = "DetailActivity";
 
@@ -76,6 +82,28 @@ public class DetailActivity extends BaseActivity {
         mOrdersSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //订单参数包装
+                Map<String, String> orderParams = new HashMap<>();
+                orderParams.put("lGoodsid", "lGoodsid");
+                orderParams.put("strGoodsname", "strGoodsname");
+                orderParams.put("nPrice", "nPrice");
+                orderParams.put("strGoodsimgurl", "strGoodsimgurl");
+                orderParams.put("nGoodsTotalPrice", "nGoodsTotalPrice");
+                orderParams.put("nCount", "nCount");
+                JSONObject orderObject = new JSONObject(orderParams);
+                ArrayList<JSONObject> orderGoods = new ArrayList<>();
+                orderGoods.add(orderObject);
+                Map<String, Object> params = new HashMap<>();
+                params.put("lBuyerid", "lBuyerid");
+                params.put("strBuyername", "strBuyername");
+                params.put("nTotalprice", "nTotalprice");
+                params.put("strInvoiceheader ", "strInvoiceheader ");
+                params.put("strRemarks", "strRemarks");
+                params.put("orderGoods", orderGoods);
+
+                JSONObject jsonObject = new JSONObject(params);
+
+
                 startActivity(new Intent(DetailActivity.this, SubmitOrderActivity.class));
             }
         });
@@ -110,22 +138,19 @@ public class DetailActivity extends BaseActivity {
      */
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
-        public void onSuccess(int what, String data) {
+        public void onSuccess(int what, Response<String> data) {
             switch (what) {
                 case 0x001:
+                    String body = data.body();
+                    progressBar.setVisibility(View.GONE);
                     Log.i(TAG, "onSuccess: ----" + data);
-                    parseDataAndShow(data);
+                    parseDataAndShow(body);
                     break;
             }
         }
 
         @Override
-        public void onSuccessList(int what, List results) {
-
-        }
-
-        @Override
-        public void onFail(int what, Object result) {
+        public void onFail(int what, Response<String> result) {
 
         }
     };
@@ -142,10 +167,12 @@ public class DetailActivity extends BaseActivity {
                 String strRemarks = result.getString("strRemarks");
                 String strIntroduce = result.getString("strIntroduce");
                 int nMothnumber = result.getInt("nMothnumber");
+                int nPrice = result.getInt("nPrice");
                 tradeName.setText(strGoodsname);
                 specifications.setText(strStandard);
                 commodityIntroduction.setText(strIntroduce);
                 salesVolume.setText("已售" + nMothnumber);
+                price.setText(((double) nPrice / 100) + "元");
                 Glide.with(this)
                         .load(strGoodsimgurl)
                         .placeholder(R.mipmap.home_load_error)

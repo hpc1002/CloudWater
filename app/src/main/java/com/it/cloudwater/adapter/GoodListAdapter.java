@@ -30,7 +30,7 @@ public class GoodListAdapter extends BaseQuickAdapter<GoodsListBean.Result.DataL
                 .into((ImageView) helper.getView(R.id.bucketImg));
         helper.setText(R.id.bucket_name, item.strGoodsname);
         helper.setText(R.id.bucket_specifications, item.strStandard);
-        helper.setText(R.id.bucket_price, item.nPrice + "");
+        helper.setText(R.id.bucket_price, ((double)item.nPrice/100) + "元");
         helper.setText(R.id.bucket_amount_sold, "已售" + item.nMothnumber);
     }
 }

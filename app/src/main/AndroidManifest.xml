@@ -12,6 +12,13 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
 
     <application
         android:name=".App"
@@ -23,7 +30,15 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".home.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="standard">
+
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/welcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +61,8 @@
         <activity android:name=".user.MessageActivity" />
         <activity android:name=".user.RegisterActivity" />
         <activity android:name=".user.LoginActivity" />
-        <activity android:name=".user.more.FindPasswordActivity"></activity>
+        <activity android:name=".user.more.FindPasswordActivity" />
+        <activity android:name=".user.AddAddressActivity"></activity>
     </application>
 
 </manifest>

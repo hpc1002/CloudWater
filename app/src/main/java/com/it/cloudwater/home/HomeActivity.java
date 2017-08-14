@@ -1,8 +1,12 @@
 package com.it.cloudwater.home;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,9 +19,13 @@ import com.it.cloudwater.App;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.home.fragment.FragmentController;
+import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.user.MessageActivity;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.utils.UIThread;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -49,15 +57,53 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     private FragmentController controller;
+    private String userId;
 
     @Override
     protected void processLogic() {
+        initPermissions();
+        userId = StorageUtil.getUserId(this);
+    }
+    private int requestCode = 1;
+    private void initPermissions() {
+        String permissionPhone = Manifest.permission.READ_PHONE_STATE;
+        String permissionContacts = Manifest.permission.GET_ACCOUNTS;
+        String permissionStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        String permissionReadSms = Manifest.permission.READ_SMS;
+        String[] allPermissions = {permissionPhone, permissionContacts, permissionStorage, permissionReadSms};
+        ArrayList<String> deniedPermissions = new ArrayList<>();
+        for (String permission : allPermissions) {
+            if (!hasPermission(permission)) {
+                deniedPermissions.add(permission);
+            }
+        }
+        if (!deniedPermissions.isEmpty()) {
+            ActivityCompat.requestPermissions(this, deniedPermissions.toArray(new String[deniedPermissions.size()]), requestCode);
+        } else {
+            setListener();
+        }
 
     }
+    private boolean hasPermission(String permission) {
+        int result = ActivityCompat.checkSelfPermission(this, permission);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == this.requestCode) {
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    finish();
+                }
+            }
 
-
+            setListener();
+        }
+    }
     @Override
     protected void setListener() {
+        hometabRadio = (RadioGroup) findViewById(R.id.hometab_radio);
         hometabRadio.setOnCheckedChangeListener(this);
         tvRight.setOnClickListener(this);
 
@@ -67,10 +113,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_right:
-                startActivity(new Intent(HomeActivity.this, MessageActivity.class));
+                if (!userId.equals("")) {
+                    startActivity(new Intent(HomeActivity.this, MessageActivity.class));
+                } else {
+                    startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                }
                 break;
-          default:
-              break;
+            default:
+                break;
         }
 
     }
@@ -79,8 +129,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
         switch (checkedId) {
             case R.id.rb_home:
-                controller.showFragment(0);
                 toolbarTitle.setText("首页");
+                controller.showFragment(0);
                 tvRight.setVisibility(View.GONE);
                 break;
             case R.id.rb_order:
@@ -142,10 +192,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             }, 1000);
         }
     }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         FragmentController.onDestroy();
     }
+
 }

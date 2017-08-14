@@ -1,5 +1,7 @@
 package com.it.cloudwater.http;
 
+import com.lzy.okgo.model.Response;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public interface MyCallBack {
      * @param what
      * @param result
      */
-    void onSuccess(int what, String result) ;
+    void onSuccess(int what, Response<String> result) ;
 
 //    /**
 //     * 成功只回掉结果
@@ -28,13 +30,13 @@ public interface MyCallBack {
 //     * @param result
 //     */
 //    void onDataError(Object result);
-    /**
-     * 成功的回调集合
-     *
-     * @param what
-     * @param results
-     */
-    void onSuccessList(int what, List results);
+//    /**
+//     * 成功的回调集合
+//     *
+//     * @param what
+//     * @param results
+//     */
+//    void onSuccessList(int what, List results);
 
     /**
      * 失败的回调
@@ -42,6 +44,6 @@ public interface MyCallBack {
      * @param what
      * @param result
      */
-    void onFail(int what, Object result);
+    void onFail(int what, Response<String> result);
 
 }

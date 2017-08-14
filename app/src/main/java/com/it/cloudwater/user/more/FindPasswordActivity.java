@@ -15,6 +15,7 @@ import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.CheckUtil;
 import com.it.cloudwater.utils.ToastManager;
+import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,12 +94,13 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
 
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
-        public void onSuccess(int what, String data) {
+        public void onSuccess(int what, Response<String> data) {
             switch (what) {
                 case 0x001:
                     Log.i(TAG, "onSuccess: ------" + data);
+                    String body = data.body();
                     try {
-                        JSONObject pwdData = new JSONObject(data);
+                        JSONObject pwdData = new JSONObject(body);
                         String resCode = pwdData.getString("resCode");
                         String result = pwdData.getString("result");
                         if (resCode.equals("1")) {
@@ -116,12 +118,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
         }
 
         @Override
-        public void onSuccessList(int what, List results) {
-
-        }
-
-        @Override
-        public void onFail(int what, Object result) {
+        public void onFail(int what, Response<String> result) {
 
         }
     };

@@ -22,9 +22,9 @@ public class FragmentController {
     private Bundle bundle;
 
     public static FragmentController getInstance(FragmentActivity activity, int containerId) {
-        if (controller == null) {
+//        if (controller == null) {
             controller = new FragmentController(activity, containerId);
-        }
+//        }
         return controller;
     }
 

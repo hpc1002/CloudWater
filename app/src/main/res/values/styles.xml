@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,7 +16,7 @@
     <style name="RadioButtonBottomTab">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_height">47dp</item>
         <item name="android:button">@null</item>
         <item name="android:textSize">@dimen/txtsize_caption</item>
         <item name="android:textColor">@drawable/txtcolor_gray2oran_sel1</item>
@@ -35,5 +35,19 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginRight">15dp</item>
+    </style>
+
+    <!--首次进入无黑色-->
+    <style name="welcomeTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--<item name="android:textColorPrimary">@android:color/white</item>-->
+        <item name="android:textColorPrimary">@color/primary_material_dark</item>
+        <item name="android:textColorSecondary">@color/primary_material_dark</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="19">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@mipmap/splash_image</item>
     </style>
 </resources>

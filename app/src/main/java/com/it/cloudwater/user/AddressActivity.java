@@ -13,12 +13,19 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.adapter.CheckAdapter;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.CheckBean;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.ToastManager;
 import com.lhalcyon.adapter.base.BaseViewHolder;
 import com.lhalcyon.adapter.helper.BasicController;
 import com.lhalcyon.adapter.helper.OnItemClickListener;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -62,6 +69,15 @@ public class AddressActivity extends BaseActivity {
                 finish();
             }
         });
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AddressActivity.this,AddAddressActivity.class));
+                ToastManager.show("新增地址");
+
+            }
+        });
+
         addressRecycler.setLayoutManager(new LinearLayoutManager(this));
         BasicController.BasicParams params = new BasicController.Builder()
                 .checkId(R.id.checkbox)
@@ -93,6 +109,22 @@ public class AddressActivity extends BaseActivity {
             }
         });
     }
+
+    private MyCallBack myCallBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+
+                    break;
+            }
+        }
+
+        @Override
+        public void onFail(int what, Response<String> result) {
+
+        }
+    };
 
     @Override
     protected void loadViewLayout() {

@@ -20,12 +20,12 @@ import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.user.observer.SmsObserver;
 import com.it.cloudwater.utils.CheckUtil;
 import com.it.cloudwater.utils.CountDownTimerUtils;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
+import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -135,12 +135,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 mCountDownTimerUtils.start();
                 CloudApi.getSmsCode(0x001, phoneNumberInput, new MyCallBack() {
                     @Override
-                    public void onSuccess(int what, String data) {
+                    public void onSuccess(int what, Response<String> data) {
                         try {
-                            JSONObject sendData = new JSONObject(data);
+                            String body = data.body();
+                            JSONObject sendData = new JSONObject(body);
                             String result = sendData.getString("result");
 
                             resCode = sendData.getString("resCode");
+
                             Log.i(TAG, "SendCode: ---------" + "result" + result + "resCode" + resCode);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -148,12 +150,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
 
                     @Override
-                    public void onSuccessList(int what, List results) {
-
-                    }
-
-                    @Override
-                    public void onFail(int what, Object result) {
+                    public void onFail(int what, Response<String> result) {
 
                     }
                 });
@@ -187,13 +184,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
-        public void onSuccess(int what, String data) {
+        public void onSuccess(int what, Response<String> data) {
             switch (what) {
                 case 0x001:
                     Log.i(TAG, "onDataSuccess: success" + data);
-
+                    String body = data.body();
                     try {
-                        JSONObject sendData = new JSONObject(data);
+                        JSONObject sendData = new JSONObject(body);
                         String result = sendData.getString("result");
 
                         resCode = sendData.getString("resCode");
@@ -203,12 +200,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                     break;
                 case 0x002:
+                    String body1 = data.body();
                     try {
-                        JSONObject registerData = new JSONObject(data);
+                        JSONObject registerData = new JSONObject(body1);
                         String result = registerData.getString("result");
                         String resCode = registerData.getString("resCode");
+                        StorageUtil.setKeyValue(RegisterActivity.this, "userId", result);
                         if (resCode.equals("1")) {
                             ToastManager.show(result);
+                        } else if (resCode.equals("0")) {
+                            ToastManager.show("注册成功");
                         }
                         Log.i(TAG, "Register: ---------" + "result" + result + "resCode" + resCode);
                     } catch (JSONException e) {
@@ -216,17 +217,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                     break;
             }
-
         }
 
         @Override
-        public void onSuccessList(int what, List results) {
+        public void onFail(int what, Response<String> result) {
 
-        }
-
-        @Override
-        public void onFail(int what, Object result) {
-            Log.i(TAG, "onDataError: error" + result);
         }
     };
 

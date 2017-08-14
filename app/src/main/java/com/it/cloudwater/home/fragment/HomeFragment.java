@@ -20,6 +20,7 @@ import com.it.cloudwater.home.adapter.BGABannerAdapter;
 import com.it.cloudwater.home.bean.BannerDto;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,13 +68,14 @@ public class HomeFragment extends BaseFragment {
 
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
-        public void onSuccess(int what, String result) {
+        public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
+                    String body = result.body();
                     if (goodList == null) {
                         goodList = new ArrayList<>();
                     }
-                    parseData(result);
+                    parseData(body);
                     GoodListAdapter adapter = new GoodListAdapter(R.layout.item_goods, goodList);
                     recyclerViewCommend.setAdapter(adapter);
                     adapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
@@ -88,12 +90,7 @@ public class HomeFragment extends BaseFragment {
         }
 
         @Override
-        public void onSuccessList(int what, List results) {
-
-        }
-
-        @Override
-        public void onFail(int what, Object result) {
+        public void onFail(int what, Response<String> result) {
 
         }
     };

@@ -11,16 +11,16 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.home.HomeActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.CheckUtil;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
+import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -120,19 +120,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
-        public void onSuccess(int what, String data) {
+        public void onSuccess(int what, Response<String> data) {
             switch (what) {
                 case 0x001:
+                    String body = data.body();
                     try {
-                        JSONObject loginData = new JSONObject(data);
+                        JSONObject loginData = new JSONObject(body);
                         String resCode = loginData.getString("resCode");
                         if (resCode.equals("0")) {
                             ToastManager.show("登录成功");
                             JSONObject result = loginData.getJSONObject("result");
                             int lId = result.getInt("lId");
                             String strPassword = result.getString("strPassword");
-                            StorageUtil.setKeyValue(LoginActivity.this,"userId",lId+"");
-
+                            StorageUtil.setKeyValue(LoginActivity.this, "userId", lId + "");
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         } else if (resCode.equals("1")) {
                             String result = loginData.getString("result");
                             ToastManager.show(result);
@@ -144,16 +145,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     }
                     break;
             }
-
         }
 
         @Override
-        public void onSuccessList(int what, List results) {
-
-        }
-
-        @Override
-        public void onFail(int what, Object result) {
+        public void onFail(int what, Response<String> result) {
 
         }
     };
