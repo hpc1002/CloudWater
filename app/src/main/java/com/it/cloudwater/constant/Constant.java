@@ -22,4 +22,6 @@ public class Constant {
 
     public static final String MYTICKET_LIST_URL = BASE_URL + "ticket/list";//获取买家水票
     public static final String MYCOUPON_LIST_URL = BASE_URL + "coupon/list";//我的优惠券列表
+
+    public static final String ADDRESS_LIST_URL = BASE_URL + "address/list";//获取买家收货地址
 }

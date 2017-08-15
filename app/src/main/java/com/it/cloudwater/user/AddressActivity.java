@@ -15,17 +15,17 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.CheckBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lhalcyon.adapter.base.BaseViewHolder;
 import com.lhalcyon.adapter.helper.BasicController;
 import com.lhalcyon.adapter.helper.OnItemClickListener;
 import com.lzy.okgo.model.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -51,10 +51,12 @@ public class AddressActivity extends BaseActivity {
     private ArrayList<CheckBean> datalist;
     private CheckAdapter mAdapter;
     private static final String TAG = "AddressActivity";
+    private String userId;
 
     @Override
     protected void processLogic() {
-
+        userId = StorageUtil.getUserId(this);
+        CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class AddressActivity extends BaseActivity {
         tvRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddressActivity.this,AddAddressActivity.class));
+                startActivity(new Intent(AddressActivity.this, AddAddressActivity.class));
                 ToastManager.show("新增地址");
 
             }
@@ -115,7 +117,19 @@ public class AddressActivity extends BaseActivity {
         public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
+                    String body = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("1")) {
+                            String result1 = jsonObject.getString("result");
+                            ToastManager.show(result1);
+                        } else if (resCode.equals("0")) {
 
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }

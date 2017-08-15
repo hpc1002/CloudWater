@@ -22,6 +22,9 @@ import butterknife.BindView;
 
 public class SubmitOrderActivity extends BaseActivity implements View.OnClickListener {
 
+
+    private static final int REQUEST_CODE = 0x001;
+    private static final String TAG = "SubmitOrderActivity";
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.tv_right)
@@ -54,6 +57,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     RelativeLayout rlInvoiceHeader;
     @BindView(R.id.tv_remarks)
     TextView tvRemarks;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
     @BindView(R.id.rl_remarks)
     RelativeLayout rlRemarks;
     @BindView(R.id.tv_ticket_use)
@@ -68,8 +73,6 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     RelativeLayout rlDiscount;
     @BindView(R.id.btn_settlement)
     Button btnSettlement;
-    private static final int REQUEST_CODE = 0x001;
-    private static final String TAG = "SubmitOrderActivity";
     private int count_total = 0;
 
     @Override

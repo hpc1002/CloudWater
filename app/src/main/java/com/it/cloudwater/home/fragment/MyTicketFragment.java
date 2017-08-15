@@ -6,14 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
+import com.it.cloudwater.bean.MyTicketListBean;
 import com.it.cloudwater.bean.TicketBean;
 import com.it.cloudwater.constant.DataProvider;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
+import com.it.cloudwater.viewholder.MyTicketListViewHolder;
 import com.it.cloudwater.viewholder.MyTicketViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
@@ -22,6 +25,8 @@ import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +40,9 @@ public class MyTicketFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
     EasyRecyclerView recyclerView;
     Unbinder unbinder;
-    private RecyclerArrayAdapter<TicketBean> myTicketAdapter;
     private String userId;
+    private ArrayList<MyTicketListBean.Result.DataList> dataLists;
+    private RecyclerArrayAdapter<MyTicketListBean.Result.DataList> ticketAdapter;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
@@ -53,15 +59,14 @@ public class MyTicketFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        recyclerView.setAdapterWithProgress(myTicketAdapter = new RecyclerArrayAdapter<TicketBean>(getActivity()) {
+        recyclerView.setAdapterWithProgress(ticketAdapter = new RecyclerArrayAdapter<MyTicketListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
                 return new MyTicketViewHolder(parent);
             }
         });
         CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
-        myTicketAdapter.addAll(DataProvider.getMyTicketList());
-        recyclerView.setAdapter(myTicketAdapter);
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -77,6 +82,13 @@ public class MyTicketFragment extends BaseFragment {
                             String result1 = jsonObject.getString("result");
                             ToastManager.show(result1);
                         } else if (resCode.equals("0")) {
+                            MyTicketListBean myTicketListBean = new Gson().fromJson(body, MyTicketListBean.class);
+
+                            dataLists = new ArrayList<>();
+                            for (int i = 0; i < myTicketListBean.result.dataList.size(); i++) {
+                                dataLists.add(myTicketListBean.result.dataList.get(i));
+                                initUi(dataLists);
+                            }
 
                         }
                     } catch (JSONException e) {
@@ -91,6 +103,18 @@ public class MyTicketFragment extends BaseFragment {
 
         }
     };
+
+    private void initUi(ArrayList<MyTicketListBean.Result.DataList> dataLists) {
+
+        recyclerView.setAdapterWithProgress(ticketAdapter = new RecyclerArrayAdapter<MyTicketListBean.Result.DataList>(getActivity()) {
+            @Override
+            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                return new MyTicketListViewHolder(parent);
+            }
+
+        });
+        ticketAdapter.addAll(dataLists);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
