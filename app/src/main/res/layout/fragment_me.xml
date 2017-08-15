@@ -63,14 +63,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/course_my" />
+            android:src="@mipmap/icon_coupon" />
 
         <TextView
             android:id="@+id/tv_coupon_my"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_coupon_my"
             android:text="我的优惠券"
             android:textColor="@color/course_name"
@@ -102,14 +102,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/collect_my" />
+            android:src="@mipmap/icon_invite" />
 
         <TextView
             android:id="@+id/tv_invent_my"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_invent_my"
             android:text="我要邀请"
             android:textColor="@color/course_name"
@@ -140,14 +140,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/download_my" />
+            android:src="@mipmap/icon_address" />
 
         <TextView
             android:id="@+id/tv_address_my"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_address_my"
             android:text="我的地址"
             android:textColor="@color/course_name"
@@ -178,14 +178,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/message_my" />
+            android:src="@mipmap/icon_bucket" />
 
         <TextView
             android:id="@+id/tv_bucket_my"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_bucket_my"
             android:text="我的水桶"
             android:textColor="@color/course_name"
@@ -217,14 +217,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/order_my" />
+            android:src="@mipmap/icon_ticket" />
 
         <TextView
             android:id="@+id/tv_ticket_my"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_ticket_my"
             android:text="我的水票"
             android:textColor="@color/black"
@@ -255,14 +255,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/setting" />
+            android:src="@mipmap/icon_more" />
 
         <TextView
             android:id="@+id/tv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_more"
             android:text="更多"
             android:textColor="@color/course_name"

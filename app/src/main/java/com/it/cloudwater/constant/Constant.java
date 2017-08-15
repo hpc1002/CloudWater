@@ -18,4 +18,8 @@ public class Constant {
     public static final String ADD_ADDRESS_URL = BASE_URL + "address/add";//添加收获地址
 
     public static final String AREA_LIST_URL = BASE_URL + "shop/allLocation";//获取区列表
+    public static final String GET_SHOP_URL = BASE_URL + "shop/getShops";//根据区获取商铺
+
+    public static final String MYTICKET_LIST_URL = BASE_URL + "ticket/list";//获取买家水票
+    public static final String MYCOUPON_LIST_URL = BASE_URL + "coupon/list";//我的优惠券列表
 }

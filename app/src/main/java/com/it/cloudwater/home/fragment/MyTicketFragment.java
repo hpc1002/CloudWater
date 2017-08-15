@@ -10,10 +10,18 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.TicketBean;
 import com.it.cloudwater.constant.DataProvider;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.MyTicketViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +36,12 @@ public class MyTicketFragment extends BaseFragment {
     EasyRecyclerView recyclerView;
     Unbinder unbinder;
     private RecyclerArrayAdapter<TicketBean> myTicketAdapter;
+    private String userId;
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
+
+        userId = StorageUtil.getUserId(getActivity());
         return inflater.inflate(R.layout.fr_tick_my, container, false);
     }
 
@@ -41,14 +53,44 @@ public class MyTicketFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        recyclerView.setAdapterWithProgress(myTicketAdapter= new RecyclerArrayAdapter<TicketBean>(getActivity()) {
+        recyclerView.setAdapterWithProgress(myTicketAdapter = new RecyclerArrayAdapter<TicketBean>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
                 return new MyTicketViewHolder(parent);
             }
         });
+        CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
         myTicketAdapter.addAll(DataProvider.getMyTicketList());
+        recyclerView.setAdapter(myTicketAdapter);
     }
+
+    private MyCallBack myCallBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+                    String body = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("1")) {
+                            String result1 = jsonObject.getString("result");
+                            ToastManager.show(result1);
+                        } else if (resCode.equals("0")) {
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onFail(int what, Response<String> result) {
+
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

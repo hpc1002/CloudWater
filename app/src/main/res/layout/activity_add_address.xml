@@ -14,7 +14,6 @@
         android:layout_marginBottom="@dimen/y14"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
         android:gravity="bottom">
 
         <TextView
@@ -49,7 +48,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/back_color" />
+        android:background="@color/part_line" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -57,7 +56,6 @@
         android:layout_marginBottom="@dimen/y14"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
         android:gravity="bottom">
 
         <TextView
@@ -92,7 +90,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/back_color" />
+        android:background="@color/part_line" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -100,7 +98,6 @@
         android:layout_marginBottom="@dimen/y14"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
         android:gravity="bottom">
 
         <TextView
@@ -112,20 +109,28 @@
             android:text="区/县:"
             android:textColor="@color/course_name"
             android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/et_quxian"
+        <Spinner
+            android:id="@+id/spinner_quxian"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:dropDownWidth="200dp"
             android:layout_marginLeft="@dimen/x36"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/tv_quxian"
-            android:background="@null"
-            android:inputType="phone"
-            android:textColor="@color/course_name"
-            android:textColorHint="@color/course_learn_number"
-            android:textSize="14sp" />
+            android:layout_height="wrap_content">
+        </Spinner>
+        <!--<EditText-->
+            <!--android:id="@+id/et_quxian"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="@dimen/x36"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_toRightOf="@+id/tv_quxian"-->
+            <!--android:background="@null"-->
+            <!--android:inputType="phone"-->
+            <!--android:textColor="@color/course_name"-->
+            <!--android:textColorHint="@color/course_learn_number"-->
+            <!--android:textSize="14sp" />-->
 
 
     </RelativeLayout>
@@ -135,7 +140,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/back_color" />
+        android:background="@color/part_line" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -143,7 +148,6 @@
         android:layout_marginBottom="@dimen/y14"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
         android:gravity="bottom">
 
         <TextView
@@ -178,7 +182,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/back_color" />
+        android:background="@color/part_line" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -186,7 +190,6 @@
         android:layout_marginBottom="@dimen/y14"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
         android:gravity="bottom">
 
         <TextView
@@ -221,7 +224,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/back_color" />
+        android:background="@color/part_line" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -229,7 +232,6 @@
         android:layout_marginBottom="@dimen/y14"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
         android:gravity="bottom">
 
         <TextView
@@ -264,7 +266,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/back_color" />
+        android:background="@color/part_line" />
 
     <Button
         android:id="@+id/save"

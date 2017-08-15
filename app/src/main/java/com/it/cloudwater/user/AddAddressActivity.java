@@ -3,9 +3,11 @@ package com.it.cloudwater.user;
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.it.cloudwater.R;
@@ -14,8 +16,11 @@ import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.lzy.okgo.model.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +51,8 @@ public class AddAddressActivity extends BaseActivity {
     EditText etPhone;
     @BindView(R.id.tv_quxian)
     TextView tvQuxian;
-    @BindView(R.id.et_quxian)
-    EditText etQuxian;
+    @BindView(R.id.spinner_quxian)
+    Spinner spQuxian;
     @BindView(R.id.tv_business_circle)
     TextView tvBusinessCircle;
     @BindView(R.id.et_business_circle)
@@ -108,7 +113,22 @@ public class AddAddressActivity extends BaseActivity {
                         "resCode": "0"
                 }*/
                     String body = result.body();
-
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            JSONArray data = jsonObject.getJSONArray("result");
+                            ArrayList<Object> list = new ArrayList<>();
+                            for (int i = 0; i < data.length(); i++) {
+                                list.add(data.get(i));
+                            }
+                            ArrayAdapter<Object> stringArrayAdapter = new ArrayAdapter<Object>(AddAddressActivity.this, android.R.layout.simple_spinner_dropdown_item, list);
+                            stringArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spQuxian.setAdapter(stringArrayAdapter);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
