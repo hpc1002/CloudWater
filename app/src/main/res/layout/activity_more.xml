@@ -16,6 +16,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/rl_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
@@ -37,6 +38,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_terms_of_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
@@ -58,6 +60,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_about_us"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
@@ -79,16 +82,17 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_change_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
             <TextView
-                android:id="@+id/find_password"
+                android:id="@+id/change_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="找回密码"
+                android:text="修改密码"
                 android:textSize="20sp" />
 
             <ImageView

@@ -1,6 +1,8 @@
 package com.it.cloudwater.user.more;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.home.HomeActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.CheckUtil;
@@ -20,13 +23,13 @@ import com.lzy.okgo.model.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class FindPasswordActivity extends BaseActivity implements View.OnClickListener {
+public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener {
 
 
+    private static final String TAG = "FindPasswordActivity";
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.tv_right)
@@ -43,12 +46,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
     TextView tvPhone;
     @BindView(R.id.et_mobileNumber)
     EditText etMobileNumber;
-    @BindView(R.id.get_sms_code)
-    TextView getSmsCode;
-    @BindView(R.id.tv_sms_code)
-    TextView tvSmsCode;
-    @BindView(R.id.et_sms_code)
-    EditText etSmsCode;
     @BindView(R.id.tv_password)
     TextView tvPassword;
     @BindView(R.id.et_new_password)
@@ -59,7 +56,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
     EditText etPwdTwo;
     @BindView(R.id.btn_preservation)
     Button btnPreservation;
-    private static final String TAG = "FindPasswordActivity";
 
     @Override
     protected void processLogic() {
@@ -68,10 +64,8 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void setListener() {
-        toolbarTitle.setText("找回密码");
+        toolbarTitle.setText("修改密码");
         ivLeft.setVisibility(View.VISIBLE);
-
-
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,12 +73,11 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
             }
         });
         btnPreservation.setOnClickListener(this);
-        getSmsCode.setOnClickListener(this);
     }
 
     @Override
     protected void loadViewLayout() {
-        setContentView(R.layout.activity_find_password);
+        setContentView(R.layout.activity_change_password);
     }
 
     @Override
@@ -107,6 +100,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                             ToastManager.show(result);
                         } else if (resCode.equals("0")) {
                             ToastManager.show(result);
+                            startActivity(new Intent(ChangePasswordActivity.this, HomeActivity.class));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -126,9 +120,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.get_sms_code:
-
-                break;
             case R.id.btn_preservation:
                 String phone = etMobileNumber.getText().toString();
 //                String smsCode = etSmsCode.getText().toString();

@@ -61,7 +61,7 @@
         <activity android:name=".user.MessageActivity" />
         <activity android:name=".user.RegisterActivity" />
         <activity android:name=".user.LoginActivity" />
-        <activity android:name=".user.more.FindPasswordActivity" />
+        <activity android:name=".user.more.ChangePasswordActivity" />
         <activity android:name=".user.AddAddressActivity"></activity>
     </application>
 
