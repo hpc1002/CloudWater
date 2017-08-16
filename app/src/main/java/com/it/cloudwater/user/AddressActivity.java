@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.adapter.CheckAdapter;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.bean.AddressListBean;
 import com.it.cloudwater.bean.CheckBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
@@ -48,7 +50,7 @@ public class AddressActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.address_recycler)
     RecyclerView addressRecycler;
-    private ArrayList<CheckBean> datalist;
+    ArrayList<AddressListBean.Result.DataList> addressList;
     private CheckAdapter mAdapter;
     private static final String TAG = "AddressActivity";
     private String userId;
@@ -81,35 +83,8 @@ public class AddressActivity extends BaseActivity {
         });
 
         addressRecycler.setLayoutManager(new LinearLayoutManager(this));
-        BasicController.BasicParams params = new BasicController.Builder()
-                .checkId(R.id.checkbox)
-                .choiceMode(BasicController.CHOICE_MODE_SINGLE)
-                .layoutRes(R.layout.item_check)
-                .build();
-        datalist = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            datalist.add(new CheckBean("雪花女神龙", "盘丝洞" + i, i, true));
-        }
-        addressRecycler.setAdapter(mAdapter = new CheckAdapter(params, datalist) {
-            @Override
-            public boolean isItemChecked(CheckBean checkBean, int position) {
-                return checkBean.isSingle;
-            }
-        });
-        mAdapter.setOnItemClickListener(addressRecycler, new OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseViewHolder vh, int position) {
-                CheckBean checkedData = datalist.get(position);
-                Intent intent = new Intent();
-                //把返回数据存入Intent
-                intent.putExtra("result", "雪花女神龙");
-                AddressActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                AddressActivity.this.finish();
-                //设置返回数据
-                ToastManager.show("position" + position + "iscClicked" + checkedData.address);
-            }
-        });
+
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -125,7 +100,38 @@ public class AddressActivity extends BaseActivity {
                             String result1 = jsonObject.getString("result");
                             ToastManager.show(result1);
                         } else if (resCode.equals("0")) {
+                            AddressListBean addressListBean = new Gson().fromJson(body, AddressListBean.class);
+                            int size = addressListBean.result.dataList.size();
 
+                            addressList = new ArrayList<>();
+                            for (int i=0;i<size;i++){
+                                addressList.add(addressListBean.result.dataList.get(i));
+                            }
+                            BasicController.BasicParams params = new BasicController.Builder()
+                                    .checkId(R.id.checkbox)
+                                    .choiceMode(BasicController.CHOICE_MODE_SINGLE)
+                                    .layoutRes(R.layout.item_check)
+                                    .build();
+                            addressRecycler.setAdapter(mAdapter = new CheckAdapter(params, addressList) {
+                                @Override
+                                public boolean isItemChecked(AddressListBean.Result.DataList checkBean, int position) {
+                                    return checkBean.isSingle;
+                                }
+                            });
+                            mAdapter.setOnItemClickListener(addressRecycler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(BaseViewHolder vh, int position) {
+                                    AddressListBean.Result.DataList checkedData = addressList.get(position);
+                                    Intent intent = new Intent();
+                                    //把返回数据存入Intent
+                                    intent.putExtra("result", checkedData.strDetailaddress);
+                                    AddressActivity.this.setResult(RESULT_OK, intent);
+                                    //关闭Activity
+                                    AddressActivity.this.finish();
+                                    //设置返回数据
+                                    ToastManager.show("position" + position + "iscClicked" + checkedData.strDetailaddress);
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

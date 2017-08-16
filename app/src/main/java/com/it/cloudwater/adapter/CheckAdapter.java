@@ -1,6 +1,7 @@
 package com.it.cloudwater.adapter;
 
 import com.it.cloudwater.R;
+import com.it.cloudwater.bean.AddressListBean;
 import com.it.cloudwater.bean.CheckBean;
 import com.lhalcyon.adapter.BasicAdapter;
 import com.lhalcyon.adapter.base.BaseViewHolder;
@@ -14,16 +15,16 @@ import java.util.List;
  * Description:
  */
 
-public class CheckAdapter extends BasicAdapter<CheckBean> {
+public class CheckAdapter extends BasicAdapter<AddressListBean.Result.DataList> {
 
-    public CheckAdapter(BasicParams params, List<CheckBean> data) {
+    public CheckAdapter(BasicParams params, List<AddressListBean.Result.DataList> data) {
         super(params, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, int position, CheckBean man) {
-        holder.setText(R.id.tv_name, man.name);
-        holder.setText(R.id.tv_address, man.address);
-        holder.setText(R.id.tv_phone, man.phoneNumber+"");
+    protected void convert(BaseViewHolder holder, int position, AddressListBean.Result.DataList man) {
+        holder.setText(R.id.tv_name, man.strReceiptusername);
+        holder.setText(R.id.tv_address, man.strDetailaddress);
+        holder.setText(R.id.tv_phone, man.strReceiptmobile+"");
     }
 }

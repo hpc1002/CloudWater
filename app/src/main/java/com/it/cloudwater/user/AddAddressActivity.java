@@ -1,8 +1,11 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +17,8 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONArray;
@@ -53,23 +58,21 @@ public class AddAddressActivity extends BaseActivity {
     TextView tvQuxian;
     @BindView(R.id.spinner_quxian)
     Spinner spQuxian;
-    @BindView(R.id.tv_business_circle)
-    TextView tvBusinessCircle;
-    @BindView(R.id.et_business_circle)
-    EditText etBusinessCircle;
-    @BindView(R.id.tv_village)
-    TextView tvVillage;
-    @BindView(R.id.et_village)
-    EditText etVillage;
     @BindView(R.id.tv_detail_address)
     TextView tvDetailAddress;
     @BindView(R.id.et_detail_address)
     EditText etDetailAddress;
     @BindView(R.id.save)
     Button save;
-
+    private String userId;
+    private String strLocation="";
+    private  String buyerName;
+    private  String buyerPhone;
+    private  String buyerDetailAddress;
+    private static final String TAG = "AddAddressActivity";
     @Override
     protected void processLogic() {
+        userId= StorageUtil.getUserId(this);
         CloudApi.getAreaList(0x001, myCallBack);
     }
 
@@ -83,21 +86,8 @@ public class AddAddressActivity extends BaseActivity {
                 finish();
             }
         });
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Map<String, String> params = new HashMap<>();
-                params.put("strReceiptusername", "strReceiptusername");
-                params.put("strReceiptmobile", "strReceiptmobile");
-                params.put("strLocation", "strLocation");
-                params.put("strShopname", "strShopname");
-                params.put("strNeighbourhood", "strNeighbourhood");
-                params.put("lUserid", "lUserid");
-                params.put("lShopId", "lShopId");
-                JSONObject jsonObject = new JSONObject(params);
-//                CloudApi.addAddress(0x001, jsonObject, myCallBack);
-            }
-        });
+
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -118,13 +108,56 @@ public class AddAddressActivity extends BaseActivity {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             JSONArray data = jsonObject.getJSONArray("result");
-                            ArrayList<Object> list = new ArrayList<>();
+                            final ArrayList<Object> list = new ArrayList<>();
                             for (int i = 0; i < data.length(); i++) {
                                 list.add(data.get(i));
                             }
                             ArrayAdapter<Object> stringArrayAdapter = new ArrayAdapter<Object>(AddAddressActivity.this, android.R.layout.simple_spinner_dropdown_item, list);
                             stringArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             spQuxian.setAdapter(stringArrayAdapter);
+                            spQuxian.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    strLocation=list.get(position).toString();
+                                    Log.i(TAG, "onItemSelected: strLocation"+strLocation);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+
+                            save.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    buyerName = etName.getText().toString();
+                                    buyerPhone = etPhone.getText().toString();
+                                    buyerDetailAddress = etDetailAddress.getText().toString();
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("strReceiptusername", buyerName);
+                                    params.put("strReceiptmobile", buyerPhone);
+                                    params.put("strLocation", strLocation);
+                                    params.put("strDetailaddress", buyerDetailAddress);
+                                    params.put("lUserid", userId);
+                                    JSONObject jsonObject = new JSONObject(params);
+                                    CloudApi.addAddress(0x002, jsonObject, myCallBack);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")){
+                            ToastManager.show("新建地址成功");
+                            String addressId = jsonObject.getString("result");
+                            startActivity(new Intent(AddAddressActivity.this,AddressActivity.class));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -1,21 +1,19 @@
 package com.it.cloudwater.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by hpc on 2017/7/3.
  */
 
 public class CheckBean implements Serializable{
-    public String name;
-    public String address;
-    public int phoneNumber;
+
+    public ArrayList<AddressListBean.Result.DataList> addressListBean;
     public boolean isSingle;
 
-    public CheckBean(String name, String address, int phoneNumber,boolean isSingle) {
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+    public CheckBean(ArrayList<AddressListBean.Result.DataList> addressListBean, boolean isSingle) {
+        this.addressListBean = addressListBean;
         this.isSingle=isSingle;
     }
 }
