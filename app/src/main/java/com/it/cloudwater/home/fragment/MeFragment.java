@@ -1,6 +1,7 @@
 package com.it.cloudwater.home.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,12 @@ import com.it.cloudwater.user.BucketActivity;
 import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.MoreActivity;
+import com.it.cloudwater.user.OrderActivity;
 import com.it.cloudwater.widget.RoundedCornerImageView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by hpc on 2017/6/16.
@@ -70,6 +74,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     TextView tvMore;
     @BindView(R.id.rl_more)
     RelativeLayout rlMore;
+    @BindView(R.id.iv_order_my)
+    ImageView ivOrderMy;
+    @BindView(R.id.tv_order_my)
+    TextView tvOrderMy;
+    @BindView(R.id.rl_order_my)
+    RelativeLayout rlOrderMy;
+
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
@@ -84,6 +95,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         rlMore.setOnClickListener(this);
         rlAddressMy.setOnClickListener(this);
         rlCouponMy.setOnClickListener(this);
+        rlOrderMy.setOnClickListener(this);
     }
 
     @Override
@@ -118,10 +130,15 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), CouponActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.rl_order_my:
+                intent = new Intent(getActivity(), OrderActivity.class);
+                startActivity(intent);
+                break;
 
             default:
                 break;
         }
 
     }
+
 }

@@ -15,7 +15,9 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.widget.button.AnimShopButton;
+import com.it.cloudwater.widget.button.IOnAddDelListener;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
@@ -60,12 +62,25 @@ public class DetailActivity extends BaseActivity {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     private String goodsLid;
+    private int goodCount;
     private static final String TAG = "DetailActivity";
+    private int lId;
+    private int nGoodstype;
+    private String strGoodsname;
+    private String strGoodsimgurl;
+    private String strStandard;
+    private String strRemarks;
+    private String strIntroduce;
+    private int nMothnumber;
+    private int nPrice;
+    private int nStock;
+    private int nOnline;
+    private String userId;
 
     @Override
     protected void processLogic() {
-        goodsLid = getIntent().getStringExtra("goodsLid");
-        CloudApi.getGoodsDetailData(0x001, Long.parseLong(goodsLid), myCallBack);
+
+
     }
 
     @Override
@@ -78,31 +93,53 @@ public class DetailActivity extends BaseActivity {
                 finish();
             }
         });
+        goodsLid = getIntent().getStringExtra("goodsLid");
+        userId= StorageUtil.getUserId(this);
+        CloudApi.getGoodsDetailData(0x001, Long.parseLong(goodsLid), myCallBack);
         Button mOrdersSubmit = (Button) findViewById(R.id.order_submit);
+        btnReplenish.setOnAddDelListener(new IOnAddDelListener() {
+            @Override
+            public void onAddSuccess(int count) {
+                goodCount=count;
+            }
+
+            @Override
+            public void onAddFailed(int count, FailType failType) {
+                goodCount=count;
+            }
+
+            @Override
+            public void onDelSuccess(int count) {
+                goodCount=count;
+            }
+
+            @Override
+            public void onDelFaild(int count, FailType failType) {
+                goodCount=count;
+            }
+        });
         mOrdersSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //订单参数包装
-                Map<String, String> orderParams = new HashMap<>();
-                orderParams.put("lGoodsid", "lGoodsid");
-                orderParams.put("strGoodsname", "strGoodsname");
-                orderParams.put("nPrice", "nPrice");
-                orderParams.put("strGoodsimgurl", "strGoodsimgurl");
-                orderParams.put("nGoodsTotalPrice", "nGoodsTotalPrice");
-                orderParams.put("nCount", "nCount");
+                Map<String, Object> orderParams = new HashMap<>();
+                orderParams.put("lGoodsid", goodsLid);
+                orderParams.put("strGoodsname", strGoodsname);
+                orderParams.put("nPrice", nPrice);
+                orderParams.put("strGoodsimgurl", strGoodsimgurl);
+                orderParams.put("nGoodsTotalPrice", nPrice*goodCount);
+                orderParams.put("nCount", goodCount);
                 JSONObject orderObject = new JSONObject(orderParams);
                 ArrayList<JSONObject> orderGoods = new ArrayList<>();
                 orderGoods.add(orderObject);
                 Map<String, Object> params = new HashMap<>();
-                params.put("lBuyerid", "lBuyerid");
-                params.put("strBuyername", "strBuyername");
-                params.put("nTotalprice", "nTotalprice");
-                params.put("strInvoiceheader ", "strInvoiceheader ");
-                params.put("strRemarks", "strRemarks");
+                params.put("lBuyerid", userId);
+                params.put("strBuyername", "姓名");
+                params.put("nTotalprice", nPrice*goodCount);
                 params.put("orderGoods", orderGoods);
 
                 JSONObject jsonObject = new JSONObject(params);
-
+                CloudApi.orderSubmit(0x002,jsonObject,myCallBack);
 
                 startActivity(new Intent(DetailActivity.this, SubmitOrderActivity.class));
             }
@@ -146,6 +183,19 @@ public class DetailActivity extends BaseActivity {
                     Log.i(TAG, "onSuccess: ----" + data);
                     parseDataAndShow(body);
                     break;
+                case 0x002:
+                    String body2 = data.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")){
+                            int orderId = jsonObject.getInt("result");//订单id
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
 
@@ -161,13 +211,17 @@ public class DetailActivity extends BaseActivity {
             String resCode = detailData.getString("resCode");
             if (resCode.equals("0")) {
                 JSONObject result = detailData.getJSONObject("result");
-                String strGoodsname = result.getString("strGoodsname");
-                String strGoodsimgurl = result.getString("strGoodsimgurl");
-                String strStandard = result.getString("strStandard");
-                String strRemarks = result.getString("strRemarks");
-                String strIntroduce = result.getString("strIntroduce");
-                int nMothnumber = result.getInt("nMothnumber");
-                int nPrice = result.getInt("nPrice");
+                lId = result.getInt("lId");
+                nGoodstype = result.getInt("nGoodstype");
+                strGoodsname = result.getString("strGoodsname");
+                strGoodsimgurl = result.getString("strGoodsimgurl");
+                strStandard = result.getString("strStandard");
+                strRemarks = result.getString("strRemarks");
+                strIntroduce = result.getString("strIntroduce");
+                nMothnumber = result.getInt("nMothnumber");
+                nPrice = result.getInt("nPrice");
+                nStock = result.getInt("nStock");
+                nOnline = result.getInt("nOnline");
                 tradeName.setText(strGoodsname);
                 specifications.setText(strStandard);
                 commodityIntroduction.setText(strIntroduce);
