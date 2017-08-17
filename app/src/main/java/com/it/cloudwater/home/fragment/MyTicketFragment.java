@@ -87,9 +87,9 @@ public class MyTicketFragment extends BaseFragment {
                             dataLists = new ArrayList<>();
                             for (int i = 0; i < myTicketListBean.result.dataList.size(); i++) {
                                 dataLists.add(myTicketListBean.result.dataList.get(i));
-                                initUi(dataLists);
-                            }
 
+                            }
+                            initUi(dataLists);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

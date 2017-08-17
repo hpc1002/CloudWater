@@ -15,6 +15,7 @@
             android:layout_height="30dp">
 
             <TextView
+                android:id="@+id/tv_time_order_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -22,6 +23,7 @@
                 android:textColor="@color/word_second" />
 
             <TextView
+                android:id="@+id/tv_time_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -42,12 +44,14 @@
             android:layout_marginTop="5dp">
 
             <TextView
+                android:id="@+id/tv_order_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="订单号:3123213"
                 android:textColor="@color/title" />
 
             <TextView
+                android:id="@+id/tv_payState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -83,6 +87,13 @@
                 android:textColor="@color/red" />
 
             <TextView
+                android:id="@+id/good_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="￥49" />
+
+            <TextView
                 android:id="@+id/barrel_deposit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -116,6 +127,7 @@
             android:layout_marginTop="5dp">
 
             <TextView
+                android:id="@+id/actual_pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
