@@ -50,17 +50,17 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
     @Override
     public void setData(OrderListBean.Result.DataList data) {
         super.setData(data);
-        orderCreateTime.setText(data.dtCreatetime + "");
+        orderCreateTime.setText("下单时间" + data.dtCreatetime + "");
         sendTime.setText("配送时间" + "今天8：00-9：00");
         orderNumber.setText("订单号" + data.strOrdernum);
         if (data.nState == 0) {
             payState.setText("未支付");
         }
         goodName.setText(data.orderGoods.get(0).strGoodsname);
-        goodPrice.setText("￥"+((double)data.orderGoods.get(0).nGoodsFactPrice / 100));
-        barrelDeposit.setText("桶押金" + ((double)data.nBucketmoney / 100));
+        goodPrice.setText("￥" + ((double) data.orderGoods.get(0).nGoodsFactPrice / 100));
+        barrelDeposit.setText("桶押金" + ((double) data.nBucketmoney / 100));
         barrelCount.setText("×" + data.nBucketnum);
-        actualPay.setText("实付款: ￥" + ((double)data.nTotalprice / 100));
+        actualPay.setText("实付款: ￥" + ((double) data.nTotalprice / 100));
         Glide.with(getContext())
                 .load(data.orderGoods.get(0).strGoodsimgurl + "?x-oss-process=image/resize,m_fixed,w_350,h_200")
                 .placeholder(R.mipmap.home_load_error)

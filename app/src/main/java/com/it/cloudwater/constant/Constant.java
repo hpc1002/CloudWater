@@ -15,6 +15,7 @@ public class Constant {
     public static final String ORDER_SUBMIT_URL = BASE_URL + "order/add";//提交订单
     public static final String BUYER_DETAIL_URL = BASE_URL + "buyer/detail/";//获取买家详细信息
     public static final String MY_ORDER_LIST_URL = BASE_URL + "order/list";//我的订单列表
+    public static final String ORDER_PAY_DETAIL_URL = BASE_URL + "order/payDetail/";//订单支付详情
     public static final String ADD_ADDRESS_URL = BASE_URL + "address/add";//添加收获地址
 
     public static final String AREA_LIST_URL = BASE_URL + "shop/allLocation";//获取区列表

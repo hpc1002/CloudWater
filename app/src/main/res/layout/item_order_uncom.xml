@@ -75,6 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/good_img"
+                android:textColor="@color/title"
+                android:textSize="16sp"
                 android:text="名称" />
 
             <TextView
@@ -84,7 +86,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/good_name"
                 android:text="1.8L"
-                android:textColor="@color/red" />
+                android:textSize="16sp"
+                android:textColor="@color/title" />
 
             <TextView
                 android:id="@+id/good_price"
@@ -132,6 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="实付款:￥49"
+                android:textSize="16sp"
                 android:textColor="@color/title" />
 
             <TextView

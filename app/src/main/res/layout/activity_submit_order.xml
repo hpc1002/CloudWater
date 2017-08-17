@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.it.cloudwater.commodity.SubmitOrderActivity">
 
@@ -12,19 +11,50 @@
     <RelativeLayout
         android:id="@+id/rl_address"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y80"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x25"
-            android:text="收货地址"
-            android:textColor="@color/course_name"
-            android:textSize="16sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x25"
+                android:text="收货信息"
+                android:textColor="@color/course_name"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="姓名" />
+
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手机号" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_detail_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="详细地址" />
+        </LinearLayout>
+
 
         <ImageView
             android:layout_width="wrap_content"
@@ -40,95 +70,71 @@
         android:layout_height="@dimen/y20" />
 
     <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/img_water"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/home_load_error" />
+
+        <TextView
+            android:id="@+id/tv_wanter_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/img_water"
+            android:text="水名称"
+            android:textColor="@color/title" />
+
+        <TextView
+            android:id="@+id/tv_barrel_deposit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_wanter_name"
+            android:layout_toRightOf="@+id/img_water"
+            android:text="桶押金:￥:0.00" />
 
         <TextView
             android:id="@+id/unit_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="￥26.00" />
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:text="￥26.00"
+            android:textColor="@color/title" />
 
         <TextView
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/unit_price"
-            android:text="数量2" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <com.it.cloudwater.widget.button.AnimShopButton
-            android:id="@+id/btnReplenish"
-            android:layout_toLeftOf="@+id/price"
-            android:layout_marginRight="20dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:addEnableBgColor="@color/colorPrimary"
-            app:addEnableFgColor="#ffffff"
-            app:hintBgColor="@color/colorPrimary"
-            app:hintBgRoundValue="15dp"
-            app:hintFgColor="#ffffff"
-            app:ignoreHintArea="true"
-            app:maxCount="99"/>
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:text="26.00"/>
-    </RelativeLayout>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/part_line"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp">
+            android:layout_below="@+id/unit_price"
+            android:layout_marginRight="5dp"
+            android:text="数量2" />
+
         <TextView
             android:id="@+id/total_order"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginTop="20dp"
             android:layout_alignParentRight="true"
-            android:text="订单合计:￥169.00" />
-
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_below="@+id/total_order"-->
-            <!--android:background="@color/white">-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:text="配送时间" />-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:text="1小时内配送" />-->
-
-        <!--</RelativeLayout>-->
+            android:layout_below="@+id/img_water"
+            android:text="订单合计:￥169.00"
+            android:textColor="@color/title" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/part_line" />
+
+    <View
+        android:layout_width="match_parent"
         android:layout_height="@dimen/y20" />
+
     <RelativeLayout
         android:id="@+id/rl_invoice_header"
         android:layout_width="match_parent"
@@ -142,9 +148,22 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x25"
-            android:text="开发票抬头"
+            android:text="发票抬头:"
             android:textColor="@color/course_name"
             android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_invoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/tv_invoice_header"
+            android:background="@null"
+            android:textColor="@color/course_name"
+            android:textColorHint="@color/course_learn_number"
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -172,16 +191,24 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x25"
-            android:text="备注"
+            android:text="备注:"
             android:textColor="@color/course_name"
             android:textSize="16sp" />
-        <TextView
-            android:id="@+id/tv_content"
-            android:layout_toRightOf="@+id/tv_remarks"
-            android:layout_width="wrap_content"
+
+        <EditText
+            android:id="@+id/et_remarks"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="备注内容"/>
+            android:layout_marginLeft="@dimen/x36"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/tv_remarks"
+            android:background="@null"
+            android:hint="请输入备注信息"
+            android:textColor="@color/course_name"
+            android:textColorHint="@color/course_learn_number"
+            android:textSize="14sp" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -208,11 +235,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x25"
-            android:text="使用水票"
+            android:text="使用水票:"
             android:textColor="@color/course_name"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/ticket_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -271,17 +299,27 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tv_tag1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="共:204.00" />
+            android:layout_marginLeft="20dp"
+            android:text="共: " />
+
+        <TextView
+            android:id="@+id/total_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_tag1"
+            android:text="204.00"
+            android:textColor="@color/course_learn_state" />
 
         <Button
             android:id="@+id/btn_settlement"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@color/red"
-            android:textColor="@color/white"
-            android:text="去结算" />
+            android:layout_alignParentBottom="true"
+            android:background="@color/course_learn_state"
+            android:text="去结算"
+            android:textColor="@color/white" />
     </RelativeLayout>
 </LinearLayout>

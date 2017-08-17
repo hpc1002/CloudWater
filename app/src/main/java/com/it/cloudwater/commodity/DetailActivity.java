@@ -76,6 +76,7 @@ public class DetailActivity extends BaseActivity {
     private int nStock;
     private int nOnline;
     private String userId;
+    private String body;
 
     @Override
     protected void processLogic() {
@@ -94,28 +95,28 @@ public class DetailActivity extends BaseActivity {
             }
         });
         goodsLid = getIntent().getStringExtra("goodsLid");
-        userId= StorageUtil.getUserId(this);
+        userId = StorageUtil.getUserId(this);
         CloudApi.getGoodsDetailData(0x001, Long.parseLong(goodsLid), myCallBack);
         Button mOrdersSubmit = (Button) findViewById(R.id.order_submit);
         btnReplenish.setOnAddDelListener(new IOnAddDelListener() {
             @Override
             public void onAddSuccess(int count) {
-                goodCount=count;
+                goodCount = count;
             }
 
             @Override
             public void onAddFailed(int count, FailType failType) {
-                goodCount=count;
+                goodCount = count;
             }
 
             @Override
             public void onDelSuccess(int count) {
-                goodCount=count;
+                goodCount = count;
             }
 
             @Override
             public void onDelFaild(int count, FailType failType) {
-                goodCount=count;
+                goodCount = count;
             }
         });
         mOrdersSubmit.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +128,7 @@ public class DetailActivity extends BaseActivity {
                 orderParams.put("strGoodsname", strGoodsname);
                 orderParams.put("nPrice", nPrice);
                 orderParams.put("strGoodsimgurl", strGoodsimgurl);
-                orderParams.put("nGoodsTotalPrice", nPrice*goodCount);
+                orderParams.put("nGoodsTotalPrice", nPrice * goodCount);
                 orderParams.put("nCount", goodCount);
                 JSONObject orderObject = new JSONObject(orderParams);
                 ArrayList<JSONObject> orderGoods = new ArrayList<>();
@@ -135,13 +136,12 @@ public class DetailActivity extends BaseActivity {
                 Map<String, Object> params = new HashMap<>();
                 params.put("lBuyerid", userId);
                 params.put("strBuyername", "姓名");
-                params.put("nTotalprice", nPrice*goodCount);
+                params.put("nTotalprice", nPrice * goodCount);
                 params.put("orderGoods", orderGoods);
 
                 JSONObject jsonObject = new JSONObject(params);
-                CloudApi.orderSubmit(0x002,jsonObject,myCallBack);
+                CloudApi.orderSubmit(0x002, jsonObject, myCallBack);
 
-                startActivity(new Intent(DetailActivity.this, SubmitOrderActivity.class));
             }
         });
     }
@@ -178,7 +178,8 @@ public class DetailActivity extends BaseActivity {
         public void onSuccess(int what, Response<String> data) {
             switch (what) {
                 case 0x001:
-                    String body = data.body();
+
+                    body = data.body();
                     progressBar.setVisibility(View.GONE);
                     Log.i(TAG, "onSuccess: ----" + data);
                     parseDataAndShow(body);
@@ -188,9 +189,11 @@ public class DetailActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(body2);
                         String resCode = jsonObject.getString("resCode");
-                        if (resCode.equals("0")){
+                        if (resCode.equals("0")) {
                             int orderId = jsonObject.getInt("result");//订单id
-
+                            Intent intent = new Intent(DetailActivity.this, SubmitOrderActivity.class);
+                            intent.putExtra("order_Id", orderId+"");
+                            startActivity(intent);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
