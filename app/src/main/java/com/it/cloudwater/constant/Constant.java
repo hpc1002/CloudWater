@@ -25,4 +25,8 @@ public class Constant {
     public static final String MYCOUPON_LIST_URL = BASE_URL + "coupon/list";//我的优惠券列表
 
     public static final String ADDRESS_LIST_URL = BASE_URL + "address/list";//获取买家收货地址
+    public static final String BUCKET_URL = BASE_URL + "buyer/myBucket/";//获取我的水桶
+    public static final String RETREAT_BUCKET_URL = BASE_URL + "buyer/retreatBucket";//退桶
+    public static final String ADD_SHOP_CART_URL = BASE_URL + "shopping/add";//添加购物车
+    public static final String SHOP_CART_LIST_URL = BASE_URL + "shopping/myList";//购物车商品列表
 }

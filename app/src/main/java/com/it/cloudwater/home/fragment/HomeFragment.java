@@ -20,10 +20,17 @@ import com.it.cloudwater.home.adapter.BGABannerAdapter;
 import com.it.cloudwater.home.bean.BannerDto;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cn.bingoogolapple.bgabanner.BGABanner;
@@ -43,7 +50,7 @@ public class HomeFragment extends BaseFragment {
 //    Button next;
     private ArrayList<BannerDto> bannerList;
     private ArrayList<GoodsListBean.Result.DataList> goodList;
-
+    private String userId;
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -51,6 +58,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initListener() {
+        userId= StorageUtil.getUserId(getActivity());
         recyclerViewCommend.setFocusable(false);
         recyclerViewCommend.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerViewCommend.setHasFixedSize(true);
@@ -86,6 +94,37 @@ public class HomeFragment extends BaseFragment {
                             startActivity(intent);
                         }
                     });
+                    adapter.setCallBack(new GoodListAdapter.OnMyClickListener() {
+                        @Override
+                        public void OnItemClickListener(Integer price, long id, String strGoodsname, String strGoodsimgurl, String strStandard,long goodId) {
+                            ToastManager.show(strGoodsname);
+                            Map<String, Object> shopParams = new HashMap<>();
+                            shopParams.put("strUserName","侯鹏成");
+                            shopParams.put("lUserId",userId);
+                            shopParams.put("nPrice",price);
+                            shopParams.put("lGoodsId",goodId);
+                            shopParams.put("strGoodsname",strGoodsname);
+                            shopParams.put("strGoodsimgurl",strGoodsimgurl);
+                            shopParams.put("strStandard",strStandard);
+                            JSONObject shopObject = new JSONObject(shopParams);
+                            CloudApi.addShopCart(0x002,shopObject,myCallBack);
+                        }
+                    });
+                    break;
+                   case 0x002:
+                       String body2 = result.body();
+                       try {
+                           JSONObject jsonObject = new JSONObject(body2);
+                           String resCode = jsonObject.getString("resCode");
+                           if (resCode.equals("0")){
+                               ToastManager.show("添加购物车成功");
+                           }else{
+                               ToastManager.show("添加购物车失败");
+                           }
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       }
+                       break;
             }
         }
 

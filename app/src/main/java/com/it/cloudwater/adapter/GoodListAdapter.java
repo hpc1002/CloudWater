@@ -1,9 +1,11 @@
 package com.it.cloudwater.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.it.cloudwater.R;
+import com.it.cloudwater.base.BaseAdapter;
 import com.it.cloudwater.base.BaseQuickAdapter;
 import com.it.cloudwater.base.BaseViewHolder;
 import com.it.cloudwater.bean.GoodsListBean;
@@ -22,7 +24,7 @@ public class GoodListAdapter extends BaseQuickAdapter<GoodsListBean.Result.DataL
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, GoodsListBean.Result.DataList item) {
+    protected void convert(BaseViewHolder helper, final GoodsListBean.Result.DataList item) {
         Glide.with(mContext)
                 .load(item.strGoodsimgurl)
                 .crossFade()
@@ -32,5 +34,20 @@ public class GoodListAdapter extends BaseQuickAdapter<GoodsListBean.Result.DataL
         helper.setText(R.id.bucket_specifications, item.strStandard);
         helper.setText(R.id.bucket_price, ((double)item.nPrice/100) + "元");
         helper.setText(R.id.bucket_amount_sold, "已售" + item.nMothnumber);
+        helper.getView(R.id.add_shop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallBack.OnItemClickListener(item.nPrice,item.lId,item.strGoodsname,item.strGoodsimgurl,item.strStandard,item.lId);
+            }
+        });
+    }
+    private OnMyClickListener mCallBack;
+
+    public void setCallBack(OnMyClickListener callBack) {
+        mCallBack = callBack;
+    }
+
+    public interface OnMyClickListener {
+        void OnItemClickListener(Integer price, long id, String strGoodsname,String strGoodsimgurl,String strStandard,long goodId);
     }
 }

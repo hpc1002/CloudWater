@@ -76,10 +76,16 @@
                 android:layout_marginTop="@dimen/y22"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="3dp"
                 android:textColor="@color/course_learn_number"
                 android:textSize="12sp" />
-
+            <ImageView
+                android:id="@+id/add_shop"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"/>
         </RelativeLayout>
 
     </LinearLayout>
