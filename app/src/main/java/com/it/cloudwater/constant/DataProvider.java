@@ -20,12 +20,7 @@ public class DataProvider {
     }
 
     static final BannerDto[] VIRTUAL_PICTURE = {
-            new BannerDto("翻转课堂", "http://o84n5syhk.bkt.clouddn.com/57154327_p0.png", 1, 123),
-            new BannerDto("ps实战", "http://o84n5syhk.bkt.clouddn.com/57180221_p0.jpg", 2, 124),
-            new BannerDto("网页设计", "http://o84n5syhk.bkt.clouddn.com/57174070_p0.jpg", 3, 125),
-            new BannerDto("职业礼仪", "http://o84n5syhk.bkt.clouddn.com/57166531_p0.jpg", 4, 126),
-            new BannerDto("大数据时代", "http://o84n5syhk.bkt.clouddn.com/57151022_p0.jpg", 5, 127),
-            new BannerDto("趣味课堂", "http://o84n5syhk.bkt.clouddn.com/57172236_p0.jpg", 6, 127),
+            new BannerDto("", "http://a1.qpic.cn/psb?/V140CNnH1eRmTV/jUiOQqgKqPLIUwcDzSlOO50.laGh5RJ*GGU.RFB1KnE!/b/dBoBAAAAAAAA&bo=7gJ4AQAAAAADB7c!&rf=viewer_4", 1, 123),
     };
 
     public static List<TicketBean> getMyTicketList() {
