@@ -21,7 +21,11 @@ import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.pay.PayActivity;
 import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -114,15 +118,27 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             switch (what) {
                 case 0x001:
                     String body = result.body();
-                    ArrayList<OrderDetailBean.Result> goodsData = new ArrayList<>();
-                    OrderDetailBean orderDetailBean = new Gson().fromJson(body, OrderDetailBean.class);
-                    tvWanterName.setText(orderDetailBean.result.orderGoods.get(0).strGoodsname);
-                    tvBarrelDeposit.setText(((double) orderDetailBean.result.nBucketmoney / 100) + "");
-                    unitPrice.setText(((double) orderDetailBean.result.orderGoods.get(0).nPrice / 100) + "");
-                    count.setText(orderDetailBean.result.orderGoods.get(0).nCount + "");
-                    totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "");
-                    tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100));
-                    totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "");
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            ArrayList<OrderDetailBean.Result> goodsData = new ArrayList<>();
+                            OrderDetailBean orderDetailBean = new Gson().fromJson(body, OrderDetailBean.class);
+                            tvWanterName.setText(orderDetailBean.result.orderGoods.get(0).strGoodsname);
+                            tvBarrelDeposit.setText(((double) orderDetailBean.result.nBucketmoney / 100) + "");
+                            unitPrice.setText(((double) orderDetailBean.result.orderGoods.get(0).nPrice / 100) + "");
+                            count.setText(orderDetailBean.result.orderGoods.get(0).nCount + "");
+                            totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "");
+                            tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100));
+                            totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "");
+                        } else if (resCode.equals("-1")) {
+                            String resultData = jsonObject.getString("result");
+                            ToastManager.show(resultData);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
             }
         }

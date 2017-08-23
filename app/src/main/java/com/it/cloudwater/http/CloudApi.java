@@ -212,6 +212,42 @@ public class CloudApi {
                 });
     }
 
+    public static void updateAddress(final int what, final long lId, String strNeighbourhood, String strReceiptmobile, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.ADDRESS_UPDATE_URL)
+                .tag(App.getInstance())
+                .params("lId", lId)
+                .params("strNeighbourhood", strNeighbourhood)
+                .params("strReceiptmobile", strReceiptmobile)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+    public static void deleteAddress(final int what, final long lId, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.ADDRESS_DELETE_URL)
+                .tag(App.getInstance())
+                .params("lId", lId)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
     public static void getAreaList(final int what, final MyCallBack myCallBack) {
         OkGo.<String>get(Constant.AREA_LIST_URL)
                 .tag(App.getInstance())
@@ -249,7 +285,25 @@ public class CloudApi {
                     }
                 });
     }
+    public static void getBuyTicketList(final int what, final Integer nPage, final Integer nMaxNum, long lUserId, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.BUYTICKET_LIST_URL)
+                .tag(App.getInstance())
+                .params("nPage", nPage)
+                .params("nMaxNum", nMaxNum)
+                .params("lUserId", lUserId)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
 
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
     public static void getMyCouponList(final int what, final Integer nPage, final Integer nMaxNum, long lUserId, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.MYCOUPON_LIST_URL)
                 .tag(App.getInstance())
@@ -326,6 +380,7 @@ public class CloudApi {
                     }
                 });
     }
+
     public static void addShopCart(final int what, JSONObject jsonObject, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.ADD_SHOP_CART_URL)
                 .tag(App.getInstance())
@@ -333,31 +388,32 @@ public class CloudApi {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        myCallBack.onSuccess(what,response);
+                        myCallBack.onSuccess(what, response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        myCallBack.onFail(what,response);
+                        myCallBack.onFail(what, response);
                     }
                 });
 
     }
+
     public static void getShopList(final int what, long userId, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.SHOP_CART_LIST_URL)
                 .tag(App.getInstance())
-                .params("lUserId",userId)
+                .params("lUserId", userId)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        myCallBack.onSuccess(what,response);
+                        myCallBack.onSuccess(what, response);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        myCallBack.onFail(what,response);
+                        myCallBack.onFail(what, response);
                     }
                 });
     }

@@ -14,7 +14,6 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.adapter.CheckAdapter;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.AddressListBean;
-import com.it.cloudwater.bean.CheckBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
@@ -92,6 +91,7 @@ public class AddressActivity extends BaseActivity {
         public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
+                    addressList = new ArrayList<>();
                     String body = result.body();
                     try {
                         JSONObject jsonObject = new JSONObject(body);
@@ -99,12 +99,11 @@ public class AddressActivity extends BaseActivity {
                         if (resCode.equals("1")) {
                             String result1 = jsonObject.getString("result");
                             ToastManager.show(result1);
+                            addressList.clear();
                         } else if (resCode.equals("0")) {
                             AddressListBean addressListBean = new Gson().fromJson(body, AddressListBean.class);
                             int size = addressListBean.result.dataList.size();
-
-                            addressList = new ArrayList<>();
-                            for (int i=0;i<size;i++){
+                            for (int i = 0; i < size; i++) {
                                 addressList.add(addressListBean.result.dataList.get(i));
                             }
                             BasicController.BasicParams params = new BasicController.Builder()
@@ -118,20 +117,48 @@ public class AddressActivity extends BaseActivity {
                                     return checkBean.isSingle;
                                 }
                             });
-                            mAdapter.setOnItemClickListener(addressRecycler, new OnItemClickListener() {
+//                            mAdapter.setOnItemClickListener(addressRecycler, new OnItemClickListener() {
+//                                @Override
+//                                public void onItemClick(BaseViewHolder vh, int position) {
+//                                    AddressListBean.Result.DataList checkedData = addressList.get(position);
+//                                    Intent intent = new Intent();
+//                                    //把返回数据存入Intent
+//                                    intent.putExtra("result", checkedData.strDetailaddress);
+//                                    AddressActivity.this.setResult(RESULT_OK, intent);
+//                                    //关闭Activity
+//                                    AddressActivity.this.finish();
+//                                    //设置返回数据
+//                                    ToastManager.show("position" + position + "iscClicked" + checkedData.strDetailaddress);
+//                                }
+//                            });
+                            mAdapter.setCallBack(new CheckAdapter.OnMyClickListener() {
                                 @Override
-                                public void onItemClick(BaseViewHolder vh, int position) {
-                                    AddressListBean.Result.DataList checkedData = addressList.get(position);
-                                    Intent intent = new Intent();
-                                    //把返回数据存入Intent
-                                    intent.putExtra("result", checkedData.strDetailaddress);
-                                    AddressActivity.this.setResult(RESULT_OK, intent);
-                                    //关闭Activity
-                                    AddressActivity.this.finish();
-                                    //设置返回数据
-                                    ToastManager.show("position" + position + "iscClicked" + checkedData.strDetailaddress);
+                                public void OnItemEditClickListener(long lId, String strNeighbourhood, String strReceiptmobile) {
+                                    Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
+                                    intent.putExtra("lId",lId);
+                                    startActivity(intent);
+//                                    CloudApi.updateAddress(0x002, lId, strNeighbourhood, strReceiptmobile, myCallBack);
+                                }
+
+                                @Override
+                                public void OnItemDeleteClickListener(long lId) {
+                                    CloudApi.deleteAddress(0x002, lId, myCallBack);
+
                                 }
                             });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")){
+                            CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+                            mAdapter.notifyDataSetChanged();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

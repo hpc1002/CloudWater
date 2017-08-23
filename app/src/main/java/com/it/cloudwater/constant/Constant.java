@@ -22,9 +22,12 @@ public class Constant {
     public static final String GET_SHOP_URL = BASE_URL + "shop/getShops";//根据区获取商铺
 
     public static final String MYTICKET_LIST_URL = BASE_URL + "ticket/myList";//获取买家水票
+    public static final String BUYTICKET_LIST_URL = BASE_URL + "ticket/list";//购买水票
     public static final String MYCOUPON_LIST_URL = BASE_URL + "coupon/list";//我的优惠券列表
 
     public static final String ADDRESS_LIST_URL = BASE_URL + "address/list";//获取买家收货地址
+    public static final String ADDRESS_UPDATE_URL = BASE_URL + "address/update";//修改收货地址
+    public static final String ADDRESS_DELETE_URL = BASE_URL + "address/delete";//删除收货地址
     public static final String BUCKET_URL = BASE_URL + "buyer/myBucket/";//获取我的水桶
     public static final String RETREAT_BUCKET_URL = BASE_URL + "buyer/retreatBucket";//退桶
     public static final String ADD_SHOP_CART_URL = BASE_URL + "shopping/add";//添加购物车

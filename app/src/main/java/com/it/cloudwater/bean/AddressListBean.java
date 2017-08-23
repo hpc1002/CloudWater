@@ -14,7 +14,7 @@ public class AddressListBean {
         public int nTotal;
         public ArrayList<DataList> dataList;
         public class DataList{
-            public int lId;
+            public long lId;
             public int lShopId;
             public int lUserid;
             public String strReceiptusername;
