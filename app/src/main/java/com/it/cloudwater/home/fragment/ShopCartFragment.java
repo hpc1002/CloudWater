@@ -20,6 +20,7 @@ import com.it.cloudwater.callback.OnItemListener;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.lzy.okgo.model.Response;
@@ -71,7 +72,12 @@ public class ShopCartFragment extends BaseFragment {
     @Override
     protected void initData() {
         userId = StorageUtil.getUserId(getActivity());
-        CloudApi.getShopList(0x001, Long.parseLong(userId), myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.getShopList(0x001, Long.parseLong(userId), myCallBack);
+        } else {
+            ToastManager.show("未登录");
+        }
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -116,7 +122,7 @@ public class ShopCartFragment extends BaseFragment {
 //        shopCartAdapter.addAll(cartLists);
         mRvItemAdapter = new RvItemAdapter(getActivity(), cartLists);
         cartRecycler.setAdapter(mRvItemAdapter);
-        positionSet =  new HashSet<>();
+        positionSet = new HashSet<>();
         setListener();
     }
 

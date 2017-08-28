@@ -17,6 +17,7 @@ import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.MoreActivity;
 import com.it.cloudwater.user.OrderActivity;
+import com.it.cloudwater.user.TicketActivity;
 import com.it.cloudwater.widget.RoundedCornerImageView;
 
 import butterknife.BindView;
@@ -96,6 +97,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         rlAddressMy.setOnClickListener(this);
         rlCouponMy.setOnClickListener(this);
         rlOrderMy.setOnClickListener(this);
+        rlTicketMy.setOnClickListener(this);
     }
 
     @Override
@@ -108,7 +110,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         Intent intent;
         switch (v.getId()) {
             case R.id.rl_ticket_my:
-
+                intent = new Intent(getActivity(), TicketActivity.class);
+                startActivity(intent);
                 break;
             case R.id.rl_bucket_my:
                 intent = new Intent(getActivity(), BucketActivity.class);

@@ -39,6 +39,12 @@ public class CheckAdapter extends BasicAdapter<AddressListBean.Result.DataList> 
                 mCallBack.OnItemDeleteClickListener(man.lId);
             }
         });
+        holder.getView(R.id.checkbox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallBack.onItemClickListener(man);
+            }
+        });
     }
 
     private CheckAdapter.OnMyClickListener mCallBack;
@@ -51,5 +57,7 @@ public class CheckAdapter extends BasicAdapter<AddressListBean.Result.DataList> 
         void OnItemEditClickListener(long lId, String strNeighbourhood, String strReceiptmobile);
 
         void OnItemDeleteClickListener(long lId);
+        void onItemClickListener(AddressListBean.Result.DataList data);
+
     }
 }

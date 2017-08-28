@@ -18,9 +18,7 @@ import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
-import com.lhalcyon.adapter.base.BaseViewHolder;
 import com.lhalcyon.adapter.helper.BasicController;
-import com.lhalcyon.adapter.helper.OnItemClickListener;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
@@ -117,25 +115,11 @@ public class AddressActivity extends BaseActivity {
                                     return checkBean.isSingle;
                                 }
                             });
-//                            mAdapter.setOnItemClickListener(addressRecycler, new OnItemClickListener() {
-//                                @Override
-//                                public void onItemClick(BaseViewHolder vh, int position) {
-//                                    AddressListBean.Result.DataList checkedData = addressList.get(position);
-//                                    Intent intent = new Intent();
-//                                    //把返回数据存入Intent
-//                                    intent.putExtra("result", checkedData.strDetailaddress);
-//                                    AddressActivity.this.setResult(RESULT_OK, intent);
-//                                    //关闭Activity
-//                                    AddressActivity.this.finish();
-//                                    //设置返回数据
-//                                    ToastManager.show("position" + position + "iscClicked" + checkedData.strDetailaddress);
-//                                }
-//                            });
                             mAdapter.setCallBack(new CheckAdapter.OnMyClickListener() {
                                 @Override
                                 public void OnItemEditClickListener(long lId, String strNeighbourhood, String strReceiptmobile) {
                                     Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
-                                    intent.putExtra("lId",lId);
+                                    intent.putExtra("lId", lId);
                                     startActivity(intent);
 //                                    CloudApi.updateAddress(0x002, lId, strNeighbourhood, strReceiptmobile, myCallBack);
                                 }
@@ -144,6 +128,21 @@ public class AddressActivity extends BaseActivity {
                                 public void OnItemDeleteClickListener(long lId) {
                                     CloudApi.deleteAddress(0x002, lId, myCallBack);
 
+                                }
+
+                                @Override
+                                public void onItemClickListener(AddressListBean.Result.DataList data) {
+                                    Intent intent = new Intent();
+                                    //把返回数据存入Intent
+                                    intent.putExtra("addressName", data.strReceiptusername);
+                                    intent.putExtra("addressId", data.lId + "");
+                                    intent.putExtra("addressPhone", data.strReceiptmobile + "");
+                                    intent.putExtra("addressDetail", data.strDetailaddress);
+                                    intent.putExtra("addressLocation", data.strLocation);
+                                    AddressActivity.this.setResult(RESULT_OK, intent);
+                                    //关闭Activity
+                                    AddressActivity.this.finish();
+                                    //设置返回数据
                                 }
                             });
                         }
@@ -156,7 +155,7 @@ public class AddressActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(body2);
                         String resCode = jsonObject.getString("resCode");
-                        if (resCode.equals("0")){
+                        if (resCode.equals("0")) {
                             CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
                             mAdapter.notifyDataSetChanged();
                         }

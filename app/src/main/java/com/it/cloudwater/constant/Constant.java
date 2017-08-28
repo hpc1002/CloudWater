@@ -32,4 +32,7 @@ public class Constant {
     public static final String RETREAT_BUCKET_URL = BASE_URL + "buyer/retreatBucket";//退桶
     public static final String ADD_SHOP_CART_URL = BASE_URL + "shopping/add";//添加购物车
     public static final String SHOP_CART_LIST_URL = BASE_URL + "shopping/myList";//购物车商品列表
+    public static final String SETTLEMENT_URL = BASE_URL + "order/settlement";//去结算
+    public static final String ORDER_DETAIL_URL = BASE_URL + "order/detail/";//订单详情
+    public static final String MESSAGE_LIST_URL = BASE_URL + "notice/myList";//消息列表
 }

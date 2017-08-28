@@ -18,7 +18,7 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.OrderDetailBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
-import com.it.cloudwater.pay.PayActivity;
+import com.it.cloudwater.pay.PayDetailActivity;
 import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,6 +103,10 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
     private String order_Id;
     private int count_total = 0;
+    private String userId;
+    private OrderDetailBean orderDetailBean;
+    private String addressId;
+    private String strLocation;
 
     @Override
     protected void processLogic() {
@@ -122,15 +127,14 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-                            ArrayList<OrderDetailBean.Result> goodsData = new ArrayList<>();
-                            OrderDetailBean orderDetailBean = new Gson().fromJson(body, OrderDetailBean.class);
+                            orderDetailBean = new Gson().fromJson(body, OrderDetailBean.class);
                             tvWanterName.setText(orderDetailBean.result.orderGoods.get(0).strGoodsname);
-                            tvBarrelDeposit.setText(((double) orderDetailBean.result.nBucketmoney / 100) + "");
-                            unitPrice.setText(((double) orderDetailBean.result.orderGoods.get(0).nPrice / 100) + "");
+                            tvBarrelDeposit.setText(((double) orderDetailBean.result.nBucketmoney / 100) + "元");
+                            unitPrice.setText(((double) orderDetailBean.result.orderGoods.get(0).nPrice / 100) + "元");
                             count.setText(orderDetailBean.result.orderGoods.get(0).nCount + "");
-                            totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "");
-                            tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100));
-                            totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "");
+                            totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "元");
+                            tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100 + "元"));
+                            totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "元");
                         } else if (resCode.equals("-1")) {
                             String resultData = jsonObject.getString("result");
                             ToastManager.show(resultData);
@@ -139,6 +143,22 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                         e.printStackTrace();
                     }
 
+                    break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            ToastManager.show("结算完成，去付款吧");
+                            String orderId = jsonObject.getString("result");
+                            Intent intent = new Intent(SubmitOrderActivity.this, PayDetailActivity.class);
+                            intent.putExtra("orderId", orderId+"");
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
@@ -153,10 +173,41 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     protected void setListener() {
         toolbarTitle.setText("提交订单");
         rlAddress.setOnClickListener(this);
+        userId = StorageUtil.getUserId(this);
         btnSettlement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SubmitOrderActivity.this, PayActivity.class));
+                String name = tvName.getText().toString();
+                String detailAddress = tvDetailAddress.getText().toString();
+                String phone = tvPhone.getText().toString();
+                String invoice = etInvoice.getText().toString();
+                HashMap<String, Object> orderGoodsParams = new HashMap<>();
+                orderGoodsParams.put("lGId", orderDetailBean.result.orderGoods.get(0).lGId);
+                orderGoodsParams.put("nGoodsFactPrice", orderDetailBean.result.orderGoods.get(0).nGoodsFactPrice);
+                orderGoodsParams.put("nGoodsTotalPrice", orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice);
+                orderGoodsParams.put("nWatertickets", orderDetailBean.result.orderGoods.get(0).nWatertickets);
+                JSONObject orderGood = new JSONObject(orderGoodsParams);
+                ArrayList<JSONObject> orderGoods = new ArrayList<>();
+                orderGoods.add(orderGood);
+                HashMap<String, Object> settlementParams = new HashMap<>();
+                settlementParams.put("lId", orderDetailBean.result.lId);
+                settlementParams.put("lBuyerid", userId);
+                settlementParams.put("lAddressid", addressId);
+                settlementParams.put("strReceiptusername", name);
+                settlementParams.put("strLocation", strLocation);
+                settlementParams.put("strReceiptmobile", phone);
+                settlementParams.put("strDetailaddress", detailAddress);
+                settlementParams.put("nBucketnum", 4);
+                settlementParams.put("nBucketmoney", 400);
+                settlementParams.put("strInvoiceheader", invoice);
+                settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - 600 - 4 * 200);
+                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice);
+                settlementParams.put("lMyCouponId", 12);
+                settlementParams.put("nCouponPrice", 600);
+                settlementParams.put("orderGoods", orderGoods);
+                JSONObject jsonObject = new JSONObject(settlementParams);
+                CloudApi.settlement(0x002, jsonObject, myCallBack);
+
             }
         });
     }
@@ -186,9 +237,16 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && REQUEST_CODE == requestCode) {
-            String result = data.getExtras().getString("result");
-            StorageUtil.setKeyValue(this, "address", result);
-            tvDetailAddress.setText(result);
+            String addressName = data.getExtras().getString("addressName");
+
+            addressId = data.getExtras().getString("addressId");
+            strLocation = data.getExtras().getString("addressLocation");
+            String addressPhone = data.getExtras().getString("addressPhone");
+            String addressDetail = data.getExtras().getString("addressDetail");
+            StorageUtil.setKeyValue(this, "address", addressName);
+            tvDetailAddress.setText(addressDetail);
+            tvName.setText(addressName);
+            tvPhone.setText(addressPhone);
         }
     }
 
