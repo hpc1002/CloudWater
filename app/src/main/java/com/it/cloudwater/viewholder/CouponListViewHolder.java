@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.bean.CouponListBean;
+import com.it.cloudwater.utils.DateUtil;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 /**
@@ -30,8 +31,8 @@ public class CouponListViewHolder extends BaseViewHolder<CouponListBean.Result.D
     public void setData(CouponListBean.Result.DataList data) {
         super.setData(data);
         coupon_name.setText(data.strUserName);
-        dExpire.setText(data.dExpire + "");
-        price.setText("￥"+((double) data.nPrice / 100) + "元");
+        dExpire.setText("有效期至: "+DateUtil.toDate(data.dExpire));
+        price.setText("￥" + ((double) data.nPrice / 100) + "元");
 
     }
 }

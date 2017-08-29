@@ -69,14 +69,14 @@
                     android:id="@+id/ori_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:text="原价:26.00" />
 
                 <TextView
                     android:id="@+id/buy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/frame_pay"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"

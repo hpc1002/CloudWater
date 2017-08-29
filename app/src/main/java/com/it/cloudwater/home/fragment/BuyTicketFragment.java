@@ -1,23 +1,23 @@
 package com.it.cloudwater.home.fragment;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.BuyTicketListBean;
-import com.it.cloudwater.bean.MyTicketListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.BuyTicketViewHolder;
-import com.it.cloudwater.viewholder.MyTicketListViewHolder;
-import com.it.cloudwater.viewholder.MyTicketViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
@@ -29,8 +29,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by hpc on 2017/6/19.
@@ -43,6 +41,14 @@ public class BuyTicketFragment extends BaseFragment {
     private String userId;
     private ArrayList<BuyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<BuyTicketListBean.Result.DataList> ticketAdapter;
+    private TextView water_name;
+    private TextView water_sale;
+    private TextView water_discount;
+    private TextView tv_price;
+    private TextView ori_price;
+    private TextView buy;
+    private ImageView ticketImg;
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
         userId = StorageUtil.getUserId(getActivity());
@@ -56,14 +62,9 @@ public class BuyTicketFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        recyclerView.setAdapterWithProgress(ticketAdapter = new RecyclerArrayAdapter<BuyTicketListBean.Result.DataList>(getActivity()) {
-            @Override
-            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new BuyTicketViewHolder(parent);
-            }
-        });
         CloudApi.getBuyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
     }
+
     private MyCallBack myCallBack = new MyCallBack() {
         @Override
         public void onSuccess(int what, Response<String> result) {
@@ -90,6 +91,28 @@ public class BuyTicketFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                     break;
+                case 0x002:
+                    /*
+                {
+                    "result": {
+                    "lId": 1,
+                            "strGoodsName": "SFSFDS",
+                            "dExpire": 1506787200000,
+                            "ticketcontents": [
+                    {
+                        "lId": 1,
+                            "nCount": 5,
+                            "nPrice": 55,
+                            "strRemarks": "买20赠送10"
+                    }
+        ],
+                    "strGoodsimgurl": "img_url",
+                            "nPrice": 111
+                },
+                    "resCode": "0"
+                }
+                */
+                    break;
             }
         }
 
@@ -98,12 +121,42 @@ public class BuyTicketFragment extends BaseFragment {
 
         }
     };
+
     private void initUi(ArrayList<BuyTicketListBean.Result.DataList> dataLists) {
 
         recyclerView.setAdapterWithProgress(ticketAdapter = new RecyclerArrayAdapter<BuyTicketListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new BuyTicketViewHolder(parent);
+                BuyTicketViewHolder buyTicketViewHolder = new BuyTicketViewHolder(parent, R.layout.item_water_ticket) {
+                    @Override
+                    public void setData(final BuyTicketListBean.Result.DataList data) {
+                        water_name = $(R.id.water_name);
+                        ticketImg = $(R.id.iv_ticket);
+                        water_sale = $(R.id.water_sale);
+                        water_discount = $(R.id.water_discount);
+                        tv_price = $(R.id.tv_price);
+                        ori_price = $(R.id.ori_price);
+                        buy = $(R.id.buy);
+                        water_name.setText(data.strGoodsName);
+                        water_sale.setText("月销量" + data.nMonthCount);
+                        water_discount.setText(data.strRemarks);
+                        tv_price.setText("优惠价￥" + ((double) data.nPrice / 100) + "元");
+                        ori_price.setText("原价￥" + ((double) data.nOldPrice / 100) + "元");
+                        Glide.with(getContext())
+                                .load(data.strGoodsimgurl)
+                                .placeholder(R.mipmap.home_load_error)
+                                .bitmapTransform(new CenterCrop(getContext()))
+                                .into(ticketImg);
+                        buy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ToastManager.show(data.lId + "");
+                                CloudApi.getTicketDetail(0x002, data.lId, myCallBack);
+                            }
+                        });
+                    }
+                };
+                return buyTicketViewHolder;
             }
 
         });
