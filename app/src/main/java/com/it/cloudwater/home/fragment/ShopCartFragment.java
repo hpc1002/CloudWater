@@ -156,6 +156,7 @@ public class ShopCartFragment extends BaseFragment {
                 }
             }
         });
+
     }
 
     /**

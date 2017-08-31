@@ -1,5 +1,6 @@
 package com.it.cloudwater.home.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.BuyTicketListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.TicketDetailActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.BuyTicketViewHolder;
@@ -92,26 +94,7 @@ public class BuyTicketFragment extends BaseFragment {
                     }
                     break;
                 case 0x002:
-                    /*
-                {
-                    "result": {
-                    "lId": 1,
-                            "strGoodsName": "SFSFDS",
-                            "dExpire": 1506787200000,
-                            "ticketcontents": [
-                    {
-                        "lId": 1,
-                            "nCount": 5,
-                            "nPrice": 55,
-                            "strRemarks": "买20赠送10"
-                    }
-        ],
-                    "strGoodsimgurl": "img_url",
-                            "nPrice": 111
-                },
-                    "resCode": "0"
-                }
-                */
+
                     break;
             }
         }
@@ -151,7 +134,10 @@ public class BuyTicketFragment extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 ToastManager.show(data.lId + "");
-                                CloudApi.getTicketDetail(0x002, data.lId, myCallBack);
+                                Intent intent = new Intent(getActivity(), TicketDetailActivity.class);
+                                intent.putExtra("ticketId", data.lId + "");
+                                startActivity(intent);
+
                             }
                         });
                     }

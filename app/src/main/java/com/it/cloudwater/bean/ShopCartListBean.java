@@ -14,7 +14,8 @@ public class ShopCartListBean implements Serializable {
     public class Result {
         public int nTotal;
         public ArrayList<DataList> dataList;
-        public class DataList{
+
+        public class DataList {
             public int lId;
             public int lGoodsId;
             public int nPrice;
@@ -22,7 +23,26 @@ public class ShopCartListBean implements Serializable {
             public String strGoodsimgurl;
             public String strStandard;
             public long dtCreateTime;
-            public boolean isSelect;
+            public boolean isSelect = false;
+            public boolean isChoosed;
+            public int count;
+
+            public boolean isChoosed() {
+                return isChoosed;
+            }
+
+            public void setChoosed(boolean choosed) {
+                isChoosed = choosed;
+            }
+
+            public int getCount() {
+                return count;
+            }
+
+            public void setCount(int count) {
+                this.count = count;
+            }
         }
+
     }
 }

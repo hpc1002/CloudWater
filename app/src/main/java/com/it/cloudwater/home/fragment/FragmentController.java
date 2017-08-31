@@ -41,7 +41,7 @@ public class FragmentController {
     public void initFragment() {
         fragments = new ArrayList<Fragment>();
         fragments.add(new HomeFragment());//0
-        fragments.add(new ShopCartFragment());//1
+        fragments.add(new ShopCart2Fragment());//1
         fragments.add(new WaterTicketFragment());//2
         fragments.add(new MeFragment());//3
         FragmentTransaction ft = fm.beginTransaction();

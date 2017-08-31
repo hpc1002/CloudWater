@@ -15,6 +15,7 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.bean.ShopCartListBean;
 import com.it.cloudwater.callback.OnItemListener;
 import com.it.cloudwater.widget.button.AnimShopButton;
+import com.it.cloudwater.widget.button.IOnAddDelListener;
 
 import java.util.List;
 
@@ -76,6 +77,27 @@ public class RvItemAdapter extends RecyclerView.Adapter<RvItemAdapter.MyViewHold
             public boolean onLongClick(View view) {
                 mOnItemListener.onItemLongClick(view,position);
                 return true;
+            }
+        });
+        holder.btn_animShopButton.setOnAddDelListener(new IOnAddDelListener() {
+            @Override
+            public void onAddSuccess(int count) {
+
+            }
+
+            @Override
+            public void onAddFailed(int count, FailType failType) {
+
+            }
+
+            @Override
+            public void onDelSuccess(int count) {
+
+            }
+
+            @Override
+            public void onDelFaild(int count, FailType failType) {
+
             }
         });
     }

@@ -61,7 +61,7 @@
                 android:id="@+id/btn_animShopButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:count="3"
+                app:count="1"
                 app:gapBetweenCircle="90dp"
                 app:hintFgColor="#ffffff"
                 app:hintText="小马快到碗里来"

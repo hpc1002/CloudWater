@@ -31,7 +31,7 @@
             android:name=".home.HomeActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -60,7 +60,8 @@
         <activity android:name=".user.LoginActivity" />
         <activity android:name=".user.more.ChangePasswordActivity" />
         <activity android:name=".user.AddAddressActivity" />
-        <activity android:name=".user.OrderActivity"></activity>
+        <activity android:name=".user.OrderActivity" />
+        <activity android:name=".user.TicketDetailActivity"></activity>
     </application>
 
 </manifest>
