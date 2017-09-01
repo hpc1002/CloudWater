@@ -14,6 +14,7 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.user.more.AboutUsActivity;
 import com.it.cloudwater.user.more.ChangePasswordActivity;
 import com.it.cloudwater.user.more.FeedbackActivity;
+import com.it.cloudwater.user.more.TermsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,6 +98,9 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.rl_change_pwd:
                 startActivity(new Intent(MoreActivity.this, ChangePasswordActivity.class));
+                break;
+            case R.id.rl_terms_of_service:
+                startActivity(new Intent(MoreActivity.this, TermsActivity.class));
                 break;
             default:
                 break;

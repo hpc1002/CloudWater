@@ -36,4 +36,6 @@ public class Constant {
     public static final String SETTLEMENT_URL = BASE_URL + "order/settlement";//去结算
     public static final String ORDER_DETAIL_URL = BASE_URL + "order/detail/";//订单详情
     public static final String MESSAGE_LIST_URL = BASE_URL + "notice/myList";//消息列表
+    public static final String MORE_URL = BASE_URL + "sysvalue/con/";//更多内容获取
+    public static final String FEEDBACK_URL = BASE_URL + " feedback/add";//添加用户反馈
 }

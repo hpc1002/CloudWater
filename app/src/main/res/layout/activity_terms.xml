@@ -17,6 +17,5 @@
         android:id="@+id/terms_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:text="服务协议内容"/>
+        android:layout_margin="10dp" />
 </LinearLayout>

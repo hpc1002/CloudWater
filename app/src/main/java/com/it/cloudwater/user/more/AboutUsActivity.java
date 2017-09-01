@@ -9,6 +9,12 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,11 +34,39 @@ public class AboutUsActivity extends BaseActivity {
     ImageView ivLeft;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.aboutUs_content)
+    TextView aboutUsContent;
 
     @Override
     protected void processLogic() {
-
+        CloudApi.getMore(0x001, 1, callBack);
     }
+
+    private MyCallBack callBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+                    String body = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            String content = jsonObject.getString("result");
+                            aboutUsContent.setText(content);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onFail(int what, Response<String> result) {
+
+        }
+    };
 
     @Override
     protected void setListener() {
@@ -55,4 +89,6 @@ public class AboutUsActivity extends BaseActivity {
     protected Context getActivityContext() {
         return this;
     }
+
+
 }

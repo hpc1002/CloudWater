@@ -17,7 +17,6 @@ import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.MyTicketListViewHolder;
-import com.it.cloudwater.viewholder.MyTicketViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
@@ -56,7 +55,9 @@ public class TicketActivity extends BaseActivity {
 
     @Override
     protected void processLogic() {
-        CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        }
     }
 
     @Override

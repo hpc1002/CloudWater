@@ -64,7 +64,10 @@ public class BuyTicketFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        CloudApi.getBuyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        if (!userId.equals("")){
+            CloudApi.getBuyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        }
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {

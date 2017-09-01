@@ -135,7 +135,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.rb_order:
                 controller.showFragment(1);
-                toolbar.setVisibility(View.VISIBLE);
+                toolbar.setVisibility(View.GONE);
                 toolbarTitle.setText("购物车");
                 tvRight.setVisibility(View.GONE);
                 break;

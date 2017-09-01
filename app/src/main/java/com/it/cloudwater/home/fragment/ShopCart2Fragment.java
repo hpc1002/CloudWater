@@ -256,9 +256,13 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if (userId.equals("")){
+            return;
+        }
         switch (v.getId()) {
             //全选按钮
             case R.id.ck_all:
+
                 if (shoppingCartBeanList.size() != 0) {
                     if (ckAll.isChecked()) {
                         for (int i = 0; i < shoppingCartBeanList.size(); i++) {
@@ -290,6 +294,16 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             case R.id.btn_back:
                 getActivity().finish();
                 break;
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!userId.equals("")) {
+            CloudApi.getShopList(0x001, Long.parseLong(userId), myCallBack);
+        } else {
+            ToastManager.show("未登录");
         }
     }
 

@@ -20,6 +20,7 @@ import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.pay.PayDetailActivity;
 import com.it.cloudwater.user.AddressActivity;
+import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -37,6 +38,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
 
     private static final int REQUEST_CODE = 0x001;
+    private static final int REQUEST_CODE2 = 0x002;
     private static final String TAG = "SubmitOrderActivity";
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -200,16 +202,17 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("nBucketnum", 4);
                 settlementParams.put("nBucketmoney", 400);
                 settlementParams.put("strInvoiceheader", invoice);
-                settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - 600 - 4 * 200);
+                settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(tvDiscount.getText().toString()) - 4 * 200);
                 settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice);
                 settlementParams.put("lMyCouponId", 12);
-                settlementParams.put("nCouponPrice", 600);
+                settlementParams.put("nCouponPrice", tvDiscount.getText().toString());
                 settlementParams.put("orderGoods", orderGoods);
                 JSONObject jsonObject = new JSONObject(settlementParams);
                 CloudApi.settlement(0x002, jsonObject, myCallBack);
 
             }
         });
+        rlDiscount.setOnClickListener(this);
     }
 
     @Override
@@ -230,6 +233,9 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             case R.id.rl_address:
                 startActivityForResult(new Intent(SubmitOrderActivity.this, AddressActivity.class), REQUEST_CODE);
                 break;
+            case R.id.rl_discount:
+                startActivityForResult(new Intent(SubmitOrderActivity.this, CouponActivity.class), REQUEST_CODE2);
+                break;
         }
     }
 
@@ -247,6 +253,11 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             tvDetailAddress.setText(addressDetail);
             tvName.setText(addressName);
             tvPhone.setText(addressPhone);
+        }
+        if (data != null && REQUEST_CODE2 == requestCode) {
+            String discount_amount = data.getExtras().getString("discount_amount");
+            tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100)+"元");
+            totalPay.setText(((double) (orderDetailBean.result.nFactPrice-Integer.parseInt(discount_amount)) / 100) + "元");
         }
     }
 

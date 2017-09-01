@@ -1,6 +1,7 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -106,7 +107,7 @@ public class CouponActivity extends BaseActivity {
         }
     };
 
-    private void initUi(ArrayList<CouponListBean.Result.DataList> dataLists) {
+    private void initUi(final ArrayList<CouponListBean.Result.DataList> dataLists) {
         recyclerCoupon.setAdapterWithProgress(couponAdapter = new RecyclerArrayAdapter<CouponListBean.Result.DataList>(this) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
@@ -115,6 +116,17 @@ public class CouponActivity extends BaseActivity {
 
         });
         couponAdapter.addAll(dataLists);
+        couponAdapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent();
+                //把返回数据存入Intent
+                intent.putExtra("discount_amount", dataLists.get(position).nPrice+"");
+                CouponActivity.this.setResult(RESULT_OK, intent);
+                //关闭Activity
+                CouponActivity.this.finish();
+            }
+        });
     }
 
 

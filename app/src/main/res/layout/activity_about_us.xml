@@ -7,6 +7,7 @@
     tools:context="com.it.cloudwater.user.more.AboutUsActivity">
 <include layout="@layout/toolbar"/>
     <TextView
+        android:id="@+id/aboutUs_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"

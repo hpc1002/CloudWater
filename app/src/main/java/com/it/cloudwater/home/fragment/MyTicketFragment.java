@@ -10,8 +10,6 @@ import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.MyTicketListBean;
-import com.it.cloudwater.bean.TicketBean;
-import com.it.cloudwater.constant.DataProvider;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
@@ -65,8 +63,9 @@ public class MyTicketFragment extends BaseFragment {
                 return new MyTicketViewHolder(parent);
             }
         });
-        CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
-
+        if (!userId.equals("")) {
+            CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        }
     }
 
     private MyCallBack myCallBack = new MyCallBack() {

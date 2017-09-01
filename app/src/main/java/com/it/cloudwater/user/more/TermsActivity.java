@@ -1,7 +1,6 @@
 package com.it.cloudwater.user.more;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,9 +8,14 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class TermsActivity extends BaseActivity {
 
@@ -32,8 +36,34 @@ public class TermsActivity extends BaseActivity {
 
     @Override
     protected void processLogic() {
-
+        CloudApi.getMore(0x001, 0, callBack);
     }
+
+    private MyCallBack callBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+                    String body = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            String content = jsonObject.getString("result");
+                            termsContent.setText(content);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onFail(int what, Response<String> result) {
+
+        }
+    };
 
     @Override
     protected void setListener() {

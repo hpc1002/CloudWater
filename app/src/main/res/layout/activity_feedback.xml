@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="欢迎您提出宝贵意见"/>
-    <TextView
+    <EditText
         android:id="@+id/feed_content"
         android:layout_width="match_parent"
         android:layout_height="300dp"
