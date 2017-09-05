@@ -109,12 +109,21 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     private OrderDetailBean orderDetailBean;
     private String addressId;
     private String strLocation;
+    private String discount_amount;
 
     @Override
     protected void processLogic() {
-        String address = StorageUtil.getValue(this, "address");
-        if (!address.isEmpty()) {
-            tvDetailAddress.setText(address);
+        String addressName = StorageUtil.getValue(this, "address_name");
+        String addressPhone = StorageUtil.getValue(this, "address_phone");
+        String addressDetail = StorageUtil.getValue(this, "address_detail");
+        if (!addressName.isEmpty()) {
+            tvName.setText(addressName);
+        }
+        if (!addressPhone.isEmpty()) {
+            tvPhone.setText(addressPhone);
+        }
+        if (!addressDetail.isEmpty()) {
+            tvDetailAddress.setText(addressDetail);
         }
         CloudApi.orderPayDetail(0x001, Long.parseLong(order_Id), myCallBack);
     }
@@ -155,7 +164,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                             ToastManager.show("结算完成，去付款吧");
                             String orderId = jsonObject.getString("result");
                             Intent intent = new Intent(SubmitOrderActivity.this, PayDetailActivity.class);
-                            intent.putExtra("orderId", orderId+"");
+                            intent.putExtra("orderId", orderId + "");
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
@@ -202,10 +211,16 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("nBucketnum", 4);
                 settlementParams.put("nBucketmoney", 400);
                 settlementParams.put("strInvoiceheader", invoice);
-                settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(tvDiscount.getText().toString()) - 4 * 200);
+                if (discount_amount != null) {
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - 4 * 200);
+                    settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
+                } else {
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - 4 * 200);
+                    settlementParams.put("nCouponPrice", 0);
+                }
                 settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice);
                 settlementParams.put("lMyCouponId", 12);
-                settlementParams.put("nCouponPrice", tvDiscount.getText().toString());
+
                 settlementParams.put("orderGoods", orderGoods);
                 JSONObject jsonObject = new JSONObject(settlementParams);
                 CloudApi.settlement(0x002, jsonObject, myCallBack);
@@ -231,7 +246,9 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_address:
-                startActivityForResult(new Intent(SubmitOrderActivity.this, AddressActivity.class), REQUEST_CODE);
+                Intent intent = new Intent(SubmitOrderActivity.this, AddressActivity.class);
+                intent.putExtra("address_tag", "address_tag");
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.rl_discount:
                 startActivityForResult(new Intent(SubmitOrderActivity.this, CouponActivity.class), REQUEST_CODE2);
@@ -249,15 +266,18 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             strLocation = data.getExtras().getString("addressLocation");
             String addressPhone = data.getExtras().getString("addressPhone");
             String addressDetail = data.getExtras().getString("addressDetail");
-            StorageUtil.setKeyValue(this, "address", addressName);
+            StorageUtil.setKeyValue(this, "address_name", addressName);
+            StorageUtil.setKeyValue(this, "address_phone", addressPhone);
+            StorageUtil.setKeyValue(this, "address_detail", addressDetail);
             tvDetailAddress.setText(addressDetail);
             tvName.setText(addressName);
             tvPhone.setText(addressPhone);
         }
         if (data != null && REQUEST_CODE2 == requestCode) {
-            String discount_amount = data.getExtras().getString("discount_amount");
-            tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100)+"元");
-            totalPay.setText(((double) (orderDetailBean.result.nFactPrice-Integer.parseInt(discount_amount)) / 100) + "元");
+
+            discount_amount = data.getExtras().getString("discount_amount");
+            tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100) + "元");
+            totalPay.setText(((double) (orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount)) / 100) + "元");
         }
     }
 

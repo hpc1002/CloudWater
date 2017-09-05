@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:src="@mipmap/icon_coupon" />
+            android:src="@mipmap/icon_order" />
 
         <TextView
             android:id="@+id/tv_order_my"

@@ -51,6 +51,7 @@ public class AddressActivity extends BaseActivity {
     private CheckAdapter mAdapter;
     private static final String TAG = "AddressActivity";
     private String userId;
+    private String address_tag = "";
 
     @Override
     protected void processLogic() {
@@ -79,6 +80,7 @@ public class AddressActivity extends BaseActivity {
             }
         });
 
+        address_tag = getIntent().getStringExtra("address_tag");
         addressRecycler.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -132,17 +134,18 @@ public class AddressActivity extends BaseActivity {
 
                                 @Override
                                 public void onItemClickListener(AddressListBean.Result.DataList data) {
-                                    Intent intent = new Intent();
-                                    //把返回数据存入Intent
-                                    intent.putExtra("addressName", data.strReceiptusername);
-                                    intent.putExtra("addressId", data.lId + "");
-                                    intent.putExtra("addressPhone", data.strReceiptmobile + "");
-                                    intent.putExtra("addressDetail", data.strDetailaddress);
-                                    intent.putExtra("addressLocation", data.strLocation);
-                                    AddressActivity.this.setResult(RESULT_OK, intent);
-                                    //关闭Activity
-                                    AddressActivity.this.finish();
-                                    //设置返回数据
+                                    if (data != null && address_tag != null) {
+                                        Intent intent = new Intent();
+                                        //把返回数据存入Intent
+                                        intent.putExtra("addressName", data.strReceiptusername);
+                                        intent.putExtra("addressId", data.lId + "");
+                                        intent.putExtra("addressPhone", data.strReceiptmobile + "");
+                                        intent.putExtra("addressDetail", data.strDetailaddress);
+                                        intent.putExtra("addressLocation", data.strLocation);
+                                        AddressActivity.this.setResult(RESULT_OK, intent);
+                                        //关闭Activity
+                                        AddressActivity.this.finish();
+                                    }
                                 }
                             });
                         }
