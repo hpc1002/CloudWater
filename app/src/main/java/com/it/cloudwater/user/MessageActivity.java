@@ -45,7 +45,10 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     protected void processLogic() {
-        CloudApi.getMessageList(0x001, 1, 10, Long.parseLong(userId), myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.getMessageList(0x001, 1, 10, Long.parseLong(userId), myCallBack);
+        }
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {

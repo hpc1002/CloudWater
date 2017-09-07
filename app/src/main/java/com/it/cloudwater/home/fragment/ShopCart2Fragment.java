@@ -140,7 +140,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             boolean choosed = bean.isChoosed();
             if (choosed) {
                 String shoppingName = bean.strGoodsname;
-                int count = bean.count;
+                int count = bean.nGoodsCount;
                 double price = bean.nPrice;
                 String attribute = bean.strStandard;
                 int id = bean.lId;
@@ -195,10 +195,10 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             ShopCartListBean.Result.DataList shoppingCartBean = shoppingCartBeanList.get(i);
             if (shoppingCartBean.isChoosed()) {
                 totalCount++;
-                totalPrice += shoppingCartBean.nPrice * shoppingCartBean.count;
+                totalPrice += shoppingCartBean.nPrice * shoppingCartBean.nGoodsCount;
             }
         }
-        tvShowPrice.setText("合计:" + totalPrice);
+        tvShowPrice.setText("合计:" + ((double) totalPrice / 100) + "元");
         tvSettlement.setText("结算(" + totalCount + ")");
     }
 
@@ -212,7 +212,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
     @Override
     public void doIncrease(int position, View showCountView, boolean isChecked) {
         ShopCartListBean.Result.DataList shoppingCartBean = shoppingCartBeanList.get(position);
-        int currentCount = shoppingCartBean.count;
+        int currentCount = shoppingCartBean.nGoodsCount;
         currentCount++;
         shoppingCartBean.setCount(currentCount);
         ((TextView) showCountView).setText(currentCount + "");
@@ -256,7 +256,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (userId.equals("")){
+        if (userId.equals("")) {
             return;
         }
         switch (v.getId()) {

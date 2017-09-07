@@ -107,9 +107,9 @@ public class ShoppingCartAdapter extends BaseAdapter {
             holder.tvCommodityAttr.setText(attribute);
         }
         holder.tvCommodityName.setText(shoppingCartBean.strGoodsname);
-        holder.tvCommodityPrice.setText(shoppingCartBean.nPrice + "");
-        holder.tvCommodityNum.setText(" X" + shoppingCartBean.count+ "");
-        holder.tvCommodityShowNum.setText(shoppingCartBean.count + "");
+        holder.tvCommodityPrice.setText(((double)shoppingCartBean.nPrice /100)+ "元");
+        holder.tvCommodityNum.setText(" X" + shoppingCartBean.nGoodsCount+ "");
+        holder.tvCommodityShowNum.setText(shoppingCartBean.nGoodsCount + "");
         ImageLoader.getInstance().displayImage(shoppingCartBean.strGoodsimgurl, holder.ivShowPic);
 
         //单选框按钮
