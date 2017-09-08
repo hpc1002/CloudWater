@@ -20,6 +20,8 @@ public class OrderDetailBean {
         public int lMyCouponId;
         public int nFactPrice;
         public int nTotalprice;
+        public int nTotalWatertickets;
+        public int nTotalWaterticketsPrice;
         public double dtCreatetime;
         public String strReceiptusername;
         public ArrayList<OrderGoods> orderGoods;

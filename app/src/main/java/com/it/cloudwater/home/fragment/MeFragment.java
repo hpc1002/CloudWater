@@ -14,10 +14,12 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.user.BucketActivity;
 import com.it.cloudwater.user.CouponActivity;
+import com.it.cloudwater.user.DistributionActivity;
 import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.MoreActivity;
 import com.it.cloudwater.user.OrderActivity;
 import com.it.cloudwater.user.TicketActivity;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.widget.RoundedCornerImageView;
 
 import butterknife.BindView;
@@ -81,6 +83,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     TextView tvOrderMy;
     @BindView(R.id.rl_order_my)
     RelativeLayout rlOrderMy;
+    @BindView(R.id.iv_distribution_my)
+    ImageView ivDistributionMy;
+    @BindView(R.id.tv_distribution_my)
+    TextView tvDistributionMy;
+    @BindView(R.id.rl_distribution_my)
+    RelativeLayout rlDistributionMy;
+    Unbinder unbinder;
 
 
     @Override
@@ -90,6 +99,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initListener() {
+        String userType = StorageUtil.getUserType(getActivity());
+        if (Integer.parseInt(userType) == 0) {
+            //员工
+        } else if (Integer.parseInt(userType) == 1) {
+            //客户
+            rlDistributionMy.setVisibility(View.VISIBLE);
+        }
         rlTicketMy.setOnClickListener(this);
         rlBucketMy.setOnClickListener(this);
         rlInventMy.setOnClickListener(this);
@@ -98,6 +114,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         rlCouponMy.setOnClickListener(this);
         rlOrderMy.setOnClickListener(this);
         rlTicketMy.setOnClickListener(this);
+        rlDistributionMy.setOnClickListener(this);
     }
 
     @Override
@@ -135,6 +152,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.rl_order_my:
                 intent = new Intent(getActivity(), OrderActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.rl_distribution_my:
+                intent = new Intent(getActivity(), DistributionActivity.class);
                 startActivity(intent);
                 break;
 

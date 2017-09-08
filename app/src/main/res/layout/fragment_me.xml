@@ -21,8 +21,8 @@
                 android:id="@+id/iv_avatar"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@mipmap/default_avsar"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:src="@mipmap/default_avsar" />
         </RelativeLayout>
 
 
@@ -88,6 +88,46 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:id="@+id/rl_distribution_my"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_distribution_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:src="@mipmap/icon_order" />
+
+        <TextView
+            android:id="@+id/tv_distribution_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/iv_distribution_my"
+            android:text="我的配送"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
     <RelativeLayout
         android:id="@+id/rl_order_my"
         android:layout_width="match_parent"
@@ -125,6 +165,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/y20" />
+
     <RelativeLayout
         android:id="@+id/rl_invent_my"
         android:layout_width="match_parent"

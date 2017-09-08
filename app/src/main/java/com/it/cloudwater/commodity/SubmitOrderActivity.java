@@ -146,6 +146,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                             totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "元");
                             tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100 + "元"));
                             totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "元");
+                            ticketCount.setText(orderDetailBean.result.nTotalWatertickets + "");
                         } else if (resCode.equals("-1")) {
                             String resultData = jsonObject.getString("result");
                             ToastManager.show(resultData);
@@ -192,6 +193,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 String detailAddress = tvDetailAddress.getText().toString();
                 String phone = tvPhone.getText().toString();
                 String invoice = etInvoice.getText().toString();
+                String remarks = etRemarks.getText().toString();
                 HashMap<String, Object> orderGoodsParams = new HashMap<>();
                 orderGoodsParams.put("lGId", orderDetailBean.result.orderGoods.get(0).lGId);
                 orderGoodsParams.put("nGoodsFactPrice", orderDetailBean.result.orderGoods.get(0).nGoodsFactPrice);
@@ -208,18 +210,18 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("strLocation", strLocation);
                 settlementParams.put("strReceiptmobile", phone);
                 settlementParams.put("strDetailaddress", detailAddress);
-                settlementParams.put("nBucketnum", 4);
-                settlementParams.put("nBucketmoney", 400);
                 settlementParams.put("strInvoiceheader", invoice);
+                settlementParams.put("strRemarks", remarks);
                 if (discount_amount != null) {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - 4 * 200);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice);
                     settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
+                    settlementParams.put("lMyCouponId", orderDetailBean.result.lMyCouponId);
                 } else {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - 4 * 200);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice);
                     settlementParams.put("nCouponPrice", 0);
                 }
                 settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice);
-                settlementParams.put("lMyCouponId", 12);
+
 
                 settlementParams.put("orderGoods", orderGoods);
                 JSONObject jsonObject = new JSONObject(settlementParams);

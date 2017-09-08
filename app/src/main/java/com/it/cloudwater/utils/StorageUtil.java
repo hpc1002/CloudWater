@@ -76,6 +76,9 @@ public class StorageUtil {
     public static String getUserId(Context context) {
         return StorageUtil.getValue(context, "userId");
     }
+    public static String getUserType(Context context) {
+        return StorageUtil.getValue(context, "userType");
+    }
     public static String getCourseType(Context context) {
         return StorageUtil.getValue(context, "course_type");
     }

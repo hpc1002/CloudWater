@@ -61,7 +61,8 @@
         <activity android:name=".user.more.ChangePasswordActivity" />
         <activity android:name=".user.AddAddressActivity" />
         <activity android:name=".user.OrderActivity" />
-        <activity android:name=".user.TicketDetailActivity"></activity>
+        <activity android:name=".user.TicketDetailActivity" />
+        <activity android:name=".user.DistributionActivity"></activity>
     </application>
 
 </manifest>

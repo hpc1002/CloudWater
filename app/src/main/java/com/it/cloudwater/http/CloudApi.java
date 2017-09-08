@@ -156,12 +156,43 @@ public class CloudApi {
                 });
     }
 
+    /**
+     * 客户获取订单列表
+     *
+     * @param what
+     * @param nPage
+     * @param nMaxNum
+     * @param lBuyerid
+     * @param nState
+     * @param myCallBack
+     */
     public static void orderList(final int what, final Integer nPage, final Integer nMaxNum, long lBuyerid, Integer nState, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.MY_ORDER_LIST_URL)
                 .tag(App.getInstance())
                 .params("nPage", nPage)
                 .params("nMaxNum", nMaxNum)
                 .params("lBuyerid", lBuyerid)
+                .params("nState", nState)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+
+    public static void distributionList(final int what, final Integer nPage, final Integer nMaxNum, long lDeliveryid, Integer nState, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.MY_ORDER_LIST_URL)
+                .tag(App.getInstance())
+                .params("nPage", nPage)
+                .params("nMaxNum", nMaxNum)
+                .params("lDeliveryid", lDeliveryid)
                 .params("nState", nState)
                 .execute(new StringCallback() {
                     @Override
@@ -510,11 +541,12 @@ public class CloudApi {
                     }
                 });
     }
-    public static void feedback(final int what, long lUserId, String content,final MyCallBack myCallBack) {
+
+    public static void feedback(final int what, long lUserId, String content, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.FEEDBACK_URL)
                 .tag(App.getInstance())
-                .params("lUserId",lUserId)
-                .params("strContent",content)
+                .params("lUserId", lUserId)
+                .params("strContent", content)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

@@ -132,7 +132,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             JSONObject result = loginData.getJSONObject("result");
                             int lId = result.getInt("lId");
                             String strPassword = result.getString("strPassword");
+                            int nUserType = result.getInt("nUserType");
+                            String strMobile = result.getString("strMobile");
+                            int nState = result.getInt("nState");
+                            int nBucketnum = result.getInt("nBucketnum");
                             StorageUtil.setKeyValue(LoginActivity.this, "userId", lId + "");
+                            StorageUtil.setKeyValue(LoginActivity.this, "userType", nUserType + "");
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         } else if (resCode.equals("1")) {
                             String result = loginData.getString("result");
