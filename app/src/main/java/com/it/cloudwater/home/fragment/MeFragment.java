@@ -1,7 +1,6 @@
 package com.it.cloudwater.home.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,15 @@ import com.it.cloudwater.user.BucketActivity;
 import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.user.DistributionActivity;
 import com.it.cloudwater.user.InvitationActivity;
+import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.user.MoreActivity;
 import com.it.cloudwater.user.OrderActivity;
 import com.it.cloudwater.user.TicketActivity;
 import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.widget.RoundedCornerImageView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
@@ -33,8 +33,6 @@ import butterknife.Unbinder;
 public class MeFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.iv_avatar)
     RoundedCornerImageView ivAvatar;
-    @BindView(R.id.rl_tag)
-    RelativeLayout rlTag;
     @BindView(R.id.tv_phoneNumber)
     TextView tvPhoneNumber;
     @BindView(R.id.tv_login)
@@ -90,6 +88,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.rl_distribution_my)
     RelativeLayout rlDistributionMy;
     Unbinder unbinder;
+    private String userId;
 
 
     @Override
@@ -99,22 +98,36 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void initListener() {
+        rlDistributionMy.setVisibility(View.GONE);
         String userType = StorageUtil.getUserType(getActivity());
-        if (Integer.parseInt(userType) == 0) {
-            //员工
-        } else if (Integer.parseInt(userType) == 1) {
-            //客户
-            rlDistributionMy.setVisibility(View.VISIBLE);
+
+        userId = StorageUtil.getUserId(getActivity());
+        if (!userType.equals("")) {
+            if (Integer.parseInt(userType) == 0) {
+                //员工
+                rlDistributionMy.setVisibility(View.VISIBLE);
+            } else if (Integer.parseInt(userType) == 1) {
+                //客户
+                rlDistributionMy.setVisibility(View.GONE);
+            }
         }
+
         rlTicketMy.setOnClickListener(this);
         rlBucketMy.setOnClickListener(this);
         rlInventMy.setOnClickListener(this);
-        rlMore.setOnClickListener(this);
+
         rlAddressMy.setOnClickListener(this);
         rlCouponMy.setOnClickListener(this);
         rlOrderMy.setOnClickListener(this);
         rlTicketMy.setOnClickListener(this);
         rlDistributionMy.setOnClickListener(this);
+        rlMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MoreActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -125,6 +138,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent;
+        if (userId.equals("")) {
+            ToastManager.show("请先登录");
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            return;
+        }
         switch (v.getId()) {
             case R.id.rl_ticket_my:
                 intent = new Intent(getActivity(), TicketActivity.class);
@@ -138,10 +156,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), InvitationActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.rl_more:
-                intent = new Intent(getActivity(), MoreActivity.class);
-                startActivity(intent);
-                break;
+
             case R.id.rl_address_my:
                 intent = new Intent(getActivity(), AddressActivity.class);
                 startActivity(intent);

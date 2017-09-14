@@ -10,18 +10,18 @@
         android:background="@color/colorPrimary"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_centerVertical="true"
-            android:background="@drawable/header_back_bg"
-            android:drawableLeft="@drawable/ddhk_header_back"
-            android:paddingLeft="10dp"
-            android:paddingTop="20dip"
-            android:text="返回"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+        <!--<Button-->
+            <!--android:id="@+id/btn_back"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:background="@drawable/header_back_bg"-->
+            <!--android:drawableLeft="@drawable/ddhk_header_back"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingTop="20dip"-->
+            <!--android:text="返回"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="14sp" />-->
 
 
         <TextView
@@ -42,8 +42,8 @@
             android:layout_centerVertical="true"
             android:background="@null"
             android:gravity="center"
-            android:text="编辑"
             android:paddingTop="20dip"
+            android:text="编辑"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -95,13 +95,14 @@
         <TextView
             android:id="@+id/tv_show_price"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
 
             android:gravity="center"
             android:padding="5dp"
             android:text="合计:0.00"
             android:textColor="@color/black" />
+
         <TextView
             android:id="@+id/tv_settlement"
             android:layout_width="100dp"
@@ -109,9 +110,8 @@
             android:layout_alignParentRight="true"
             android:background="@color/colorPrimary"
             android:gravity="center"
-            android:text="结算(0)"
+            android:text="提交订单(0)"
             android:textColor="@color/white" />
-
 
 
     </LinearLayout>

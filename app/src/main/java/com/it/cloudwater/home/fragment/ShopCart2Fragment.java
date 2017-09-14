@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,8 +51,8 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
     TextView tvSettlement;
     @BindView(R.id.rl_bottom)
     LinearLayout rlBottom;
-    @BindView(R.id.btn_back)
-    Button btnBack;
+//    @BindView(R.id.btn_back)
+//    Button btnBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.bt_header_right)
@@ -77,7 +79,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
         btHeaderRight.setOnClickListener(this);
         ckAll.setOnClickListener(this);
         tvSettlement.setOnClickListener(this);
-        btnBack.setOnClickListener(this);
+//        btnBack.setOnClickListener(this);
     }
 
     @Override
@@ -136,19 +138,52 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
      */
     private void lementOnder() {
         //选中的需要提交的商品清单
-        for (ShopCartListBean.Result.DataList bean : shoppingCartBeanList) {
-            boolean choosed = bean.isChoosed();
-            if (choosed) {
-                String shoppingName = bean.strGoodsname;
-                int count = bean.nGoodsCount;
-                double price = bean.nPrice;
-                String attribute = bean.strStandard;
-                int id = bean.lId;
 
+        ArrayList<Map<String, Object>> maps = new ArrayList<>();
+        for (int i = 0; i < shoppingCartBeanList.size(); i++) {
+            Map<String, Object> orderParams = new HashMap<>();
+            boolean isChoosed = shoppingCartBeanList.get(i).isChoosed;
+            if (isChoosed) {
+                orderParams.put("lGoodsid", shoppingCartBeanList.get(i).lGoodsId);
+                orderParams.put("strGoodsname", shoppingCartBeanList.get(i).strGoodsname);
+                orderParams.put("nPrice", shoppingCartBeanList.get(i).nPrice);
+                orderParams.put("strGoodsimgurl", shoppingCartBeanList.get(i).strGoodsimgurl);
+                orderParams.put("nGoodsTotalPrice", shoppingCartBeanList.get(i).nPrice * shoppingCartBeanList.get(i).nGoodsCount);
+                orderParams.put("nCount", shoppingCartBeanList.get(i).nGoodsCount);
+                maps.add(orderParams);
             }
         }
-        ToastManager.show("总价：" + totalPrice);
+//        for (ShopCartListBean.Result.DataList bean : shoppingCartBeanList) {
+//            boolean choosed = bean.isChoosed();
+//            if (choosed) {
+//                String shoppingName = bean.strGoodsname;
+//                int count = bean.nGoodsCount;
+//                double price = bean.nPrice;
+//                String attribute = bean.strStandard;
+//                int id = bean.lId;
+//                orderParams.put("lGoodsid", bean.lGoodsId);
+//                orderParams.put("strGoodsname", bean.strGoodsname);
+//                orderParams.put("nPrice", bean.nPrice);
+//                orderParams.put("strGoodsimgurl", bean.strGoodsimgurl);
+//                orderParams.put("nGoodsTotalPrice", bean.nPrice * bean.nGoodsCount);
+//                orderParams.put("nCount", bean.nGoodsCount);
+//                maps.add(orderParams);
+//            }
+//
+//        }
+        ToastManager.show("总价：" + totalPrice / 100);
         //跳转到支付界面
+        //订单参数包装
+
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("lBuyerid", userId);
+        params.put("strBuyername", "姓名");
+        params.put("nTotalprice", totalPrice);
+        params.put("orderGoods", maps);
+
+        JSONObject jsonObject = new JSONObject(params);
+        CloudApi.orderSubmit(0x002, jsonObject, myCallBack);
     }
 
     /**
@@ -291,9 +326,9 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             case R.id.tv_settlement: //结算
                 lementOnder();
                 break;
-            case R.id.btn_back:
-                getActivity().finish();
-                break;
+//            case R.id.btn_back:
+//                getActivity().finish();
+//                break;
         }
     }
 

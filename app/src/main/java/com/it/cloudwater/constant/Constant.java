@@ -38,4 +38,7 @@ public class Constant {
     public static final String MESSAGE_LIST_URL = BASE_URL + "notice/myList";//消息列表
     public static final String MORE_URL = BASE_URL + "sysvalue/con/";//更多内容获取
     public static final String FEEDBACK_URL = BASE_URL + " feedback/add";//添加用户反馈
+    public static final String IMAGE_URL = BASE_URL + "common/getImg/";//获取图片资源
+    public static final String LUNBO_URL = BASE_URL + "activity/list";//获取轮播图片
+    public static final String LOGOUT_URL = BASE_URL + "buyer/logout";//退出登录
 }

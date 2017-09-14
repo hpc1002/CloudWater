@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/good_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/home_load_error" />
+
+    <TextView
+        android:id="@+id/good_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/good_img"
+        android:text="名称"
+        android:textColor="@color/title"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/good_capacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/good_name"
+        android:text="1.8L"
+        android:textColor="@color/title"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/good_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="￥49" />
+
+    <TextView
+        android:id="@+id/barrel_deposit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/good_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/good_img"
+        android:text="桶押金:10.00"
+        android:textColor="@color/word_second" />
+
+    <TextView
+        android:id="@+id/barrel_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/good_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:text="×1"
+        android:textColor="@color/word_second" />
+</RelativeLayout>

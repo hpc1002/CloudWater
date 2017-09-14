@@ -50,7 +50,10 @@ public class BucketActivity extends BaseActivity {
     @Override
     protected void processLogic() {
         userId = StorageUtil.getUserId(this);
-        CloudApi.getMyBucket(0x001, Long.parseLong(userId), myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.getMyBucket(0x001, Long.parseLong(userId), myCallBack);
+        }
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {

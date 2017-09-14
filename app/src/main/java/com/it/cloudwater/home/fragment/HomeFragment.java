@@ -24,6 +24,7 @@ import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,10 +81,16 @@ public class HomeFragment extends BaseFragment {
             switch (what) {
                 case 0x001:
                     String body = result.body();
-                    if (goodList == null) {
-                        goodList = new ArrayList<>();
+
+//                    parseData(body);
+                    GoodsListBean goodsListBean = new Gson().fromJson(body, GoodsListBean.class);
+                    goodList = new ArrayList<GoodsListBean.Result.DataList>();
+                    if (goodsListBean!=null){
+                        int size = goodsListBean.result.dataList.size();
+                        for (int i = 0; i < size; i++) {
+                            goodList.add(goodsListBean.result.dataList.get(i));
+                        }
                     }
-                    parseData(body);
                     GoodListAdapter adapter = new GoodListAdapter(R.layout.item_goods, goodList);
                     recyclerViewCommend.setAdapter(adapter);
                     adapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
@@ -125,6 +132,21 @@ public class HomeFragment extends BaseFragment {
                            e.printStackTrace();
                        }
                        break;
+                case 0x003:
+                    String body3 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body3);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")){
+                            JSONObject result1 = jsonObject.getJSONObject("result");
+                            JSONArray dataList = result1.getJSONArray("dataList");
+                            JSONObject jsonObject1 = new JSONObject(dataList.get(0).toString());
+                            int lId = jsonObject1.getInt("lId");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
 
@@ -135,10 +157,8 @@ public class HomeFragment extends BaseFragment {
     };
 
     private void parseData(String json) {
-        GoodsListBean goodsListBean = new Gson().fromJson(json, GoodsListBean.class);
-        for (int i = 0, size = goodsListBean.result.dataList.size(); i < size; i++) {
-            goodList.add(goodsListBean.result.dataList.get(i));
-        }
+
+
 
     }
 
@@ -150,6 +170,7 @@ public class HomeFragment extends BaseFragment {
     private void getBannerData() {
 
         bannerList = DataProvider.getPictures();
+        CloudApi.getLunbo(0x003,3,1,myCallBack);
         homeRecommendBanner.setAdapter(new BGABannerAdapter(getActivity()));
         ArrayList<String> bannerTitle = new ArrayList<>();
         ArrayList<String> bannerImage = new ArrayList<>();

@@ -16,12 +16,14 @@ public class OrderListBean {
 
         public class DataList {
             public int lId;
+            public int lDeliveryid;
             public double strOrdernum;
             public int nState;
             public int nSendState;
             public int lBuyerid;
             public String strBuyername;
             public String strReceiptusername;
+            public String strMobile;
             public int nBucketnum;
             public int nBucketmoney;
             public int nCouponPrice;
@@ -31,6 +33,7 @@ public class OrderListBean {
             public String strRemarks;
             public String strInvoiceheader;
             public long dtCreatetime;
+            public long dtFinishtime;
             public ArrayList<OrderGoods> orderGoods;
 
             public class OrderGoods {

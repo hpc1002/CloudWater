@@ -13,13 +13,11 @@ import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.CouponListBean;
-import com.it.cloudwater.bean.MyTicketListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.CouponListViewHolder;
-import com.it.cloudwater.viewholder.MyTicketListViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
@@ -54,10 +52,14 @@ public class CouponActivity extends BaseActivity {
     EasyRecyclerView recyclerCoupon;
     private ArrayList<CouponListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<CouponListBean.Result.DataList> couponAdapter;
+
     @Override
     protected void processLogic() {
         String userId = StorageUtil.getUserId(this);
-        CloudApi.getMyCouponList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.getMyCouponList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        }
+
     }
 
     @Override
@@ -121,7 +123,7 @@ public class CouponActivity extends BaseActivity {
             public void onItemClick(int position) {
                 Intent intent = new Intent();
                 //把返回数据存入Intent
-                intent.putExtra("discount_amount", dataLists.get(position).nPrice+"");
+                intent.putExtra("discount_amount", dataLists.get(position).nPrice + "");
                 CouponActivity.this.setResult(RESULT_OK, intent);
                 //关闭Activity
                 CouponActivity.this.finish();

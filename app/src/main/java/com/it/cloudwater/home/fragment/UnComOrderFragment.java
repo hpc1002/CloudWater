@@ -54,7 +54,10 @@ public class UnComOrderFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
+        }
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {

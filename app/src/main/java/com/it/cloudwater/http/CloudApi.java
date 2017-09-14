@@ -79,6 +79,24 @@ public class CloudApi {
                     }
                 });
     }
+    public static void Logout(final int what, long lUserId, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.LOGOUT_URL)
+                .tag(App.getInstance())
+                .params("lUserId", lUserId)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                        Log.i(TAG, "onSuccess: " + response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
 
     public static void ChangePassword(final int what, String phone, String password, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.CHANGE_PASSWORD_URL)
@@ -547,6 +565,42 @@ public class CloudApi {
                 .tag(App.getInstance())
                 .params("lUserId", lUserId)
                 .params("strContent", content)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+    public static void getImageUrl(final int what, Integer type, long lResId, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.IMAGE_URL)
+                .tag(App.getInstance())
+                .params("type", type)
+                .params("strContent", lResId)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+    public static void getLunbo(final int what, Integer nMaxNum, Integer nPage, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.LUNBO_URL)
+                .tag(App.getInstance())
+                .params("nMaxNum", nMaxNum)
+                .params("nPage", nPage)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

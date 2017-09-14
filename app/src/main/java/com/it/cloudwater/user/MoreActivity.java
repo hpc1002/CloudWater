@@ -2,7 +2,6 @@ package com.it.cloudwater.user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,13 +10,20 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.user.more.AboutUsActivity;
 import com.it.cloudwater.user.more.ChangePasswordActivity;
 import com.it.cloudwater.user.more.FeedbackActivity;
 import com.it.cloudwater.user.more.TermsActivity;
+import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 更多...
@@ -55,6 +61,7 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
     RelativeLayout rlChangePwd;
     @BindView(R.id.logout)
     TextView logout;
+    private String userId;
 
     @Override
     protected void processLogic() {
@@ -75,6 +82,8 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
         rlAboutUs.setOnClickListener(this);
         rlTermsOfService.setOnClickListener(this);
         rlChangePwd.setOnClickListener(this);
+        logout.setOnClickListener(this);
+        userId = StorageUtil.getUserId(this);
     }
 
     @Override
@@ -102,9 +111,39 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
             case R.id.rl_terms_of_service:
                 startActivity(new Intent(MoreActivity.this, TermsActivity.class));
                 break;
+            case R.id.logout:
+                CloudApi.Logout(0x001, Long.parseLong(userId), myCallBack);
+                break;
             default:
                 break;
         }
     }
 
+    private MyCallBack myCallBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+                    String body = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            ToastManager.show("退出登录成功");
+                            StorageUtil.deteteUserId(MoreActivity.this);
+                            Intent intent = new Intent(MoreActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onFail(int what, Response<String> result) {
+
+        }
+    };
 }

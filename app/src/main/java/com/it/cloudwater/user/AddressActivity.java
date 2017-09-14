@@ -56,7 +56,10 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void processLogic() {
         userId = StorageUtil.getUserId(this);
-        CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        if (!userId.equals("")) {
+            CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        }
+
     }
 
     @Override
