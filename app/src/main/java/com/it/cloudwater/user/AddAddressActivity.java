@@ -157,7 +157,7 @@ public class AddAddressActivity extends BaseActivity {
                         if (resCode.equals("0")){
                             ToastManager.show("新建地址成功");
                             String addressId = jsonObject.getString("result");
-                            startActivity(new Intent(AddAddressActivity.this,AddressActivity.class));
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

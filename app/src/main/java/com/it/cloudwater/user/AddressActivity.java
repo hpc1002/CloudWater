@@ -52,7 +52,7 @@ public class AddressActivity extends BaseActivity {
     private static final String TAG = "AddressActivity";
     private String userId;
     private String address_tag = "";
-
+    private BasicController.BasicParams params;
     @Override
     protected void processLogic() {
         userId = StorageUtil.getUserId(this);
@@ -103,13 +103,15 @@ public class AddressActivity extends BaseActivity {
                             String result1 = jsonObject.getString("result");
                             ToastManager.show(result1);
                             addressList.clear();
+                            addressRecycler.setAdapter(null);
                         } else if (resCode.equals("0")) {
                             AddressListBean addressListBean = new Gson().fromJson(body, AddressListBean.class);
                             int size = addressListBean.result.dataList.size();
                             for (int i = 0; i < size; i++) {
                                 addressList.add(addressListBean.result.dataList.get(i));
                             }
-                            BasicController.BasicParams params = new BasicController.Builder()
+
+                            params = new BasicController.Builder()
                                     .checkId(R.id.checkbox)
                                     .choiceMode(BasicController.CHOICE_MODE_SINGLE)
                                     .layoutRes(R.layout.item_check)
@@ -164,6 +166,12 @@ public class AddressActivity extends BaseActivity {
                         if (resCode.equals("0")) {
                             CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
                             mAdapter.notifyDataSetChanged();
+                        } else if (resCode.equals("1")) {
+                            addressList.clear();
+//                            CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+                            mAdapter.notifyDataSetChanged();
+//                            String result1 = jsonObject.getString("result");
+//                            ToastManager.show(result1);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -186,5 +194,16 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected Context getActivityContext() {
         return this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
     }
 }
