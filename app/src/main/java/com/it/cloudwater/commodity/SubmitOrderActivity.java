@@ -2,10 +2,11 @@ package com.it.cloudwater.commodity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,12 @@ import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
+import com.it.cloudwater.viewholder.OrderViewHolder;
+import com.it.cloudwater.widget.button.AnimShopButton;
+import com.it.cloudwater.widget.button.IOnAddDelListener;
+import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
@@ -32,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SubmitOrderActivity extends BaseActivity implements View.OnClickListener {
 
@@ -60,16 +66,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     TextView tvDetailAddress;
     @BindView(R.id.rl_address)
     RelativeLayout rlAddress;
-    @BindView(R.id.img_water)
-    ImageView imgWater;
-    @BindView(R.id.tv_wanter_name)
-    TextView tvWanterName;
-    @BindView(R.id.tv_barrel_deposit)
-    TextView tvBarrelDeposit;
-    @BindView(R.id.unit_price)
-    TextView unitPrice;
-    @BindView(R.id.count)
-    TextView count;
+    @BindView(R.id.order_recycler)
+    EasyRecyclerView orderRecycler;
     @BindView(R.id.total_order)
     TextView totalOrder;
     @BindView(R.id.tv_invoice_header)
@@ -102,30 +100,23 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     TextView totalPay;
     @BindView(R.id.btn_settlement)
     Button btnSettlement;
+    @BindView(R.id.btnReplenish)
+    AnimShopButton btnReplenish;
+    @BindView(R.id.bucket_money)
+    TextView bucketMoney;
+    private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
 
     private String order_Id;
     private int count_total = 0;
     private String userId;
     private OrderDetailBean orderDetailBean;
-    private String addressId;
-    private String strLocation;
+
     private String discount_amount;
+    private int bucketCount;
 
     @Override
     protected void processLogic() {
-        String addressName = StorageUtil.getValue(this, "address_name");
-        String addressPhone = StorageUtil.getValue(this, "address_phone");
-        String addressDetail = StorageUtil.getValue(this, "address_detail");
-        if (!addressName.isEmpty()) {
-            tvName.setText(addressName);
-        }
-        if (!addressPhone.isEmpty()) {
-            tvPhone.setText(addressPhone);
-        }
-        if (!addressDetail.isEmpty()) {
-            tvDetailAddress.setText(addressDetail);
-        }
-        CloudApi.orderPayDetail(0x001, Long.parseLong(order_Id), myCallBack);
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -139,10 +130,17 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             orderDetailBean = new Gson().fromJson(body, OrderDetailBean.class);
-                            tvWanterName.setText(orderDetailBean.result.orderGoods.get(0).strGoodsname);
-                            tvBarrelDeposit.setText(((double) orderDetailBean.result.nBucketmoney / 100) + "元");
-                            unitPrice.setText(((double) orderDetailBean.result.orderGoods.get(0).nPrice / 100) + "元");
-                            count.setText(orderDetailBean.result.orderGoods.get(0).nCount + "");
+                            ArrayList<OrderDetailBean.Result.OrderGoods> orderGoodses = new ArrayList<>();
+                            for (int i = 0; i < orderDetailBean.result.orderGoods.size(); i++) {
+                                orderGoodses.add(orderDetailBean.result.orderGoods.get(i));
+                            }
+                            orderRecycler.setAdapterWithProgress(orderAdapter = new RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods>(SubmitOrderActivity.this) {
+                                @Override
+                                public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                                    return new OrderViewHolder(parent);
+                                }
+                            });
+                            orderAdapter.addAll(orderGoodses);
                             totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "元");
                             tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100 + "元"));
                             totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "元");
@@ -184,8 +182,60 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void setListener() {
         toolbarTitle.setText("提交订单");
+        ivLeft.setVisibility(View.VISIBLE);
+        ivLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         rlAddress.setOnClickListener(this);
         userId = StorageUtil.getUserId(this);
+        orderRecycler.setLayoutManager(new LinearLayoutManager(this));
+        String addressName = StorageUtil.getValue(this, "address_name");
+        String addressPhone = StorageUtil.getValue(this, "address_phone");
+        String addressDetail = StorageUtil.getValue(this, "address_detail");
+        final String addressId = StorageUtil.getValue(this, "addressId");
+        final String strLocation = StorageUtil.getValue(this, "strLocation");
+        if (!addressName.isEmpty()) {
+            tvName.setText(addressName);
+        }
+        if (!addressPhone.isEmpty()) {
+            tvPhone.setText(addressPhone);
+        }
+        if (!addressDetail.isEmpty()) {
+            tvDetailAddress.setText(addressDetail);
+        }
+        CloudApi.orderPayDetail(0x001, Long.parseLong(order_Id), myCallBack);
+        btnReplenish.setOnAddDelListener(new IOnAddDelListener() {
+            @Override
+            public void onAddSuccess(int count) {
+                bucketCount = count;
+                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+            }
+
+            @Override
+            public void onAddFailed(int count, FailType failType) {
+                bucketCount = count;
+                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+            }
+
+            @Override
+            public void onDelSuccess(int count) {
+                bucketCount = count;
+                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+            }
+
+            @Override
+            public void onDelFaild(int count, FailType failType) {
+                bucketCount = count;
+                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
+            }
+        });
         btnSettlement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,14 +263,14 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("strInvoiceheader", invoice);
                 settlementParams.put("strRemarks", remarks);
                 if (discount_amount != null) {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice + bucketCount * 5000);
                     settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
                     settlementParams.put("lMyCouponId", orderDetailBean.result.lMyCouponId);
                 } else {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice + bucketCount * 5000);
                     settlementParams.put("nCouponPrice", 0);
                 }
-                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice);
+                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice + bucketCount * 5000);
 
 
                 settlementParams.put("orderGoods", orderGoods);
@@ -264,13 +314,15 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
         if (data != null && REQUEST_CODE == requestCode) {
             String addressName = data.getExtras().getString("addressName");
 
-            addressId = data.getExtras().getString("addressId");
-            strLocation = data.getExtras().getString("addressLocation");
+            String addressId = data.getExtras().getString("addressId");
+            String strLocation = data.getExtras().getString("addressLocation");
             String addressPhone = data.getExtras().getString("addressPhone");
             String addressDetail = data.getExtras().getString("addressDetail");
             StorageUtil.setKeyValue(this, "address_name", addressName);
             StorageUtil.setKeyValue(this, "address_phone", addressPhone);
             StorageUtil.setKeyValue(this, "address_detail", addressDetail);
+            StorageUtil.setKeyValue(this, "addressId", addressId);
+            StorageUtil.setKeyValue(this, "strLocation", strLocation);
             tvDetailAddress.setText(addressDetail);
             tvName.setText(addressName);
             tvPhone.setText(addressPhone);
@@ -279,14 +331,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
             discount_amount = data.getExtras().getString("discount_amount");
             tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100) + "元");
-            totalPay.setText(((double) (orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount)) / 100) + "元");
+            totalPay.setText(((double) (orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) + bucketCount * 5000) / 100) + "元");
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

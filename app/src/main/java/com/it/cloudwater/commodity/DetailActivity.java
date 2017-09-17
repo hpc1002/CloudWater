@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
@@ -192,7 +193,7 @@ public class DetailActivity extends BaseActivity {
                         if (resCode.equals("0")) {
                             int orderId = jsonObject.getInt("result");//订单id
                             Intent intent = new Intent(DetailActivity.this, SubmitOrderActivity.class);
-                            intent.putExtra("order_Id", orderId+"");
+                            intent.putExtra("order_Id", orderId + "");
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
@@ -231,7 +232,7 @@ public class DetailActivity extends BaseActivity {
                 salesVolume.setText("已售" + nMothnumber);
                 price.setText(((double) nPrice / 100) + "元");
                 Glide.with(this)
-                        .load(strGoodsimgurl)
+                        .load(Constant.IMAGE_URL+"0/" + lId)
                         .placeholder(R.mipmap.home_load_error)
                         .crossFade()
                         .into((ImageView) findViewById(R.id.commodity_pictures));

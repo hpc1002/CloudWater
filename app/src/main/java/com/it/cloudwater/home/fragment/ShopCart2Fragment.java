@@ -1,10 +1,10 @@
 package com.it.cloudwater.home.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -15,6 +15,7 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.adapter.ShoppingCartAdapter;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.ShopCartListBean;
+import com.it.cloudwater.commodity.SubmitOrderActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
@@ -51,7 +52,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
     TextView tvSettlement;
     @BindView(R.id.rl_bottom)
     LinearLayout rlBottom;
-//    @BindView(R.id.btn_back)
+    //    @BindView(R.id.btn_back)
 //    Button btnBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -114,6 +115,22 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
                         e.printStackTrace();
                     }
                     break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            ToastManager.show("提交订单成功");
+                            int orderId = jsonObject.getInt("result");
+                            Intent intent = new Intent(getActivity(), SubmitOrderActivity.class);
+                            intent.putExtra("order_Id", orderId+"");
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
 
         }
@@ -153,29 +170,8 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
                 maps.add(orderParams);
             }
         }
-//        for (ShopCartListBean.Result.DataList bean : shoppingCartBeanList) {
-//            boolean choosed = bean.isChoosed();
-//            if (choosed) {
-//                String shoppingName = bean.strGoodsname;
-//                int count = bean.nGoodsCount;
-//                double price = bean.nPrice;
-//                String attribute = bean.strStandard;
-//                int id = bean.lId;
-//                orderParams.put("lGoodsid", bean.lGoodsId);
-//                orderParams.put("strGoodsname", bean.strGoodsname);
-//                orderParams.put("nPrice", bean.nPrice);
-//                orderParams.put("strGoodsimgurl", bean.strGoodsimgurl);
-//                orderParams.put("nGoodsTotalPrice", bean.nPrice * bean.nGoodsCount);
-//                orderParams.put("nCount", bean.nGoodsCount);
-//                maps.add(orderParams);
-//            }
-//
-//        }
         ToastManager.show("总价：" + totalPrice / 100);
-        //跳转到支付界面
         //订单参数包装
-
-
         Map<String, Object> params = new HashMap<>();
         params.put("lBuyerid", userId);
         params.put("strBuyername", "姓名");
@@ -234,7 +230,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             }
         }
         tvShowPrice.setText("合计:" + ((double) totalPrice / 100) + "元");
-        tvSettlement.setText("结算(" + totalCount + ")");
+        tvSettlement.setText("提交订单(" + totalCount + ")");
     }
 
     /**

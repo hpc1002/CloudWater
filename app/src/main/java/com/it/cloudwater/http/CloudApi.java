@@ -596,11 +596,9 @@ public class CloudApi {
                     }
                 });
     }
-    public static void getLunbo(final int what, Integer nMaxNum, Integer nPage, final MyCallBack myCallBack) {
-        OkGo.<String>post(Constant.LUNBO_URL)
+    public static void getLunbo(final int what, final MyCallBack myCallBack) {
+        OkGo.<String>get(Constant.LUNBO_URL)
                 .tag(App.getInstance())
-                .params("nMaxNum", nMaxNum)
-                .params("nPage", nPage)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -69,67 +70,113 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y20" />
 
-    <RelativeLayout
-        android:background="@color/white"
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/white">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/img_water"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@mipmap/home_load_error" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_wanter_name"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:layout_toRightOf="@+id/img_water"-->
+    <!--android:text="水名称"-->
+    <!--android:textColor="@color/title" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_barrel_deposit"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/tv_wanter_name"-->
+    <!--android:layout_toRightOf="@+id/img_water"-->
+    <!--android:text="桶押金:￥:0.00" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/unit_price"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:text="￥26.00"-->
+    <!--android:textColor="@color/title" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/count"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_below="@+id/unit_price"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:text="数量2" />-->
+
+    <!---->
+    <!--</RelativeLayout>-->
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/order_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/img_water"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/home_load_error" />
-
-        <TextView
-            android:id="@+id/tv_wanter_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/img_water"
-            android:text="水名称"
-            android:textColor="@color/title" />
-
-        <TextView
-            android:id="@+id/tv_barrel_deposit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_wanter_name"
-            android:layout_toRightOf="@+id/img_water"
-            android:text="桶押金:￥:0.00" />
-
-        <TextView
-            android:id="@+id/unit_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:text="￥26.00"
-            android:textColor="@color/title" />
-
-        <TextView
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/unit_price"
-            android:layout_marginRight="5dp"
-            android:text="数量2" />
-
-        <TextView
-            android:id="@+id/total_order"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/img_water"
-            android:text="订单合计:￥169.00"
-            android:textColor="@color/title" />
-    </RelativeLayout>
+    </com.jude.easyrecyclerview.EasyRecyclerView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/part_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:text="桶押金:" />
+
+        <com.it.cloudwater.widget.button.AnimShopButton
+            android:id="@+id/btnReplenish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/bucket_money"
+            app:addEnableBgColor="@color/colorPrimary"
+            app:addEnableFgColor="#ffffff"
+            app:hintBgColor="@color/colorPrimary"
+            app:hintBgRoundValue="15dp"
+            app:hintFgColor="#ffffff"
+            app:ignoreHintArea="true"
+            app:maxCount="99" />
+
+        <TextView
+            android:id="@+id/bucket_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="￥0" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/total_order"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:text="订单合计:￥169.00"
+        android:textColor="@color/title" />
+
 
     <View
         android:layout_width="match_parent"

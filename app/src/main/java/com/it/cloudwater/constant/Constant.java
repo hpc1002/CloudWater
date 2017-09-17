@@ -41,4 +41,7 @@ public class Constant {
     public static final String IMAGE_URL = BASE_URL + "common/getImg/";//获取图片资源
     public static final String LUNBO_URL = BASE_URL + "activity/list";//获取轮播图片
     public static final String LOGOUT_URL = BASE_URL + "buyer/logout";//退出登录
+//    public static final String BASEIMG_URL = "http://59.110.235.32:8080";//图片baseurl
+
+
 }
