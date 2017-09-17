@@ -131,6 +131,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.rb_home:
                 toolbarTitle.setText("首页");
                 controller.showFragment(0);
+                toolbar.setVisibility(View.VISIBLE);
                 tvRight.setVisibility(View.GONE);
                 break;
             case R.id.rb_order:

@@ -6,8 +6,9 @@
     android:layout_margin="5dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:orientation="vertical">
@@ -15,7 +16,7 @@
         <ImageView
             android:id="@+id/bucketImg"
             android:layout_width="@dimen/x350"
-            android:layout_height="@dimen/y200"
+            android:layout_height="@dimen/y350"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -34,7 +35,7 @@
             android:textColor="@color/course_name"
             android:textSize="14sp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -43,13 +44,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y22"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
                 android:text="规格:500ml*1瓶"
                 android:textColor="@color/course_learn_number"
                 android:textSize="12sp" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/bucket_amount_sold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y22"
+                android:layout_alignParentRight="true"
+                android:text="已售"
+                android:textColor="@color/course_learn_number"
+                android:textSize="12sp" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -67,25 +75,13 @@
                 android:textColor="@color/red"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/bucket_amount_sold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/y40"
-                android:layout_marginTop="@dimen/y22"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="3dp"
-                android:textColor="@color/course_learn_number"
-                android:textSize="12sp" />
+
             <ImageView
                 android:id="@+id/add_shop"
-                android:layout_alignParentRight="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/shopcart"/>
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/shopcart" />
         </RelativeLayout>
 
     </LinearLayout>

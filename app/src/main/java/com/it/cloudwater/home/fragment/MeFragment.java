@@ -100,6 +100,18 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     protected void initListener() {
         rlDistributionMy.setVisibility(View.GONE);
         String userType = StorageUtil.getUserType(getActivity());
+        String userPhone = StorageUtil.getValue(getActivity(), "userPhone");
+        if (!userPhone.equals("")) {
+            tvPhoneNumber.setText(userPhone);
+        } else {
+            tvPhoneNumber.setText("登录");
+            tvPhoneNumber.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+            });
+        }
 
         userId = StorageUtil.getUserId(getActivity());
         if (!userType.equals("")) {

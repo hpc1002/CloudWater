@@ -124,8 +124,21 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
                             ToastManager.show("提交订单成功");
                             int orderId = jsonObject.getInt("result");
                             Intent intent = new Intent(getActivity(), SubmitOrderActivity.class);
-                            intent.putExtra("order_Id", orderId+"");
+                            intent.putExtra("order_Id", orderId + "");
                             startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 0x003:
+                    String body3 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body3);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            ToastManager.show("删除成功");
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -155,31 +168,32 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
      */
     private void lementOnder() {
         //选中的需要提交的商品清单
-
-        ArrayList<Map<String, Object>> maps = new ArrayList<>();
-        for (int i = 0; i < shoppingCartBeanList.size(); i++) {
-            Map<String, Object> orderParams = new HashMap<>();
-            boolean isChoosed = shoppingCartBeanList.get(i).isChoosed;
-            if (isChoosed) {
-                orderParams.put("lGoodsid", shoppingCartBeanList.get(i).lGoodsId);
-                orderParams.put("strGoodsname", shoppingCartBeanList.get(i).strGoodsname);
-                orderParams.put("nPrice", shoppingCartBeanList.get(i).nPrice);
-                orderParams.put("strGoodsimgurl", shoppingCartBeanList.get(i).strGoodsimgurl);
-                orderParams.put("nGoodsTotalPrice", shoppingCartBeanList.get(i).nPrice * shoppingCartBeanList.get(i).nGoodsCount);
-                orderParams.put("nCount", shoppingCartBeanList.get(i).nGoodsCount);
-                maps.add(orderParams);
+        if (shoppingCartBeanList != null && shoppingCartBeanList.size() != 0) {
+            ArrayList<Map<String, Object>> maps = new ArrayList<>();
+            for (int i = 0; i < shoppingCartBeanList.size(); i++) {
+                Map<String, Object> orderParams = new HashMap<>();
+                boolean isChoosed = shoppingCartBeanList.get(i).isChoosed;
+                if (isChoosed) {
+                    orderParams.put("lGoodsid", shoppingCartBeanList.get(i).lGoodsId);
+                    orderParams.put("strGoodsname", shoppingCartBeanList.get(i).strGoodsname);
+                    orderParams.put("nPrice", shoppingCartBeanList.get(i).nPrice);
+                    orderParams.put("strGoodsimgurl", shoppingCartBeanList.get(i).strGoodsimgurl);
+                    orderParams.put("nGoodsTotalPrice", shoppingCartBeanList.get(i).nPrice * shoppingCartBeanList.get(i).nGoodsCount);
+                    orderParams.put("nCount", shoppingCartBeanList.get(i).nGoodsCount);
+                    maps.add(orderParams);
+                }
             }
+            ToastManager.show("总价：" + totalPrice / 100);
+            //订单参数包装
+            Map<String, Object> params = new HashMap<>();
+            params.put("lBuyerid", userId);
+            params.put("strBuyername", "姓名");
+            params.put("nTotalprice", totalPrice);
+            params.put("orderGoods", maps);
+            params.put("nAddOrderType", 1);
+            JSONObject jsonObject = new JSONObject(params);
+            CloudApi.orderSubmit(0x002, jsonObject, myCallBack);
         }
-        ToastManager.show("总价：" + totalPrice / 100);
-        //订单参数包装
-        Map<String, Object> params = new HashMap<>();
-        params.put("lBuyerid", userId);
-        params.put("strBuyername", "姓名");
-        params.put("nTotalprice", totalPrice);
-        params.put("orderGoods", maps);
-
-        JSONObject jsonObject = new JSONObject(params);
-        CloudApi.orderSubmit(0x002, jsonObject, myCallBack);
     }
 
     /**
@@ -279,6 +293,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
      */
     @Override
     public void childDelete(int position) {
+        CloudApi.deleteShopCart(0x003, shoppingCartBeanList.get(position).lId, myCallBack);
         shoppingCartBeanList.remove(position);
         shoppingCartAdapter.notifyDataSetChanged();
         statistics();
@@ -294,7 +309,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             //全选按钮
             case R.id.ck_all:
 
-                if (shoppingCartBeanList.size() != 0) {
+                if (shoppingCartBeanList != null && shoppingCartBeanList.size() != 0) {
                     if (ckAll.isChecked()) {
                         for (int i = 0; i < shoppingCartBeanList.size(); i++) {
                             shoppingCartBeanList.get(i).setChoosed(true);
@@ -306,8 +321,9 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
                         }
                         shoppingCartAdapter.notifyDataSetChanged();
                     }
+                    statistics();
                 }
-                statistics();
+
                 break;
             case R.id.bt_header_right:
                 flag = !flag;

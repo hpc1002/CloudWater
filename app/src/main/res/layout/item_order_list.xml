@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="水名称"
+        android:textSize="14sp"
         android:textColor="@color/title"
         android:layout_marginLeft="20dp"
         android:layout_centerVertical="true"
@@ -35,6 +36,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="5dp"
         android:text="￥26.00"
+        android:textSize="14sp"
         android:textColor="@color/title" />
 
     <TextView
@@ -44,6 +46,8 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/unit_price"
         android:layout_marginRight="5dp"
+        android:textSize="12sp"
+        android:textColor="@color/word_second"
         android:text="数量2" />
 </RelativeLayout>
 

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.bean.ShopCartListBean;
+import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.utils.StringUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -107,10 +108,10 @@ public class ShoppingCartAdapter extends BaseAdapter {
             holder.tvCommodityAttr.setText(attribute);
         }
         holder.tvCommodityName.setText(shoppingCartBean.strGoodsname);
-        holder.tvCommodityPrice.setText(((double)shoppingCartBean.nPrice /100)+ "元");
-        holder.tvCommodityNum.setText(" X" + shoppingCartBean.nGoodsCount+ "");
+        holder.tvCommodityPrice.setText(((double) shoppingCartBean.nPrice / 100) + "元");
+        holder.tvCommodityNum.setText(" X" + shoppingCartBean.nGoodsCount + "");
         holder.tvCommodityShowNum.setText(shoppingCartBean.nGoodsCount + "");
-        ImageLoader.getInstance().displayImage(shoppingCartBean.strGoodsimgurl, holder.ivShowPic);
+        ImageLoader.getInstance().displayImage(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId, holder.ivShowPic);
 
         //单选框按钮
         holder.ckOneChose.setOnClickListener(

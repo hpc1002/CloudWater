@@ -2,6 +2,7 @@ package com.it.cloudwater.commodity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SubmitOrderActivity extends BaseActivity implements View.OnClickListener {
 
@@ -104,6 +106,10 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     AnimShopButton btnReplenish;
     @BindView(R.id.bucket_money)
     TextView bucketMoney;
+    @BindView(R.id.tv_location)
+    TextView tvLocation;
+    @BindView(R.id.tv_addressId)
+    TextView tvAddressId;
     private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
 
     private String order_Id;
@@ -195,8 +201,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
         String addressName = StorageUtil.getValue(this, "address_name");
         String addressPhone = StorageUtil.getValue(this, "address_phone");
         String addressDetail = StorageUtil.getValue(this, "address_detail");
-        final String addressId = StorageUtil.getValue(this, "addressId");
-        final String strLocation = StorageUtil.getValue(this, "strLocation");
+        String addressId = StorageUtil.getValue(this, "addressId");
+        String strLocation = StorageUtil.getValue(this, "strLocation");
         if (!addressName.isEmpty()) {
             tvName.setText(addressName);
         }
@@ -205,6 +211,12 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
         }
         if (!addressDetail.isEmpty()) {
             tvDetailAddress.setText(addressDetail);
+        }
+        if (!addressDetail.isEmpty()) {
+            tvAddressId.setText(addressId);
+        }
+        if (!addressDetail.isEmpty()) {
+            tvLocation.setText(strLocation);
         }
         CloudApi.orderPayDetail(0x001, Long.parseLong(order_Id), myCallBack);
         btnReplenish.setOnAddDelListener(new IOnAddDelListener() {
@@ -242,6 +254,12 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 String name = tvName.getText().toString();
                 String detailAddress = tvDetailAddress.getText().toString();
                 String phone = tvPhone.getText().toString();
+                String addressId = tvAddressId.getText().toString();
+                String strLocation = tvLocation.getText().toString();
+                if (name.equals("") || detailAddress.equals("") || phone.equals("")) {
+                    ToastManager.show("收货地址不能为空");
+                    return;
+                }
                 String invoice = etInvoice.getText().toString();
                 String remarks = etRemarks.getText().toString();
                 HashMap<String, Object> orderGoodsParams = new HashMap<>();
@@ -326,6 +344,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             tvDetailAddress.setText(addressDetail);
             tvName.setText(addressName);
             tvPhone.setText(addressPhone);
+            tvLocation.setText(strLocation);
+            tvAddressId.setText(addressId);
         }
         if (data != null && REQUEST_CODE2 == requestCode) {
 

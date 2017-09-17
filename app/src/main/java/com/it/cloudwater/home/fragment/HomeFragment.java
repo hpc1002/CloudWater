@@ -1,6 +1,7 @@
 package com.it.cloudwater.home.fragment;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
  * Created by hpc on 2017/6/16.
  */
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.home_recommend_banner)
     BGABanner homeRecommendBanner;
     @BindView(R.id.recyclerView_commend)
@@ -52,7 +53,17 @@ public class HomeFragment extends BaseFragment {
     private ArrayList<BannerDto> bannerList;
     private ArrayList<GoodsListBean.Result.DataList> goodList;
     private String userId;
+    private static final int REFRESH_COMPLETE = 0X110;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case REFRESH_COMPLETE:
+                    swipeRefresh.setRefreshing(false);
+                    break;
 
+            }
+        }
+    };
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -64,16 +75,9 @@ public class HomeFragment extends BaseFragment {
         recyclerViewCommend.setFocusable(false);
         recyclerViewCommend.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerViewCommend.setHasFixedSize(true);
-//        next.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
-//            }
-//        });
-
-
-        CloudApi.getGoodsListData(0x001, 1, 4, myCallBack);
-
+        CloudApi.getGoodsListData(0x001, 1, 8, myCallBack);
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -81,9 +85,8 @@ public class HomeFragment extends BaseFragment {
         public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
+                    mHandler.sendEmptyMessage(REFRESH_COMPLETE);
                     String body = result.body();
-
-//                    parseData(body);
                     GoodsListBean goodsListBean = new Gson().fromJson(body, GoodsListBean.class);
                     goodList = new ArrayList<GoodsListBean.Result.DataList>();
                     if (goodsListBean != null) {
@@ -105,7 +108,6 @@ public class HomeFragment extends BaseFragment {
                     adapter.setCallBack(new GoodListAdapter.OnMyClickListener() {
                         @Override
                         public void OnItemClickListener(Integer price, long id, String strGoodsname, String strGoodsimgurl, String strStandard, long goodId) {
-                            ToastManager.show(strGoodsname);
                             Map<String, Object> shopParams = new HashMap<>();
                             shopParams.put("strUserName", "侯鹏成");
                             shopParams.put("lUserId", userId);
@@ -171,4 +173,10 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onRefresh() {
+//        CloudApi.getLunbo(0x003, myCallBack);
+        CloudApi.getGoodsListData(0x001, 1, 8, myCallBack);
+
+    }
 }

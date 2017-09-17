@@ -192,7 +192,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     try {
                         JSONObject sendData = new JSONObject(body);
                         String result = sendData.getString("result");
-
                         resCode = sendData.getString("resCode");
                         Log.i(TAG, "SendCode: ---------" + "result" + result + "resCode" + resCode);
                     } catch (JSONException e) {
@@ -210,6 +209,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             ToastManager.show(result);
                         } else if (resCode.equals("0")) {
                             ToastManager.show("注册成功");
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                         }
                         Log.i(TAG, "Register: ---------" + "result" + result + "resCode" + resCode);
                     } catch (JSONException e) {

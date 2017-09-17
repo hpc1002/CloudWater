@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.BuyTicketListBean;
+import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.user.TicketDetailActivity;
@@ -64,7 +65,7 @@ public class BuyTicketFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        if (!userId.equals("")){
+        if (!userId.equals("")) {
             CloudApi.getBuyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
         }
 
@@ -126,10 +127,10 @@ public class BuyTicketFragment extends BaseFragment {
                         water_name.setText(data.strGoodsName);
                         water_sale.setText("月销量" + data.nMonthCount);
                         water_discount.setText(data.strRemarks);
-                        tv_price.setText("优惠价￥" + ((double) data.nPrice / 100) + "元");
-                        ori_price.setText("原价￥" + ((double) data.nOldPrice / 100) + "元");
+                        tv_price.setText("￥" + ((double) data.nPrice / 100));
+                        ori_price.setText("原价￥" + ((double) data.nOldPrice / 100));
                         Glide.with(getContext())
-                                .load(data.strGoodsimgurl)
+                                .load(Constant.IMAGE_URL + "0/"+data.lId)
                                 .placeholder(R.mipmap.home_load_error)
                                 .bitmapTransform(new CenterCrop(getContext()))
                                 .into(ticketImg);

@@ -57,7 +57,7 @@ public class DetailActivity extends BaseActivity {
     @BindView(R.id.btnReplenish)
     AnimShopButton btnReplenish;
     @BindView(R.id.commodity_introduction)
-    TextView commodityIntroduction;
+    ImageView commodityIntroduction;
     @BindView(R.id.order_submit)
     Button orderSubmit;
     @BindView(R.id.progressBar)
@@ -139,7 +139,7 @@ public class DetailActivity extends BaseActivity {
                 params.put("strBuyername", "姓名");
                 params.put("nTotalprice", nPrice * goodCount);
                 params.put("orderGoods", orderGoods);
-
+                params.put("nAddOrderType",0);
                 JSONObject jsonObject = new JSONObject(params);
                 CloudApi.orderSubmit(0x002, jsonObject, myCallBack);
 
@@ -227,15 +227,19 @@ public class DetailActivity extends BaseActivity {
                 nStock = result.getInt("nStock");
                 nOnline = result.getInt("nOnline");
                 tradeName.setText(strGoodsname);
-                specifications.setText(strStandard);
-                commodityIntroduction.setText(strIntroduce);
+                specifications.setText("规格:"+strStandard);
                 salesVolume.setText("已售" + nMothnumber);
-                price.setText(((double) nPrice / 100) + "元");
+                price.setText("￥"+((double) nPrice / 100));
                 Glide.with(this)
                         .load(Constant.IMAGE_URL+"0/" + lId)
                         .placeholder(R.mipmap.home_load_error)
                         .crossFade()
                         .into((ImageView) findViewById(R.id.commodity_pictures));
+                Glide.with(this)
+                        .load(Constant.IMAGE_URL+"2/" + lId)
+                        .placeholder(R.mipmap.home_load_error)
+                        .crossFade()
+                        .into((ImageView) findViewById(R.id.commodity_introduction));
             }
         } catch (JSONException e) {
             e.printStackTrace();

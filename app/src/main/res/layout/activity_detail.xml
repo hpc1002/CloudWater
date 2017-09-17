@@ -44,6 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textSize="12sp"
+            android:textColor="@color/word_second"
             android:gravity="center_horizontal" />
 
         <RelativeLayout
@@ -56,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:textSize="16sp"
                 android:textColor="@color/colorPrimary" />
 
 
@@ -83,7 +86,7 @@
             android:textSize="16sp"
             android:text="商品介绍" />
 
-        <TextView
+        <ImageView
             android:id="@+id/commodity_introduction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

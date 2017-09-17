@@ -138,6 +138,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             int nBucketnum = result.getInt("nBucketnum");
                             StorageUtil.setKeyValue(LoginActivity.this, "userId", lId + "");
                             StorageUtil.setKeyValue(LoginActivity.this, "userType", nUserType + "");
+                            StorageUtil.setKeyValue(LoginActivity.this, "userPhone", strMobile);
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         } else if (resCode.equals("1")) {
                             String result = loginData.getString("result");
