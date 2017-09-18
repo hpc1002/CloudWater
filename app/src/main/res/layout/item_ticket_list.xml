@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,25 +13,25 @@
             android:id="@+id/tv_bucket_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="桶装水名" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tv_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/tv_bucket_name"
-            android:text="优惠信息" />
+            android:textSize="12sp"
+            android:layout_toRightOf="@+id/tv_bucket_name" />
 
         <TextView
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/checkbox"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="40dp"
             android:layout_centerVertical="true"
-            android:text="￥80"
+            android:layout_marginRight="40dp"
+            android:layout_toLeftOf="@+id/checkbox"
+            android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
         <CheckBox

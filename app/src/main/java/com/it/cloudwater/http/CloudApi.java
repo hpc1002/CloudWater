@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.it.cloudwater.App;
 import com.it.cloudwater.R;
+import com.it.cloudwater.bean.TicketDetailBean;
 import com.it.cloudwater.constant.Constant;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -358,6 +359,24 @@ public class CloudApi {
                 });
     }
 
+    public static void buyTicket(final int what, JSONObject jsonObject, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.TICKET_BUY_URL)
+                .tag(App.getInstance())
+                .upJson(jsonObject)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+
     public static void getMyCouponList(final int what, final Integer nPage, final Integer nMaxNum, long lUserId, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.MYCOUPON_LIST_URL)
                 .tag(App.getInstance())
@@ -457,7 +476,7 @@ public class CloudApi {
     public static void deleteShopCart(final int what, long lId, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.SHOP_CART_DELETE_URL)
                 .tag(App.getInstance())
-                .params("lId",lId )
+                .params("lId", lId)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

@@ -23,6 +23,7 @@ public class TicketDetailBean {
             public int nCount;
             public int nPrice;
             public String strRemarks;
+            public String strTicketname;
         }
     }
 }

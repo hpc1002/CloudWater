@@ -11,61 +11,118 @@
     <ImageView
         android:id="@+id/bucket_img"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:src="@mipmap/home_load_error" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_height="40dp"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/bucket_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="桶装水名字" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/bucket_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="原价26.00元/桶" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y40" />
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/eyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.jude.easyrecyclerview.EasyRecyclerView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <RelativeLayout
+        android:id="@+id/rl_coupon_my"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+
+        <TextView
+            android:id="@+id/tv_coupon_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_toRightOf="@+id/iv_coupon_my"
+            android:text="优惠"
+            android:textColor="@color/course_name"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/tv_coupon_my"
+            android:text="-￥5"
+            android:textColor="@color/colorPrimary" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="共:" />
+
+        <TextView
+            android:id="@+id/total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥400"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.jude.easyrecyclerview.EasyRecyclerView
-            android:id="@+id/eyRecyclerView"
+        <TextView
+            android:id="@+id/to_pay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </com.jude.easyrecyclerview.EasyRecyclerView>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-
-            <TextView
-                android:id="@+id/total_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/frame_delete"
-                android:padding="10dp"
-                android:text="共130元" />
-
-            <TextView
-                android:id="@+id/to_pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/frame_delete"
-                android:padding="10dp"
-                android:text="去结算" />
-        </RelativeLayout>
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="去结算"
+            android:textColor="@color/white" />
     </RelativeLayout>
 
 </LinearLayout>

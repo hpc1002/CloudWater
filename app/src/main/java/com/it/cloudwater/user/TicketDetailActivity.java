@@ -14,15 +14,22 @@ import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.TicketDetailBean;
+import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.viewholder.TicketDetailListViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.lzy.okgo.model.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,14 +62,19 @@ public class TicketDetailActivity extends BaseActivity {
     ImageView bucketImg;
     private String ticketId;
     private RecyclerArrayAdapter<TicketDetailBean.Result.TicketContents> ticketListAdapter;
+    private String userId;
+    private TicketDetailBean ticketDetailBean;
+
+    private TicketDetailBean.Result.TicketContents TicketDatas;
 
     @Override
     protected void processLogic() {
-        CloudApi.getTicketDetail(0x001, Long.parseLong(ticketId), myCallBack);
+
     }
 
     @Override
     protected void setListener() {
+        userId = StorageUtil.getUserId(this);
         toolbarTitle.setText("水票详情");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +85,21 @@ public class TicketDetailActivity extends BaseActivity {
         });
         ticketId = getIntent().getStringExtra("ticketId");
         eyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        CloudApi.getTicketDetail(0x001, Long.parseLong(ticketId), myCallBack);
+        totalPrice.setText("￥" + 0);
+        toPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String, Object> ticketParams = new HashMap<>();
+                ticketParams.put("lUserid", userId);
+                ticketParams.put("lTicketConId", TicketDatas.lId);
+                ticketParams.put("nFactPrice", TicketDatas.nPrice);
+                ticketParams.put("nCount", TicketDatas.nCount);
+
+                JSONObject ticketObject = new JSONObject(ticketParams);
+                CloudApi.buyTicket(0x002, ticketObject, myCallBack);
+            }
+        });
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -80,35 +107,17 @@ public class TicketDetailActivity extends BaseActivity {
         public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
-                       /*
-                {
-                    "result": {
-                    "lId": 1,
-                            "strGoodsName": "SFSFDS",
-                            "dExpire": 1506787200000,
-                            "ticketcontents": [
-                    {
-                        "lId": 1,
-                            "nCount": 5,
-                            "nPrice": 55,
-                            "strRemarks": "买20赠送10"
-                    }
-        ],
-                    "strGoodsimgurl": "img_url",
-                            "nPrice": 111
-                },
-                    "resCode": "0"
-                }
-                */
+
                     String body = result.body();
-                    TicketDetailBean ticketDetailBean = new Gson().fromJson(body, TicketDetailBean.class);
+
+                    ticketDetailBean = new Gson().fromJson(body, TicketDetailBean.class);
                     bucketName.setText(ticketDetailBean.result.strGoodsName);
                     Glide.with(TicketDetailActivity.this)
-                            .load(ticketDetailBean.result.strGoodsimgurl)
+                            .load(Constant.IMAGE_URL + "0/" + ticketDetailBean.result.lId)
                             .centerCrop()
                             .placeholder(R.mipmap.home_load_error)
                             .into(bucketImg);
-                    bucketPrice.setText("原价" + ((double) ticketDetailBean.result.nPrice / 100) + "元/桶");
+                    bucketPrice.setText("￥" + ((double) ticketDetailBean.result.nPrice / 100));
                     ArrayList<TicketDetailBean.Result.TicketContents> ticketContentses = new ArrayList<>();
                     for (int i = 0; i < ticketDetailBean.result.ticketcontents.size(); i++) {
                         ticketContentses.add(ticketDetailBean.result.ticketcontents.get(i));
@@ -116,10 +125,31 @@ public class TicketDetailActivity extends BaseActivity {
                     eyRecyclerView.setAdapterWithProgress(ticketListAdapter = new RecyclerArrayAdapter<TicketDetailBean.Result.TicketContents>(TicketDetailActivity.this) {
                         @Override
                         public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                            return new TicketDetailListViewHolder(parent);
+                            TicketDetailListViewHolder ticketDetailListViewHolder = new TicketDetailListViewHolder(parent);
+                            ticketDetailListViewHolder.setCallBack(new TicketDetailListViewHolder.allCheck() {
+                                @Override
+                                public void OnItemClickListener(TicketDetailBean.Result.TicketContents data) {
+                                    TicketDatas = data;
+                                    totalPrice.setText("￥" + ((double) data.nPrice / 100));
+                                }
+                            });
+                            return ticketDetailListViewHolder;
                         }
                     });
                     ticketListAdapter.addAll(ticketContentses);
+                    break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            String ticketOrderId = jsonObject.getString("result");
+                            //请求支付接口
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }

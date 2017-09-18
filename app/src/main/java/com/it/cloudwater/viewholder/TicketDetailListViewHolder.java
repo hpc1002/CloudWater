@@ -2,6 +2,7 @@ package com.it.cloudwater.viewholder;
 
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.it.cloudwater.R;
@@ -26,10 +27,28 @@ public class TicketDetailListViewHolder extends BaseViewHolder<TicketDetailBean.
     }
 
     @Override
-    public void setData(TicketDetailBean.Result.TicketContents data) {
+    public void setData(final TicketDetailBean.Result.TicketContents data) {
         super.setData(data);
-        tv_bucket_name.setText("桶装水名称");
-        tv_price.setText(((double) data.nPrice / 100) + "元");
+        tv_bucket_name.setText(data.strTicketname);
+        tv_price.setText("￥" + ((double) data.nPrice / 100));
         tv_discount.setText(data.strRemarks);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    mCallBack.OnItemClickListener(data);
+                }
+            }
+        });
+    }
+
+    private allCheck mCallBack;
+
+    public void setCallBack(allCheck callBack) {
+        mCallBack = callBack;
+    }
+
+    public interface allCheck {
+        void OnItemClickListener(TicketDetailBean.Result.TicketContents data);
     }
 }
