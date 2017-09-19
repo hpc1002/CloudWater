@@ -5,9 +5,9 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.mcxtzhang.swipemenulib.SwipeMenuLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<com.mcxtzhang.swipemenulib.SwipeMenuLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
         <LinearLayout
             android:id="@+id/ll_item"
@@ -66,12 +66,12 @@
                 android:background="@color/back_color" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:background="@color/course_learn_state"
-            android:text="删除"
-            android:textColor="@android:color/white" />
-    </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
+        <!--<Button-->
+            <!--android:id="@+id/btnDelete"-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/course_learn_state"-->
+            <!--android:text="删除"-->
+            <!--android:textColor="@android:color/white" />-->
+    <!--</com.mcxtzhang.swipemenulib.SwipeMenuLayout>-->
 </LinearLayout>

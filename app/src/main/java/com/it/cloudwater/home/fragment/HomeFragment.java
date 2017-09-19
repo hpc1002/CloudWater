@@ -75,7 +75,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         recyclerViewCommend.setFocusable(false);
         recyclerViewCommend.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerViewCommend.setHasFixedSize(true);
-        CloudApi.getGoodsListData(0x001, 1, 8, myCallBack);
+        CloudApi.getGoodsListData(0x001, 1, 1000, myCallBack);
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
     }

@@ -1,6 +1,8 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -32,7 +34,7 @@ import butterknife.BindView;
 /**
  * 我的水票
  */
-public class TicketActivity extends BaseActivity {
+public class TicketActivity extends BaseActivity implements RecyclerArrayAdapter.OnLoadMoreListener{
 
 
     @BindView(R.id.recyclerView)
@@ -52,7 +54,21 @@ public class TicketActivity extends BaseActivity {
     private String userId;
     private ArrayList<MyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<MyTicketListBean.Result.DataList> ticketAdapter;
-
+    private int nTotal;
+    private static final int REFRESH_COMPLETE = 0X110;
+    private static final int SWIPE_REFRESH_COMPLETE = 0X111;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_COMPLETE:
+                    recyclerView.setRefreshing(false);
+                    break;
+                case SWIPE_REFRESH_COMPLETE:
+//                    swipeRefresh.setRefreshing(false);
+                    break;
+            }
+        }
+    };
     @Override
     protected void processLogic() {
         if (!userId.equals("")) {
@@ -119,6 +135,9 @@ public class TicketActivity extends BaseActivity {
 
         });
         ticketAdapter.addAll(dataLists);
+        mHandler.sendEmptyMessage(REFRESH_COMPLETE);
+        ticketAdapter.setNoMore(R.layout.view_nomore);
+        ticketAdapter.setMore(R.layout.view_more, this);
     }
 
     @Override
@@ -131,4 +150,17 @@ public class TicketActivity extends BaseActivity {
         return this;
     }
 
+    int page=1;
+    @Override
+    public void onLoadMore() {
+        if (!userId.equals("")) {
+
+            if (page < (nTotal / 8 + 1)) {
+                page++;
+                CloudApi.getMyTicketList(0x001, 1, 8 * page, Integer.parseInt(userId), myCallBack);
+            } else {
+                ticketAdapter.stopMore();
+            }
+        }
+    }
 }

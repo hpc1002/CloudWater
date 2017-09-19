@@ -1,30 +1,40 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.bean.MessageListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
+import com.it.cloudwater.viewholder.MessageListViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
 /**
  * 消息页面
  */
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends BaseActivity implements RecyclerArrayAdapter.OnLoadMoreListener {
 
 
     @BindView(R.id.toolbar_title)
@@ -42,6 +52,22 @@ public class MessageActivity extends BaseActivity {
     @BindView(R.id.message_recycler)
     EasyRecyclerView messageRecycler;
     private String userId;
+    private RecyclerArrayAdapter<MessageListBean.Result.DataList> messageAdapter;
+    private int nTotal;
+    private static final int REFRESH_COMPLETE = 0X110;
+    private static final int SWIPE_REFRESH_COMPLETE = 0X111;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_COMPLETE:
+                    messageRecycler.setRefreshing(false);
+                    break;
+                case SWIPE_REFRESH_COMPLETE:
+//                    swipeRefresh.setRefreshing(false);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void processLogic() {
@@ -65,6 +91,12 @@ public class MessageActivity extends BaseActivity {
                             ToastManager.show(emptyResult);
                         } else if (resCode.equals("0")) {
                             //解析数据并展示
+                            MessageListBean messageListBean = new Gson().fromJson(body, MessageListBean.class);
+                            ArrayList<MessageListBean.Result.DataList> dataLists = new ArrayList<>();
+                            for (int i = 0; i < messageListBean.result.dataList.size(); i++) {
+                                dataLists.add(messageListBean.result.dataList.get(i));
+                            }
+                            initUi(dataLists);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -78,6 +110,19 @@ public class MessageActivity extends BaseActivity {
 
         }
     };
+
+    private void initUi(ArrayList<MessageListBean.Result.DataList> dataLists) {
+        messageRecycler.setAdapterWithProgress(messageAdapter = new RecyclerArrayAdapter<MessageListBean.Result.DataList>(this) {
+            @Override
+            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                return new MessageListViewHolder(parent);
+            }
+        });
+        messageAdapter.addAll(dataLists);
+        mHandler.sendEmptyMessage(REFRESH_COMPLETE);
+        messageAdapter.setNoMore(R.layout.view_nomore);
+        messageAdapter.setMore(R.layout.view_more, this);
+    }
 
     @Override
     protected void setListener() {
@@ -103,4 +148,18 @@ public class MessageActivity extends BaseActivity {
         return this;
     }
 
+    int page = 1;
+
+    @Override
+    public void onLoadMore() {
+        if (!userId.equals("")) {
+
+            if (page < (nTotal / 10 + 1)) {
+                page++;
+                CloudApi.getMessageList(0x001, 1, 10 * page, Long.parseLong(userId), myCallBack);
+            } else {
+                messageAdapter.stopMore();
+            }
+        }
+    }
 }

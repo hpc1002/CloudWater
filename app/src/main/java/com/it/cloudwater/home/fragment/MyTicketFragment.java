@@ -1,6 +1,8 @@
 package com.it.cloudwater.home.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,13 +36,28 @@ import butterknife.Unbinder;
  * Created by hpc on 2017/6/19.
  */
 
-public class MyTicketFragment extends BaseFragment {
+public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener {
     @BindView(R.id.recyclerView)
     EasyRecyclerView recyclerView;
     Unbinder unbinder;
     private String userId;
     private ArrayList<MyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<MyTicketListBean.Result.DataList> ticketAdapter;
+    private int nTotal;
+    private static final int REFRESH_COMPLETE = 0X110;
+    private static final int SWIPE_REFRESH_COMPLETE = 0X111;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_COMPLETE:
+                    recyclerView.setRefreshing(false);
+                    break;
+                case SWIPE_REFRESH_COMPLETE:
+//                    swipeRefresh.setRefreshing(false);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
@@ -83,6 +100,7 @@ public class MyTicketFragment extends BaseFragment {
                         } else if (resCode.equals("0")) {
                             MyTicketListBean myTicketListBean = new Gson().fromJson(body, MyTicketListBean.class);
 
+                            nTotal = myTicketListBean.result.nTotal;
                             dataLists = new ArrayList<>();
                             for (int i = 0; i < myTicketListBean.result.dataList.size(); i++) {
                                 dataLists.add(myTicketListBean.result.dataList.get(i));
@@ -113,6 +131,9 @@ public class MyTicketFragment extends BaseFragment {
 
         });
         ticketAdapter.addAll(dataLists);
+        mHandler.sendEmptyMessage(REFRESH_COMPLETE);
+        ticketAdapter.setNoMore(R.layout.view_nomore);
+        ticketAdapter.setMore(R.layout.view_more, this);
     }
 
     @Override
@@ -127,5 +148,20 @@ public class MyTicketFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    int page = 1;
+
+    @Override
+    public void onLoadMore() {
+        if (!userId.equals("")) {
+
+            if (page < (nTotal / 8 + 1)) {
+                page++;
+                CloudApi.getMyTicketList(0x001, 1, 8 * page, Integer.parseInt(userId), myCallBack);
+            } else {
+                ticketAdapter.stopMore();
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.it.cloudwater.home.fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,7 @@ import butterknife.BindView;
  * Created by hpc on 2017/6/19.
  */
 
-public class UnComOrderFragment extends BaseFragment {
+public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener {
     @BindView(R.id.erv_order_un_com)
     EasyRecyclerView ervOrderUnCom;
     private View view;
@@ -38,6 +40,22 @@ public class UnComOrderFragment extends BaseFragment {
     private Integer nState = 0;
     private ArrayList<OrderListBean.Result.DataList> orderList;
     private RecyclerArrayAdapter<OrderListBean.Result.DataList> orderListAdapter;
+    private int nTotal;
+    private OrderListBean orderListBean;
+    private static final int REFRESH_COMPLETE = 0X110;
+    private static final int SWIPE_REFRESH_COMPLETE = 0X111;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_COMPLETE:
+                    ervOrderUnCom.setRefreshing(false);
+                    break;
+                case SWIPE_REFRESH_COMPLETE:
+//                    swipeRefresh.setRefreshing(false);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
@@ -54,8 +72,9 @@ public class UnComOrderFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        orderList = new ArrayList<>();
         if (!userId.equals("")) {
-            CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
+            CloudApi.orderList(0x001, 1, 4, Long.parseLong(userId), nState, myCallBack);
         }
 
     }
@@ -66,14 +85,18 @@ public class UnComOrderFragment extends BaseFragment {
             switch (what) {
                 case 0x001:
                     String body = result.body();
+
                     try {
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-                            OrderListBean orderListBean = new Gson().fromJson(body, OrderListBean.class);
+
+                            orderListBean = new Gson().fromJson(body, OrderListBean.class);
                             int size = orderListBean.result.dataList.size();
 
-                            orderList = new ArrayList<>();
+                            nTotal = orderListBean.result.nTotal;
+
+
                             for (int i = 0; i < size; i++) {
                                 orderList.add(orderListBean.result.dataList.get(i));
                             }
@@ -103,5 +126,26 @@ public class UnComOrderFragment extends BaseFragment {
             }
         });
         orderListAdapter.addAll(orderList);
+
+//        orderListAdapter.addAll(orderList.subList(orderList.size() - orderListBean.result.dataList.size(), orderList.size()));
+        mHandler.sendEmptyMessage(REFRESH_COMPLETE);
+        orderListAdapter.setMore(R.layout.view_more, this);
+        orderListAdapter.setNoMore(R.layout.view_nomore);
+    }
+
+    int page = 1;
+
+    @Override
+    public void onLoadMore() {
+
+        if (!userId.equals("")) {
+
+            if (page < (nTotal / 4 + 1)) {
+                page++;
+                CloudApi.orderList(0x001, 1, 4 * page, Long.parseLong(userId), nState, myCallBack);
+            } else {
+                orderListAdapter.stopMore();
+            }
+        }
     }
 }

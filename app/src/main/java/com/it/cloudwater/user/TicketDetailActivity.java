@@ -18,6 +18,7 @@ import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.TicketDetailListViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
@@ -107,9 +108,7 @@ public class TicketDetailActivity extends BaseActivity {
         public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
-
                     String body = result.body();
-
                     ticketDetailBean = new Gson().fromJson(body, TicketDetailBean.class);
                     bucketName.setText(ticketDetailBean.result.strGoodsName);
                     Glide.with(TicketDetailActivity.this)
@@ -146,6 +145,7 @@ public class TicketDetailActivity extends BaseActivity {
                         if (resCode.equals("0")) {
                             String ticketOrderId = jsonObject.getString("result");
                             //请求支付接口
+                            ToastManager.show("去支付");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -170,10 +170,4 @@ public class TicketDetailActivity extends BaseActivity {
         return this;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

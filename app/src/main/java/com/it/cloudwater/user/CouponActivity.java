@@ -2,6 +2,8 @@ package com.it.cloudwater.user;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -34,7 +36,7 @@ import butterknife.BindView;
  * author hpc
  * 我的优惠券
  */
-public class CouponActivity extends BaseActivity {
+public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter.OnLoadMoreListener {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -52,10 +54,26 @@ public class CouponActivity extends BaseActivity {
     EasyRecyclerView recyclerCoupon;
     private ArrayList<CouponListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<CouponListBean.Result.DataList> couponAdapter;
+    private String userId;
+    private int nTotal;
+    private static final int REFRESH_COMPLETE = 0X110;
+    private static final int SWIPE_REFRESH_COMPLETE = 0X111;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_COMPLETE:
+                    recyclerCoupon.setRefreshing(false);
+                    break;
+                case SWIPE_REFRESH_COMPLETE:
+//                    swipeRefresh.setRefreshing(false);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void processLogic() {
-        String userId = StorageUtil.getUserId(this);
+
         if (!userId.equals("")) {
             CloudApi.getMyCouponList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
         }
@@ -64,6 +82,8 @@ public class CouponActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
+
+        userId = StorageUtil.getUserId(this);
         toolbarTitle.setText("优惠券");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +110,7 @@ public class CouponActivity extends BaseActivity {
                         } else if (resCode.equals("0")) {
                             CouponListBean couponListBean = new Gson().fromJson(body, CouponListBean.class);
 
+                            nTotal = couponListBean.result.nTotal;
                             dataLists = new ArrayList<>();
                             for (int i = 0; i < couponListBean.result.dataList.size(); i++) {
                                 dataLists.add(couponListBean.result.dataList.get(i));
@@ -118,6 +139,9 @@ public class CouponActivity extends BaseActivity {
 
         });
         couponAdapter.addAll(dataLists);
+        mHandler.sendEmptyMessage(REFRESH_COMPLETE);
+        couponAdapter.setMore(R.layout.view_more, this);
+        couponAdapter.setNoMore(R.layout.view_nomore);
         couponAdapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -143,4 +167,18 @@ public class CouponActivity extends BaseActivity {
         return this;
     }
 
+    int page = 1;
+
+    @Override
+    public void onLoadMore() {
+        if (!userId.equals("")) {
+
+            if (page < (nTotal / 8 + 1)) {
+                page++;
+                CloudApi.getMyCouponList(0x001, 1, 8 * page, Integer.parseInt(userId), myCallBack);
+            } else {
+                couponAdapter.stopMore();
+            }
+        }
+    }
 }
