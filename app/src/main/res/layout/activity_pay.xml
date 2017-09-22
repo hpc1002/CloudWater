@@ -5,52 +5,55 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.it.cloudwater.pay.PayActivity">
+    <include layout="@layout/toolbar"/>
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp">-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="30dp"-->
+    <!--android:text="请支付"-->
+    <!--android:textColor="@color/colorGray" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
-            android:text="请支付"
-            android:textColor="@color/colorGray" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_toLeftOf="@+id/actual_pay"-->
+    <!--android:text="实付款" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/actual_pay"
-            android:text="实付款" />
-
-        <TextView
-            android:id="@+id/actual_pay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:text="￥200.00"
-            android:textColor="@color/red" />
-    </RelativeLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/actual_pay"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="20dp"-->
+    <!--android:text="￥200.00"-->
+    <!--android:textColor="@color/red" />-->
+    <!--</RelativeLayout>-->
 
     <RelativeLayout
         android:id="@+id/rl_ali_pay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/iv_ali"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ali_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/iv_ali"
             android:text="支付宝" />
 
@@ -59,24 +62,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_wechat_pay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/iv_wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_centerVertical="true"
+            android:src="@mipmap/wechat_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/iv_wechat"
             android:text="微信" />
 
@@ -85,6 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:layout_centerVertical="true" />
     </RelativeLayout>
 

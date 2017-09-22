@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.home.HomeActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.user.more.AboutUsActivity;
@@ -131,8 +132,10 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
                         if (resCode.equals("0")) {
                             ToastManager.show("退出登录成功");
                             StorageUtil.deteteUserId(MoreActivity.this);
-                            Intent intent = new Intent(MoreActivity.this, LoginActivity.class);
+                            StorageUtil.deteteUserPhone(MoreActivity.this);
+                            Intent intent = new Intent(MoreActivity.this, HomeActivity.class);
                             startActivity(intent);
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

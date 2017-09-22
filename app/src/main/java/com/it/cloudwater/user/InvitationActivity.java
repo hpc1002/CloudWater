@@ -1,7 +1,6 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,9 +8,14 @@ import android.widget.TextView;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.http.CloudApi;
+import com.it.cloudwater.http.MyCallBack;
+import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * 我的邀请
@@ -38,7 +42,7 @@ public class InvitationActivity extends BaseActivity {
 
     @Override
     protected void processLogic() {
-
+        CloudApi.getMore(0x001, 3, myCallBack);
     }
 
     @Override
@@ -63,4 +67,29 @@ public class InvitationActivity extends BaseActivity {
         return this;
     }
 
+    private MyCallBack myCallBack = new MyCallBack() {
+        @Override
+        public void onSuccess(int what, Response<String> result) {
+            switch (what) {
+                case 0x001:
+                    String body = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            String content = jsonObject.getString("result");
+                            detail.setText(content);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onFail(int what, Response<String> result) {
+
+        }
+    };
 }

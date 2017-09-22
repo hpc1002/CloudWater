@@ -75,7 +75,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/tv_coupon_my"
-            android:text="-￥5"
             android:textColor="@color/colorPrimary" />
 
         <ImageView
@@ -105,7 +104,6 @@
             android:id="@+id/total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="￥400"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
     </LinearLayout>

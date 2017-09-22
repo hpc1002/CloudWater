@@ -83,8 +83,8 @@ public class StorageUtil {
         return StorageUtil.getValue(context, "course_type");
     }
 
-    public static boolean deteteTokenId(Context context) {
-        return getEditor(context).remove("token").commit();
+    public static boolean deteteUserPhone(Context context) {
+        return getEditor(context).remove("userPhone").commit();
     }
 
     public static boolean deteteUserId(Context context) {

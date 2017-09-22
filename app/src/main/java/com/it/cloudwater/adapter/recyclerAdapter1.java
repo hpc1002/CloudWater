@@ -1,5 +1,6 @@
 package com.it.cloudwater.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,10 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.it.cloudwater.R;
 import com.it.cloudwater.bean.OrderListBean;
+import com.it.cloudwater.constant.Constant;
 
 import java.util.ArrayList;
 
@@ -20,10 +23,11 @@ import java.util.ArrayList;
 
 public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHolder> {
     private ArrayList<OrderListBean.Result.DataList.OrderGoods> cbeanList;
-    private boolean checkState;
+    private Context context;
 
-    public recyclerAdapter1(ArrayList<OrderListBean.Result.DataList.OrderGoods> cbeanList) {
+    public recyclerAdapter1(ArrayList<OrderListBean.Result.DataList.OrderGoods> cbeanList, Context context) {
         this.cbeanList = cbeanList;
+        this.context = context;
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
@@ -44,9 +48,15 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
         public TextView getGoodPrice() {
             return good_price;
         }
+
+        public ImageView getGoodImg() {
+            return good_img;
+        }
+
         public TextView getBarrelDeposit() {
             return barrel_deposit;
         }
+
         public TextView getBarrelCount() {
             return barrel_count;
         }
@@ -72,11 +82,15 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
     @Override
     public void onBindViewHolder(final MyHolder holder, final int position) {
         holder.getGoodName().setText(cbeanList.get(position).strGoodsname);
-        holder.getGoodCapacity().setText(1.8+"");
+        holder.getGoodCapacity().setText(1.8 + "");
         holder.getGoodPrice().setText("￥" + ((double) cbeanList.get(position).nGoodsFactPrice / 100));
 //        holder.getBarrelCount().setText(3+"");
 //        holder.getBarrelDeposit().setText(2+"L");
-
+        Glide.with(context)
+                .load(Constant.IMAGE_URL + "0/" + cbeanList.get(position).lGoodsid)
+                .centerCrop()
+                .placeholder(R.mipmap.home_load_error)
+                .into(holder.getGoodImg());
 
         holder.itemView.setId(position);
     }

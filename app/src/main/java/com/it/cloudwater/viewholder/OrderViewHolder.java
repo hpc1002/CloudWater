@@ -36,7 +36,7 @@ public class OrderViewHolder extends BaseViewHolder<OrderDetailBean.Result.Order
     public void setData(OrderDetailBean.Result.OrderGoods data) {
         super.setData(data);
         tv_wanter_name.setText(data.strGoodsname);
-        unit_price.setText("￥" + ((double) data.nPrice / 100) + "元");
+        unit_price.setText("￥" + ((double) data.nPrice / 100));
         count.setText("x" + data.nCount);
         Glide.with(getContext())
                 .load(Constant.IMAGE_URL + "0/" + data.lGoodsid)

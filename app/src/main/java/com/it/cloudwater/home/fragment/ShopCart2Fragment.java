@@ -18,6 +18,7 @@ import com.it.cloudwater.bean.ShopCartListBean;
 import com.it.cloudwater.commodity.SubmitOrderActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -88,8 +89,6 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
         userId = StorageUtil.getUserId(getActivity());
         if (!userId.equals("")) {
             CloudApi.getShopList(0x001, Long.parseLong(userId), myCallBack);
-        } else {
-            ToastManager.show("未登录");
         }
 
     }
@@ -349,8 +348,6 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
         super.onHiddenChanged(hidden);
         if (!userId.equals("")) {
             CloudApi.getShopList(0x001, Long.parseLong(userId), myCallBack);
-        } else {
-            ToastManager.show("未登录");
         }
     }
 

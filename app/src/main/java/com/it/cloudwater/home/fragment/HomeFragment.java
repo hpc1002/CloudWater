@@ -23,6 +23,7 @@ import com.it.cloudwater.home.adapter.BGABannerAdapter;
 import com.it.cloudwater.home.bean.BannerDto;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -64,6 +65,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             }
         }
     };
+
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -108,6 +110,11 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     adapter.setCallBack(new GoodListAdapter.OnMyClickListener() {
                         @Override
                         public void OnItemClickListener(Integer price, long id, String strGoodsname, String strGoodsimgurl, String strStandard, long goodId) {
+                            if (userId.equals("")) {
+                                ToastManager.show("请先去登录");
+                                startActivity(new Intent(getActivity(), LoginActivity.class));
+                                return;
+                            }
                             Map<String, Object> shopParams = new HashMap<>();
                             shopParams.put("strUserName", "侯鹏成");
                             shopParams.put("lUserId", userId);

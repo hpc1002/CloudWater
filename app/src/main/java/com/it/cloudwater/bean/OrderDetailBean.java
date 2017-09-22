@@ -14,6 +14,7 @@ public class OrderDetailBean {
         public double strOrdernum;
         public int nState;
         public int lBuyerid;
+        public int lAddressid;
         public int nBucketnum;
         public int nBucketmoney;
         public int nCouponPrice;
@@ -23,7 +24,16 @@ public class OrderDetailBean {
         public int nTotalWatertickets;
         public int nTotalWaterticketsPrice;
         public double dtCreatetime;
+        public double dtPaytime;
         public String strReceiptusername;
+        public String strDetailaddress;
+        public String strLocation;
+        public String strReceiptmobile;
+        public String strInvoiceheader;
+        public String strRemarks;
+        public String strFieldName;
+        public String strMobile;
+        public String strBuyername;
         public ArrayList<OrderGoods> orderGoods;
         public class OrderGoods{
             public int lGId;

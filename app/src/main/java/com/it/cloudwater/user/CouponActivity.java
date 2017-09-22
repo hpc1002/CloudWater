@@ -56,6 +56,8 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
     private RecyclerArrayAdapter<CouponListBean.Result.DataList> couponAdapter;
     private String userId;
     private int nTotal;
+    private int fullFlag;
+    private String nFullPrice;
     private static final int REFRESH_COMPLETE = 0X110;
     private static final int SWIPE_REFRESH_COMPLETE = 0X111;
     private Handler mHandler = new Handler() {
@@ -75,7 +77,12 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
     protected void processLogic() {
 
         if (!userId.equals("")) {
-            CloudApi.getMyCouponList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+            if (nFullPrice == null) {
+                CloudApi.getAloneMyCouponList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+            } else {
+                CloudApi.getMyCouponList(0x001, 1, 8, Integer.parseInt(userId), fullFlag, myCallBack);
+            }
+
         }
 
     }
@@ -83,6 +90,10 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
     @Override
     protected void setListener() {
 
+        nFullPrice = getIntent().getStringExtra("nFullPrice");
+        if (nFullPrice != null) {
+            fullFlag = Integer.parseInt(nFullPrice);
+        }
         userId = StorageUtil.getUserId(this);
         toolbarTitle.setText("优惠券");
         ivLeft.setVisibility(View.VISIBLE);
@@ -134,7 +145,24 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
         recyclerCoupon.setAdapterWithProgress(couponAdapter = new RecyclerArrayAdapter<CouponListBean.Result.DataList>(this) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new CouponListViewHolder(parent);
+                CouponListViewHolder couponListViewHolder = new CouponListViewHolder(parent);
+                couponListViewHolder.setCallBack(new CouponListViewHolder.allCheck() {
+                    @Override
+                    public void OnItemClickListener(CouponListBean.Result.DataList data) {
+                        if (data.nDataFlag == 0) {
+                            ToastManager.show("优惠券不可用");
+                        } else if (data.nDataFlag == 1) {
+                            Intent intent = new Intent();
+                            //把返回数据存入Intent
+                            intent.putExtra("discount_amount", data.nPrice + "");
+                            CouponActivity.this.setResult(RESULT_OK, intent);
+                            //关闭Activity
+                            CouponActivity.this.finish();
+                        }
+
+                    }
+                });
+                return couponListViewHolder;
             }
 
         });
@@ -175,7 +203,12 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
 
             if (page < (nTotal / 8 + 1)) {
                 page++;
-                CloudApi.getMyCouponList(0x001, 1, 8 * page, Integer.parseInt(userId), myCallBack);
+                if (nFullPrice == null) {
+                    CloudApi.getAloneMyCouponList(0x001, 1, 8 * page, Integer.parseInt(userId), myCallBack);
+                } else {
+                    CloudApi.getMyCouponList(0x001, 1, 8 * page, fullFlag, Integer.parseInt(userId), myCallBack);
+                }
+
             } else {
                 couponAdapter.stopMore();
             }

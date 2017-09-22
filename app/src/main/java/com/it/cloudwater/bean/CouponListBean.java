@@ -22,6 +22,7 @@ public class CouponListBean {
             public String strUserName;
             public long dExpire;
             public int nPrice;
+            public int nDataFlag;
         }
     }
 }

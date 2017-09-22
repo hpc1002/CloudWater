@@ -1,5 +1,6 @@
 package com.it.cloudwater.home.fragment;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.OrderListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.pay.PayActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.OrderListViewHolder;
@@ -37,7 +39,7 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
     EasyRecyclerView ervOrderUnCom;
     private View view;
     private String userId;
-    private Integer nState = 0;
+    private Integer nState = -1;//未支付
     private ArrayList<OrderListBean.Result.DataList> orderList;
     private RecyclerArrayAdapter<OrderListBean.Result.DataList> orderListAdapter;
     private int nTotal;
@@ -74,7 +76,7 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
     protected void initData() {
         orderList = new ArrayList<>();
         if (!userId.equals("")) {
-            CloudApi.orderList(0x001, 1, 4, Long.parseLong(userId), nState, myCallBack);
+            CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
         }
 
     }
@@ -122,7 +124,17 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
         ervOrderUnCom.setAdapterWithProgress(orderListAdapter = new RecyclerArrayAdapter<OrderListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new OrderListViewHolder(parent);
+                OrderListViewHolder orderListViewHolder = new OrderListViewHolder(parent,getActivity());
+                orderListViewHolder.setCallBack(new OrderListViewHolder.allCheck() {
+                    @Override
+                    public void OnItemClickListener(OrderListBean.Result.DataList data) {
+                        Intent intent = new Intent(getActivity(), PayActivity.class);
+                        intent.putExtra("orderId", data.lId + "");
+                        intent.putExtra("payType", "bucket");
+                        startActivity(intent);
+                    }
+                });
+                return orderListViewHolder;
             }
         });
         orderListAdapter.addAll(orderList);
@@ -140,9 +152,9 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
 
         if (!userId.equals("")) {
 
-            if (page < (nTotal / 4 + 1)) {
+            if (page < (nTotal / 8 + 1)) {
                 page++;
-                CloudApi.orderList(0x001, 1, 4 * page, Long.parseLong(userId), nState, myCallBack);
+                CloudApi.orderList(0x001, 1, 8 * page, Long.parseLong(userId), nState, myCallBack);
             } else {
                 orderListAdapter.stopMore();
             }

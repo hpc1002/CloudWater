@@ -12,11 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.it.cloudwater.R;
 import com.it.cloudwater.bean.ShopCartListBean;
 import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.utils.StringUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -111,8 +111,13 @@ public class ShoppingCartAdapter extends BaseAdapter {
         holder.tvCommodityPrice.setText(((double) shoppingCartBean.nPrice / 100) + "元");
         holder.tvCommodityNum.setText(" X" + shoppingCartBean.nGoodsCount + "");
         holder.tvCommodityShowNum.setText(shoppingCartBean.nGoodsCount + "");
-        ImageLoader.getInstance().displayImage(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId, holder.ivShowPic);
-
+//        ImageLoader.getInstance().displayImage(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId, holder.ivShowPic);
+        Glide.with(context)
+                .load(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId)
+                .placeholder(R.mipmap.home_load_error)
+                .centerCrop()
+                .crossFade()
+                .into(holder.ivShowPic);
         //单选框按钮
         holder.ckOneChose.setOnClickListener(
                 new View.OnClickListener() {

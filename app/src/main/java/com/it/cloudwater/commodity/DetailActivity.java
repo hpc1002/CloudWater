@@ -16,7 +16,9 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.widget.button.AnimShopButton;
 import com.it.cloudwater.widget.button.IOnAddDelListener;
 import com.lzy.okgo.model.Response;
@@ -123,6 +125,15 @@ public class DetailActivity extends BaseActivity {
         mOrdersSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (userId.equals("")) {
+                    ToastManager.show("请先登录");
+                    startActivity(new Intent(DetailActivity.this, LoginActivity.class));
+                    return;
+                }
+                if (goodCount == 0) {
+                    ToastManager.show("商品不能为空");
+                    return;
+                }
                 //订单参数包装
                 Map<String, Object> orderParams = new HashMap<>();
                 orderParams.put("lGoodsid", goodsLid);
@@ -139,7 +150,7 @@ public class DetailActivity extends BaseActivity {
                 params.put("strBuyername", "姓名");
                 params.put("nTotalprice", nPrice * goodCount);
                 params.put("orderGoods", orderGoods);
-                params.put("nAddOrderType",0);
+                params.put("nAddOrderType", 0);
                 JSONObject jsonObject = new JSONObject(params);
                 CloudApi.orderSubmit(0x002, jsonObject, myCallBack);
 
@@ -227,16 +238,16 @@ public class DetailActivity extends BaseActivity {
                 nStock = result.getInt("nStock");
                 nOnline = result.getInt("nOnline");
                 tradeName.setText(strGoodsname);
-                specifications.setText("规格:"+strStandard);
+                specifications.setText("规格:" + strStandard);
                 salesVolume.setText("已售" + nMothnumber);
-                price.setText("￥"+((double) nPrice / 100));
+                price.setText("￥" + ((double) nPrice / 100));
                 Glide.with(this)
-                        .load(Constant.IMAGE_URL+"0/" + lId)
+                        .load(Constant.IMAGE_URL + "0/" + lId)
                         .placeholder(R.mipmap.home_load_error)
                         .crossFade()
                         .into((ImageView) findViewById(R.id.commodity_pictures));
                 Glide.with(this)
-                        .load(Constant.IMAGE_URL+"2/" + lId)
+                        .load(Constant.IMAGE_URL + "2/" + lId)
                         .placeholder(R.mipmap.home_load_error)
                         .crossFade()
                         .into((ImageView) findViewById(R.id.commodity_introduction));

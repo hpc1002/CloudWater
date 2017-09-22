@@ -1,12 +1,13 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,8 +18,8 @@ import com.it.cloudwater.bean.TicketDetailBean;
 import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.pay.PayActivity;
 import com.it.cloudwater.utils.StorageUtil;
-import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.TicketDetailListViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
@@ -33,10 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class TicketDetailActivity extends BaseActivity {
-
+    private static final int REQUEST_CODE3 = 0x003;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.tv_right)
@@ -61,12 +61,19 @@ public class TicketDetailActivity extends BaseActivity {
     TextView toPay;
     @BindView(R.id.bucket_img)
     ImageView bucketImg;
+    @BindView(R.id.tv_coupon_my)
+    TextView tvCouponMy;
+    @BindView(R.id.tv_discount)
+    TextView tvDiscount;
+    @BindView(R.id.rl_coupon_my)
+    RelativeLayout rlCouponMy;
     private String ticketId;
     private RecyclerArrayAdapter<TicketDetailBean.Result.TicketContents> ticketListAdapter;
     private String userId;
     private TicketDetailBean ticketDetailBean;
 
     private TicketDetailBean.Result.TicketContents TicketDatas;
+    private String discount_amount;
 
     @Override
     protected void processLogic() {
@@ -88,6 +95,14 @@ public class TicketDetailActivity extends BaseActivity {
         eyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         CloudApi.getTicketDetail(0x001, Long.parseLong(ticketId), myCallBack);
         totalPrice.setText("￥" + 0);
+        rlCouponMy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TicketDetailActivity.this, CouponActivity.class);
+                intent.putExtra("nFullPrice", ticketDetailBean.result.nPrice + "");
+                startActivityForResult(intent, REQUEST_CODE3);
+            }
+        });
         toPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,8 +159,10 @@ public class TicketDetailActivity extends BaseActivity {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             String ticketOrderId = jsonObject.getString("result");
-                            //请求支付接口
-                            ToastManager.show("去支付");
+                            Intent intent = new Intent(TicketDetailActivity.this, PayActivity.class);
+                            intent.putExtra("orderId", ticketOrderId);
+                            intent.putExtra("payType", "ticket");
+                            startActivity(intent);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -159,6 +176,17 @@ public class TicketDetailActivity extends BaseActivity {
 
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null && REQUEST_CODE3 == requestCode) {
+
+            discount_amount = data.getExtras().getString("discount_amount");
+            tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100) + "元");
+            totalPrice.setText("￥" + ((double) (ticketDetailBean.result.nPrice - Integer.parseInt(discount_amount)) / 100));
+        }
+    }
 
     @Override
     protected void loadViewLayout() {

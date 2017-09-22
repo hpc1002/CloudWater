@@ -119,7 +119,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/y20" />
     </RelativeLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y20" />
     <RelativeLayout
         android:id="@+id/rl_order_my"
         android:layout_width="match_parent"

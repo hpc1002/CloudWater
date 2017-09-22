@@ -6,6 +6,7 @@ package com.it.cloudwater.constant;
 
 public class Constant {
     public static final String BASE_URL = "http://59.110.235.32:8080/api/app/";//基本URL
+//    public static final String BASE_URL = "http://www.fuzhents.com/api/app/";//基本URL
     public static final String LOGIN_URL = BASE_URL + "buyer/login";//买家登录
     public static final String REGISTER_URL = BASE_URL + "buyer/register";//买家注册
     public static final String SENDSMS_URL = BASE_URL + "common/sendSms";//获取手机验证码
@@ -43,7 +44,7 @@ public class Constant {
     public static final String IMAGE_URL = BASE_URL + "common/getImg/";//获取图片资源
     public static final String LUNBO_URL = BASE_URL + "activity/list";//获取轮播图片
     public static final String LOGOUT_URL = BASE_URL + "buyer/logout";//退出登录
-//    public static final String BASEIMG_URL = "http://59.110.235.32:8080";//图片baseurl
+    public static final String ALIPAY_URL = BASE_URL+"pay/alipay.do";//阿里支付
 
 
 }

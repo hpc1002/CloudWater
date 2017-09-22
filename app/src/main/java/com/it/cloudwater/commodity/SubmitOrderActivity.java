@@ -119,6 +119,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
     private String discount_amount;
     private int bucketCount;
+    private int factPrice;
 
     @Override
     protected void processLogic() {
@@ -281,7 +282,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("strInvoiceheader", invoice);
                 settlementParams.put("strRemarks", remarks);
                 if (discount_amount != null) {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice + bucketCount * 5000);
+                    factPrice= orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice + bucketCount * 5000;
+                    settlementParams.put("nFactPrice", factPrice);
                     settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
                     settlementParams.put("lMyCouponId", orderDetailBean.result.lMyCouponId);
                 } else {
@@ -321,7 +323,9 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.rl_discount:
-                startActivityForResult(new Intent(SubmitOrderActivity.this, CouponActivity.class), REQUEST_CODE2);
+                Intent intent1 = new Intent(SubmitOrderActivity.this, CouponActivity.class);
+                intent1.putExtra("nFullPrice",orderDetailBean.result.nFactPrice + "");
+                startActivityForResult(intent1, REQUEST_CODE2);
                 break;
         }
     }
