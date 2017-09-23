@@ -20,19 +20,14 @@ import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.DataList> {
 
     private TextView orderCreateTime;
-    //    private TextView sendTime;
     private TextView orderNumber;
     private TextView payState;
-    //    private TextView goodName;
-//    private TextView goodeCapccity;
-//    private TextView goodPrice;
-//    private TextView barrelDeposit;
-//    private TextView barrelCount;
     private TextView actualPay;
-    //    private TextView deleteOrder;
     private TextView quickPay;
+    private TextView barrelCount;
+    private TextView barrel_deposit;
+    private TextView order_delete;
     private EasyRecyclerView goods_recyclerView;
-    //    private ImageView goodImg;
     private recyclerAdapter1 adapter;
     private Context context;
 
@@ -45,6 +40,9 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         goods_recyclerView = $(R.id.goods_recyclerView);
         actualPay = $(R.id.actual_pay);
         quickPay = $(R.id.quick_pay);
+        order_delete = $(R.id.order_delete);
+        barrel_deposit = $(R.id.barrel_deposit);
+        barrelCount = $(R.id.barrel_count);
     }
 
     @Override
@@ -53,7 +51,9 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         orderCreateTime.setText("下单时间" + DateUtil.toDate(data.dtCreatetime));
 //        sendTime.setText("配送时间" + "今天8：00-9：00");
         orderNumber.setText("订单号" + data.strOrdernum);
-        if (data.nState == -1) {
+        barrel_deposit.setText("桶押金:￥" + ((double) data.nBucketmoney * data.nBucketnum / 100));
+        barrelCount.setText("x" + data.nBucketnum);
+        if (data.nState != 3) {
             payState.setText("未支付");
         } else if (data.nState == 3) {
             payState.setText("已支付");
@@ -69,6 +69,12 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
                 mCallBack.OnItemClickListener(data);
             }
         });
+        order_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallBack.OnItemDeleteClickListener(data);
+            }
+        });
     }
 
     private allCheck mCallBack;
@@ -79,5 +85,7 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
 
     public interface allCheck {
         void OnItemClickListener(OrderListBean.Result.DataList data);
+
+        void OnItemDeleteClickListener(OrderListBean.Result.DataList data);
     }
 }

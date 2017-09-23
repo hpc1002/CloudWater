@@ -28,7 +28,7 @@ public class CheckUtil {
 
     public static boolean isPassword(String password) {
 
-        String num = "^[0-9a-zA-Z]{6,}$";
+        String num = "^[0-9a-zA-Z]{6,16}$";
         if (TextUtils.isEmpty(password)) {
             return false;
         } else {

@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     ToastManager.show("密码不能为空");
                     return;
                 }
-                if (passwordInput.equals("")) {
+                if (!isPwd) {
                     ToastManager.show("密码输入格式有误");
                     return;
                 }

@@ -282,15 +282,15 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("strInvoiceheader", invoice);
                 settlementParams.put("strRemarks", remarks);
                 if (discount_amount != null) {
-                    factPrice= orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice + bucketCount * 5000;
+                    factPrice= orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) + bucketCount * orderDetailBean.result.nBucketmoney;
                     settlementParams.put("nFactPrice", factPrice);
                     settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
                     settlementParams.put("lMyCouponId", orderDetailBean.result.lMyCouponId);
                 } else {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice - orderDetailBean.result.nTotalWatertickets * orderDetailBean.result.nTotalWaterticketsPrice + bucketCount * 5000);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice+ bucketCount * orderDetailBean.result.nBucketmoney);
                     settlementParams.put("nCouponPrice", 0);
                 }
-                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice + bucketCount * 5000);
+                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice + bucketCount * orderDetailBean.result.nBucketmoney);
 
 
                 settlementParams.put("orderGoods", orderGoods);

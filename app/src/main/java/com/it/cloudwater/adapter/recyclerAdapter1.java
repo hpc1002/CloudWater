@@ -53,13 +53,6 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
             return good_img;
         }
 
-        public TextView getBarrelDeposit() {
-            return barrel_deposit;
-        }
-
-        public TextView getBarrelCount() {
-            return barrel_count;
-        }
 
         public MyHolder(View itemView) {
             super(itemView);
@@ -67,8 +60,7 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
             good_name = (TextView) itemView.findViewById(R.id.good_name);
             good_capacity = (TextView) itemView.findViewById(R.id.good_capacity);
             good_price = (TextView) itemView.findViewById(R.id.good_price);
-            barrel_deposit = (TextView) itemView.findViewById(R.id.barrel_deposit);
-            barrel_count = (TextView) itemView.findViewById(R.id.barrel_count);
+
         }
     }
 
@@ -84,8 +76,6 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
         holder.getGoodName().setText(cbeanList.get(position).strGoodsname);
         holder.getGoodCapacity().setText(1.8 + "");
         holder.getGoodPrice().setText("￥" + ((double) cbeanList.get(position).nGoodsFactPrice / 100));
-//        holder.getBarrelCount().setText(3+"");
-//        holder.getBarrelDeposit().setText(2+"L");
         Glide.with(context)
                 .load(Constant.IMAGE_URL + "0/" + cbeanList.get(position).lGoodsid)
                 .centerCrop()

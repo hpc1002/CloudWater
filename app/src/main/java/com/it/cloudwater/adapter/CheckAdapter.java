@@ -1,6 +1,7 @@
 package com.it.cloudwater.adapter;
 
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.it.cloudwater.R;
 import com.it.cloudwater.bean.AddressListBean;
@@ -30,9 +31,14 @@ public class CheckAdapter extends BasicAdapter<AddressListBean.Result.DataList> 
         holder.getView(R.id.edit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallBack.OnItemEditClickListener(man.lId, man.strNeighbourhood, man.strReceiptmobile);
+                mCallBack.OnItemEditClickListener(man.lId, man.strReceiptusername,man.strLocation,man.strDetailaddress, man.strReceiptmobile);
             }
         });
+        if (man.nIsdefault==1){
+            holder.getView(R.id.checkbox).setBackgroundResource(R.mipmap.checked_icon);
+        }else if (man.nIsdefault==0){
+            holder.getView(R.id.checkbox).setBackgroundResource(R.mipmap.unchecked_icon);
+        }
         holder.getView(R.id.delete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +60,7 @@ public class CheckAdapter extends BasicAdapter<AddressListBean.Result.DataList> 
     }
 
     public interface OnMyClickListener {
-        void OnItemEditClickListener(long lId, String strNeighbourhood, String strReceiptmobile);
+        void OnItemEditClickListener(long lId,String strReceiptusername,String strLocation, String strDetailaddress, String strReceiptmobile);
 
         void OnItemDeleteClickListener(long lId);
         void onItemClickListener(AddressListBean.Result.DataList data);

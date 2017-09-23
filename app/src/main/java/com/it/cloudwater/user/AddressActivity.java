@@ -53,11 +53,12 @@ public class AddressActivity extends BaseActivity {
     private String userId;
     private String address_tag = "";
     private BasicController.BasicParams params;
+
     @Override
     protected void processLogic() {
         userId = StorageUtil.getUserId(this);
         if (!userId.equals("")) {
-            CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+            CloudApi.getMyAddressList(0x001, 1, 100, Integer.parseInt(userId), myCallBack);
         }
 
     }
@@ -77,7 +78,9 @@ public class AddressActivity extends BaseActivity {
         tvRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddressActivity.this, AddAddressActivity.class));
+                Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
+                Intent intent1 = intent.putExtra("address", "address_new");
+                startActivity(intent1);
                 ToastManager.show("新增地址");
 
             }
@@ -124,9 +127,14 @@ public class AddressActivity extends BaseActivity {
                             });
                             mAdapter.setCallBack(new CheckAdapter.OnMyClickListener() {
                                 @Override
-                                public void OnItemEditClickListener(long lId, String strNeighbourhood, String strReceiptmobile) {
+                                public void OnItemEditClickListener(long lId, String strReceiptusername, String strLocation, String strDetailaddress, String strReceiptmobile) {
                                     Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
-                                    intent.putExtra("lId", lId);
+                                    intent.putExtra("lId", lId + "");
+                                    intent.putExtra("strReceiptusername", strReceiptusername);
+                                    intent.putExtra("strLocation", strLocation);
+                                    intent.putExtra("strDetailaddress", strDetailaddress);
+                                    intent.putExtra("strReceiptmobile", strReceiptmobile);
+                                    intent.putExtra("address", "address_edit");
                                     startActivity(intent);
 //                                    CloudApi.updateAddress(0x002, lId, strNeighbourhood, strReceiptmobile, myCallBack);
                                 }
@@ -139,17 +147,21 @@ public class AddressActivity extends BaseActivity {
 
                                 @Override
                                 public void onItemClickListener(AddressListBean.Result.DataList data) {
-                                    if (data != null && address_tag != null) {
-                                        Intent intent = new Intent();
-                                        //把返回数据存入Intent
-                                        intent.putExtra("addressName", data.strReceiptusername);
-                                        intent.putExtra("addressId", data.lId + "");
-                                        intent.putExtra("addressPhone", data.strReceiptmobile + "");
-                                        intent.putExtra("addressDetail", data.strDetailaddress);
-                                        intent.putExtra("addressLocation", data.strLocation);
-                                        AddressActivity.this.setResult(RESULT_OK, intent);
-                                        //关闭Activity
-                                        AddressActivity.this.finish();
+                                    if (data != null) {
+                                        CloudApi.setDefaultAddress(0x003, data.lId, myCallBack);
+                                        if (address_tag != null) {
+                                            Intent intent = new Intent();
+                                            //把返回数据存入Intent
+                                            intent.putExtra("addressName", data.strReceiptusername);
+                                            intent.putExtra("addressId", data.lId + "");
+                                            intent.putExtra("addressPhone", data.strReceiptmobile + "");
+                                            intent.putExtra("addressDetail", data.strDetailaddress);
+                                            intent.putExtra("addressLocation", data.strLocation);
+                                            AddressActivity.this.setResult(RESULT_OK, intent);
+                                            //关闭Activity
+                                            AddressActivity.this.finish();
+                                        }
+
                                     }
                                 }
                             });
@@ -172,6 +184,18 @@ public class AddressActivity extends BaseActivity {
                             mAdapter.notifyDataSetChanged();
 //                            String result1 = jsonObject.getString("result");
 //                            ToastManager.show(result1);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 0x003:
+                    String body3 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body3);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            CloudApi.getMyAddressList(0x001, 1, 100, Integer.parseInt(userId), myCallBack);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -204,6 +228,6 @@ public class AddressActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        CloudApi.getMyAddressList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        CloudApi.getMyAddressList(0x001, 1, 100, Integer.parseInt(userId), myCallBack);
     }
 }

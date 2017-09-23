@@ -1,7 +1,6 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -65,20 +64,26 @@ public class AddAddressActivity extends BaseActivity {
     @BindView(R.id.save)
     Button save;
     private String userId;
-    private String strLocation="";
-    private  String buyerName;
-    private  String buyerPhone;
-    private  String buyerDetailAddress;
+    private String buyerName;
+    private String buyerPhone;
+    private String strLocation;
+    private String buyerDetailAddress;
+    private String area;
     private static final String TAG = "AddAddressActivity";
+    private int defaultPosition;
+    ArrayList<Object> list = new ArrayList<>();
+    private String address_tag;
+    private String lId;
+
     @Override
     protected void processLogic() {
-        userId= StorageUtil.getUserId(this);
-        CloudApi.getAreaList(0x001, myCallBack);
+        userId = StorageUtil.getUserId(this);
+
     }
 
     @Override
     protected void setListener() {
-        toolbarTitle.setText("新建收货地址");
+
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +91,27 @@ public class AddAddressActivity extends BaseActivity {
                 finish();
             }
         });
+        CloudApi.getAreaList(0x001, myCallBack);
 
+        address_tag = getIntent().getStringExtra("address");
+        if (address_tag.equals("address_edit")) {
+            toolbarTitle.setText("编辑收货地址");
+            lId = getIntent().getStringExtra("lId");
+            String strReceiptusername = getIntent().getStringExtra("strReceiptusername");
+            String strDetailaddress = getIntent().getStringExtra("strDetailaddress");
+            area = getIntent().getStringExtra("strLocation");
+            String strReceiptmobile = getIntent().getStringExtra("strReceiptmobile");
+            etName.setText(strReceiptusername);
+            etPhone.setText(strReceiptmobile);
+            etDetailAddress.setText(strDetailaddress);
+        } else if (address_tag.equals("address_new")) {
+            toolbarTitle.setText("新增收货地址");
+        }
+
+
+//        if (!lId.equals("")) {
+//            CloudApi.updateAddress(0x002, Long.parseLong(lId), strReceiptusername, strLocation, strDetailaddress, strReceiptmobile, myCallBack);
+//        }
 
     }
 
@@ -108,18 +133,28 @@ public class AddAddressActivity extends BaseActivity {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             JSONArray data = jsonObject.getJSONArray("result");
-                            final ArrayList<Object> list = new ArrayList<>();
+
                             for (int i = 0; i < data.length(); i++) {
                                 list.add(data.get(i));
                             }
+
                             ArrayAdapter<Object> stringArrayAdapter = new ArrayAdapter<Object>(AddAddressActivity.this, android.R.layout.simple_spinner_dropdown_item, list);
                             stringArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             spQuxian.setAdapter(stringArrayAdapter);
+                            if (address_tag.equals("address_edit") && !area.isEmpty()) {
+                                for (int i = 0; i < list.size(); i++) {
+                                    if (list.get(i).toString().equals(area)) {
+                                        defaultPosition = i;
+                                        spQuxian.setSelection(defaultPosition);
+                                    }
+                                }
+                            }
                             spQuxian.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    strLocation=list.get(position).toString();
-                                    Log.i(TAG, "onItemSelected: strLocation"+strLocation);
+                                    strLocation = list.get(position).toString();
+                                    spQuxian.setSelection(position);
+                                    Log.i(TAG, "onItemSelected: strLocation" + strLocation);
                                 }
 
                                 @Override
@@ -140,8 +175,16 @@ public class AddAddressActivity extends BaseActivity {
                                     params.put("strLocation", strLocation);
                                     params.put("strDetailaddress", buyerDetailAddress);
                                     params.put("lUserid", userId);
+                                    if (address_tag.equals("address_edit")) {
+                                        params.put("lId", lId);
+                                    }
                                     JSONObject jsonObject = new JSONObject(params);
-                                    CloudApi.addAddress(0x002, jsonObject, myCallBack);
+                                    if (address_tag.equals("address_edit")) {
+                                        CloudApi.updateAddress(0x003, jsonObject, myCallBack);
+                                    } else if (address_tag.equals("address_new")) {
+                                        CloudApi.addAddress(0x002, jsonObject, myCallBack);
+                                    }
+
                                 }
                             });
                         }
@@ -154,9 +197,20 @@ public class AddAddressActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(body2);
                         String resCode = jsonObject.getString("resCode");
-                        if (resCode.equals("0")){
+                        if (resCode.equals("0")) {
                             ToastManager.show("新建地址成功");
                             String addressId = jsonObject.getString("result");
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 0x003:
+                    try {
+                        JSONObject jsonObject = new JSONObject(result.body());
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
                             finish();
                         }
                     } catch (JSONException e) {

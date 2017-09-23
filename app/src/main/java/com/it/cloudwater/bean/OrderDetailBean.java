@@ -11,7 +11,7 @@ public class OrderDetailBean {
     public Result result;
     public class Result{
         public int lId;
-        public double strOrdernum;
+        public String strOrdernum;
         public int nState;
         public int lBuyerid;
         public int lAddressid;
@@ -23,8 +23,8 @@ public class OrderDetailBean {
         public int nTotalprice;
         public int nTotalWatertickets;
         public int nTotalWaterticketsPrice;
-        public double dtCreatetime;
-        public double dtPaytime;
+        public long dtCreatetime;
+        public long dtPaytime;
         public String strReceiptusername;
         public String strDetailaddress;
         public String strLocation;

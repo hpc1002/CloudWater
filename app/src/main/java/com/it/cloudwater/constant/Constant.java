@@ -6,7 +6,7 @@ package com.it.cloudwater.constant;
 
 public class Constant {
     public static final String BASE_URL = "http://59.110.235.32:8080/api/app/";//基本URL
-//    public static final String BASE_URL = "http://www.fuzhents.com/api/app/";//基本URL
+    //    public static final String BASE_URL = "http://www.fuzhents.com/api/app/";//基本URL
     public static final String LOGIN_URL = BASE_URL + "buyer/login";//买家登录
     public static final String REGISTER_URL = BASE_URL + "buyer/register";//买家注册
     public static final String SENDSMS_URL = BASE_URL + "common/sendSms";//获取手机验证码
@@ -18,6 +18,7 @@ public class Constant {
     public static final String MY_ORDER_LIST_URL = BASE_URL + "order/list";//我的订单列表
     public static final String ORDER_PAY_DETAIL_URL = BASE_URL + "order/payDetail/";//订单支付详情
     public static final String ADD_ADDRESS_URL = BASE_URL + "address/add";//添加收获地址
+    public static final String SET_DEFAULT_ADDRESS_URL = BASE_URL + "address/setDefault";//设置默认地址
 
     public static final String AREA_LIST_URL = BASE_URL + "shop/allLocation";//获取区列表
     public static final String GET_SHOP_URL = BASE_URL + "shop/getShops";//根据区获取商铺
@@ -38,13 +39,18 @@ public class Constant {
     public static final String SHOP_CART_LIST_URL = BASE_URL + "shopping/myList";//购物车商品列表
     public static final String SETTLEMENT_URL = BASE_URL + "order/settlement";//去结算
     public static final String ORDER_DETAIL_URL = BASE_URL + "order/detail/";//订单详情
+    public static final String ORDER_DELETE_URL = BASE_URL + "order/delete";//订单删除
+    public static final String ORDER_STATE_URL = BASE_URL + "order/setPayNstate";//修改订单状态为成功
     public static final String MESSAGE_LIST_URL = BASE_URL + "notice/myList";//消息列表
     public static final String MORE_URL = BASE_URL + "sysvalue/con/";//更多内容获取
     public static final String FEEDBACK_URL = BASE_URL + " feedback/add";//添加用户反馈
     public static final String IMAGE_URL = BASE_URL + "common/getImg/";//获取图片资源
     public static final String LUNBO_URL = BASE_URL + "activity/list";//获取轮播图片
     public static final String LOGOUT_URL = BASE_URL + "buyer/logout";//退出登录
-    public static final String ALIPAY_URL = BASE_URL+"pay/alipay.do";//阿里支付
+    public static final String ALIPAY_URL = BASE_URL + "pay/alipay.do";//阿里支付
+
+
+    public static final String WE_APP_ID = "wx45a19a6c3853e403";//微信appid
 
 
 }

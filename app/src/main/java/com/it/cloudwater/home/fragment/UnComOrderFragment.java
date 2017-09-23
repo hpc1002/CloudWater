@@ -1,8 +1,10 @@
 package com.it.cloudwater.home.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,14 +31,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by hpc on 2017/6/19.
  */
 
-public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener {
+public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.erv_order_un_com)
     EasyRecyclerView ervOrderUnCom;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
+    Unbinder unbinder;
     private View view;
     private String userId;
     private Integer nState = -1;//未支付
@@ -53,7 +60,7 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
                     ervOrderUnCom.setRefreshing(false);
                     break;
                 case SWIPE_REFRESH_COMPLETE:
-//                    swipeRefresh.setRefreshing(false);
+                    swipeRefresh.setRefreshing(false);
                     break;
             }
         }
@@ -69,12 +76,14 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
 
     @Override
     protected void initListener() {
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         ervOrderUnCom.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override
     protected void initData() {
-        orderList = new ArrayList<>();
+
         if (!userId.equals("")) {
             CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
         }
@@ -87,12 +96,15 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
             switch (what) {
                 case 0x001:
                     String body = result.body();
-
+                    orderList = new ArrayList<>();
                     try {
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
-                        if (resCode.equals("0")) {
-
+                        mHandler.sendEmptyMessage(SWIPE_REFRESH_COMPLETE);
+                        if (resCode.equals("1")) {
+                            ToastManager.show("暂无订单");
+                            initUi(orderList);
+                        } else if (resCode.equals("0")) {
                             orderListBean = new Gson().fromJson(body, OrderListBean.class);
                             int size = orderListBean.result.dataList.size();
 
@@ -103,13 +115,23 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
                                 orderList.add(orderListBean.result.dataList.get(i));
                             }
                             initUi(orderList);
-                        } else if (resCode.equals("1")) {
-                            ToastManager.show("暂无订单");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
+                    break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
@@ -124,7 +146,7 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
         ervOrderUnCom.setAdapterWithProgress(orderListAdapter = new RecyclerArrayAdapter<OrderListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                OrderListViewHolder orderListViewHolder = new OrderListViewHolder(parent,getActivity());
+                OrderListViewHolder orderListViewHolder = new OrderListViewHolder(parent, getActivity());
                 orderListViewHolder.setCallBack(new OrderListViewHolder.allCheck() {
                     @Override
                     public void OnItemClickListener(OrderListBean.Result.DataList data) {
@@ -132,6 +154,11 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
                         intent.putExtra("orderId", data.lId + "");
                         intent.putExtra("payType", "bucket");
                         startActivity(intent);
+                    }
+
+                    @Override
+                    public void OnItemDeleteClickListener(OrderListBean.Result.DataList data) {
+                        CloudApi.orderDelete(0x002, data.lId, myCallBack);
                     }
                 });
                 return orderListViewHolder;
@@ -159,5 +186,27 @@ public class UnComOrderFragment extends BaseFragment implements RecyclerArrayAda
                 orderListAdapter.stopMore();
             }
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!userId.equals("")) {
+            CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
+        }
+
     }
 }

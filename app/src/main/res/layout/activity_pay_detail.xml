@@ -30,7 +30,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tag1"
-                android:text="张三"
                 android:textColor="@color/word_second" />
 
             <TextView
@@ -40,7 +39,6 @@
                 android:layout_below="@+id/tag1"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_consignee"
-                android:text="18516886132"
                 android:textColor="@color/word_second" />
 
             <TextView
@@ -48,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_consignee"
-                android:text="地址:北京市海淀区西二旗" />
+                />
         </RelativeLayout>
 
         <View
@@ -65,8 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:text="下单时间:2017-06-09 05:37" />
+                android:layout_marginLeft="10dp" />
         </RelativeLayout>
 
         <View
@@ -86,7 +83,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:text="订单号:43243232432"
                 android:textColor="@color/title" />
 
             <TextView
@@ -96,7 +92,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:text="未支付"
                 android:textColor="@color/colorPrimary" />
         </RelativeLayout>
 
@@ -162,8 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:text="￥10.00" />
+                android:layout_marginRight="10dp" />
         </RelativeLayout>
 
         <View
@@ -189,7 +183,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:text="￥200.00"
                 android:textColor="@color/red" />
         </RelativeLayout>
 

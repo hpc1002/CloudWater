@@ -16,11 +16,15 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.OrderDetailBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.DateUtil;
 import com.it.cloudwater.viewholder.OrderViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -73,6 +77,7 @@ public class PayDetailActivity extends BaseActivity {
     private String orderId;
     private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
     private OrderDetailBean orderDetailBean;
+
     @Override
     protected void processLogic() {
         CloudApi.getOrderDetail(0x001, Long.parseLong(orderId), myCallBack);
@@ -93,9 +98,9 @@ public class PayDetailActivity extends BaseActivity {
                     tvConsignee.setText(orderDetailBean.result.strReceiptusername);
                     tvPhone.setText(orderDetailBean.result.strReceiptmobile);
                     tvDetailAddress.setText(orderDetailBean.result.strDetailaddress);
-                    tvTime.setText(orderDetailBean.result.dtCreatetime + "");
-                    tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney / 100));
-                    orderNumber.setText(orderDetailBean.result.strOrdernum + "");
+                    tvTime.setText("下单时间: " + DateUtil.toDate(orderDetailBean.result.dtCreatetime));
+                    tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney * orderDetailBean.result.nBucketnum / 100));
+                    orderNumber.setText(orderDetailBean.result.strOrdernum);
                     couponCount.setText("使用优惠券" + orderDetailBean.result.nCouponPrice + "张");
                     payTotal.setText("￥" + ((double) orderDetailBean.result.nFactPrice / 100));
                     int nState = orderDetailBean.result.nState;
@@ -111,6 +116,23 @@ public class PayDetailActivity extends BaseActivity {
                         }
                     });
                     orderAdapter.addAll(orderGoodses);
+                    break;
+                case 0x002:
+                    String body2 = result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(body2);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            Intent intent = new Intent(PayDetailActivity.this, PaySuccessActivity.class);
+                            intent.putExtra("out_trade_no", orderDetailBean.result.strOrdernum);
+
+                            intent.putExtra("timestamp", DateUtil.toDate(orderDetailBean.result.dtPaytime));
+                            intent.putExtra("total_amount", ((double) orderDetailBean.result.nFactPrice / 100) + "");
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
@@ -135,10 +157,14 @@ public class PayDetailActivity extends BaseActivity {
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PayDetailActivity.this, PayActivity.class);
-                intent.putExtra("orderId",orderId+"");
-                intent.putExtra("payType", "bucket");
-                startActivity(intent);
+                if (orderDetailBean.result.nFactPrice == 0 && orderDetailBean.result.nTotalWatertickets != 0) {
+                    CloudApi.setPayNstate(0x002, Long.parseLong(orderId), 3, myCallBack);
+                } else {
+                    Intent intent = new Intent(PayDetailActivity.this, PayActivity.class);
+                    intent.putExtra("orderId", orderId + "");
+                    intent.putExtra("payType", "bucket");
+                    startActivity(intent);
+                }
             }
         });
         orderListRecycler.setLayoutManager(new LinearLayoutManager(this));

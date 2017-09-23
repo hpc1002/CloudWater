@@ -23,13 +23,13 @@
                 android:textColor="@color/word_second" />
 
             <!--<TextView-->
-                <!--android:id="@+id/tv_time_send"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:text="配送时间:今天8:00-9:00"-->
-                <!--android:textColor="@color/word_second" />-->
+            <!--android:id="@+id/tv_time_send"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:text="配送时间:今天8:00-9:00"-->
+            <!--android:textColor="@color/word_second" />-->
         </RelativeLayout>
 
         <View
@@ -60,63 +60,63 @@
         </RelativeLayout>
 
         <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
         <!--<ImageView-->
-            <!--android:id="@+id/good_img"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@mipmap/home_load_error" />-->
+        <!--android:id="@+id/good_img"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@mipmap/home_load_error" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/good_name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_toRightOf="@+id/good_img"-->
-            <!--android:text="名称"-->
-            <!--android:textColor="@color/title"-->
-            <!--android:textSize="16sp" />-->
+        <!--android:id="@+id/good_name"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_toRightOf="@+id/good_img"-->
+        <!--android:text="名称"-->
+        <!--android:textColor="@color/title"-->
+        <!--android:textSize="16sp" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/good_capacity"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_toRightOf="@+id/good_name"-->
-            <!--android:text="1.8L"-->
-            <!--android:textColor="@color/title"-->
-            <!--android:textSize="16sp" />-->
+        <!--android:id="@+id/good_capacity"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_toRightOf="@+id/good_name"-->
+        <!--android:text="1.8L"-->
+        <!--android:textColor="@color/title"-->
+        <!--android:textSize="16sp" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/good_price"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:text="￥49" />-->
+        <!--android:id="@+id/good_price"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:text="￥49" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/barrel_deposit"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/good_name"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_toRightOf="@+id/good_img"-->
-            <!--android:text="桶押金:10.00"-->
-            <!--android:textColor="@color/word_second" />-->
+        <!--android:id="@+id/barrel_deposit"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/good_name"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_toRightOf="@+id/good_img"-->
+        <!--android:text="桶押金:10.00"-->
+        <!--android:textColor="@color/word_second" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/barrel_count"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_below="@+id/good_name"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:text="×1"-->
-            <!--android:textColor="@color/word_second" />-->
+        <!--android:id="@+id/barrel_count"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_below="@+id/good_name"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:text="×1"-->
+        <!--android:textColor="@color/word_second" />-->
         <!--</RelativeLayout>-->
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/goods_recyclerView"
@@ -132,6 +132,31 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/barrel_deposit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:text="桶押金:10.00"
+                android:textColor="@color/word_second" />
+
+            <TextView
+                android:id="@+id/barrel_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:text="×1"
+                android:textColor="@color/word_second" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="5dp">
 
@@ -143,6 +168,17 @@
                 android:text="实付款:￥49"
                 android:textColor="@color/title"
                 android:textSize="16sp" />
+            <TextView
+                android:id="@+id/order_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/quick_pay"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/frame_pay"
+                android:padding="5dp"
+                android:text="订单删除"
+                android:textColor="@color/colorPrimary" />
 
 
             <TextView

@@ -15,11 +15,15 @@ import com.it.cloudwater.bean.OrderListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.ShopperListViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.lzy.okgo.model.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -58,12 +62,23 @@ public class DistributionActivity extends BaseActivity {
             switch (what) {
                 case 0x001:
                     String body = result.body();
-                    OrderListBean orderListBean = new Gson().fromJson(body, OrderListBean.class);
-                    ArrayList<OrderListBean.Result.DataList> dataLists = new ArrayList<>();
-                    for (int i = 0; i < orderListBean.result.dataList.size(); i++) {
-                        dataLists.add(orderListBean.result.dataList.get(i));
+                    try {
+                        JSONObject jsonObject = new JSONObject(body);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            OrderListBean orderListBean = new Gson().fromJson(body, OrderListBean.class);
+                            ArrayList<OrderListBean.Result.DataList> dataLists = new ArrayList<>();
+                            for (int i = 0; i < orderListBean.result.dataList.size(); i++) {
+                                dataLists.add(orderListBean.result.dataList.get(i));
+                            }
+                            initUi(dataLists);
+                        } else if (resCode.equals("1")) {
+                            ToastManager.show("暂无配送单");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    initUi(dataLists);
+
                     break;
             }
         }

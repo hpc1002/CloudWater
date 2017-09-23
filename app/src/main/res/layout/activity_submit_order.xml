@@ -44,16 +44,18 @@
                     android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/tv_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/tv_addressId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <TextView
@@ -374,7 +376,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/course_learn_state"
-            android:text="去结算"
+            android:text="提交订单"
             android:textColor="@color/white" />
     </RelativeLayout>
 </LinearLayout>
