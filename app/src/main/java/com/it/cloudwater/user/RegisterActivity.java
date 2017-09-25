@@ -70,6 +70,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private boolean isPhone;
     private boolean isPwd;
     private String resCode;
+    private String inwenteCode;
     public static final int MSG_RECEIVED_CODE = 1;
     private SmsObserver smsObserver;
     private static final String TAG = "RegisterActivity";
@@ -112,6 +113,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         phoneNumberInput = etMobileNumber.getText().toString();
         smscodeInput = etSmsCode.getText().toString();
 
+        inwenteCode = tvInventCode.getText().toString();
         password = etPassword.getText().toString();
         isPhone = CheckUtil.isMobile(phoneNumberInput);
         isPwd = CheckUtil.isPassword(password);
@@ -133,7 +135,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(getSmsCode, 60000, 1000);
                 mCountDownTimerUtils.start();
-                CloudApi.getSmsCode(0x001, phoneNumberInput, new MyCallBack() {
+                CloudApi.getSmsCode(0x001, phoneNumberInput, 0, new MyCallBack() {
                     @Override
                     public void onSuccess(int what, Response<String> data) {
                         try {
@@ -175,7 +177,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
 
-                CloudApi.Register(0x002, phoneNumberInput, password, smscodeInput, myCallBack);
+                CloudApi.Register(0x002, phoneNumberInput, password, smscodeInput, inwenteCode, myCallBack);
                 break;
             default:
                 break;

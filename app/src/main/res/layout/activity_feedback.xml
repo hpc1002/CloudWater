@@ -5,22 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.it.cloudwater.user.more.FeedbackActivity">
-<include layout="@layout/toolbar"/>
+
+    <include layout="@layout/toolbar" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="欢迎您提出宝贵意见"/>
+        android:text="欢迎您提出宝贵意见" />
+
     <EditText
         android:id="@+id/feed_content"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:background="@color/white"
-        android:text="内容内容内容内容内容内容内容内容内容内容"/>
+        android:maxLength="200"
+        android:maxLines="8"
+        android:padding="5px"
+        android:scrollbars="vertical"
+        android:singleLine="false" />
+
     <Button
         android:id="@+id/feedback_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:text="提交"/>
+        android:text="提交" />
 </LinearLayout>

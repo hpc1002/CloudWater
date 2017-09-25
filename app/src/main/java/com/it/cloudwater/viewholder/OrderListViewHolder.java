@@ -30,10 +30,12 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
     private EasyRecyclerView goods_recyclerView;
     private recyclerAdapter1 adapter;
     private Context context;
+    private String orderState;
 
-    public OrderListViewHolder(ViewGroup itemView, Context context) {
+    public OrderListViewHolder(ViewGroup itemView, Context context, String orderState) {
         super(itemView, R.layout.item_order_uncom);
         this.context = context;
+        this.orderState = orderState;
         orderCreateTime = $(R.id.tv_time_order_create);
         orderNumber = $(R.id.tv_order_number);
         payState = $(R.id.tv_payState);
@@ -53,11 +55,28 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         orderNumber.setText("订单号" + data.strOrdernum);
         barrel_deposit.setText("桶押金:￥" + ((double) data.nBucketmoney * data.nBucketnum / 100));
         barrelCount.setText("x" + data.nBucketnum);
-        if (data.nState != 3) {
+        if (orderState.equals("orderState") && data.nState != 3) {
+            if (data.nState == 0) {
+                quickPay.setText("去结算");
+            } else if (data.nState == 1) {
+                quickPay.setText("立即支付");
+            }
             payState.setText("未支付");
-        } else if (data.nState == 3) {
+
+        } else if (orderState.equals("orderState") && data.nState == 3) {
             payState.setText("已支付");
             quickPay.setVisibility(View.GONE);
+            order_delete.setVisibility(View.GONE);
+        }
+        if (orderState.equals("distributionState") && data.nSendState == 0) {
+            payState.setVisibility(View.GONE);
+            quickPay.setVisibility(View.VISIBLE);
+            quickPay.setText("立即配送");
+            order_delete.setVisibility(View.GONE);
+        } else if (orderState.equals("distributionState") && data.nSendState == 1) {
+            payState.setVisibility(View.GONE);
+            quickPay.setVisibility(View.GONE);
+            order_delete.setVisibility(View.GONE);
         }
         actualPay.setText("实付款: ￥" + ((double) data.nTotalprice / 100));
         goods_recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
@@ -66,7 +85,18 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         quickPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallBack.OnItemClickListener(data);
+                if (orderState.equals("distributionState") && data.nSendState == 0) {
+                    mCallBack.OnDistributionItemClickListener(data);
+                } else if (orderState.equals("orderState") && data.nState != 3) {
+                    if (data.nState == 0) {
+                        //去结算
+                        mCallBack.OnToSettleClickListener(data);
+                    } else if (data.nState == 1) {
+                        mCallBack.OnItemClickListener(data);
+                    }
+
+                }
+
             }
         });
         order_delete.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +115,10 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
 
     public interface allCheck {
         void OnItemClickListener(OrderListBean.Result.DataList data);
+
+        void OnToSettleClickListener(OrderListBean.Result.DataList data);
+
+        void OnDistributionItemClickListener(OrderListBean.Result.DataList data);
 
         void OnItemDeleteClickListener(OrderListBean.Result.DataList data);
     }

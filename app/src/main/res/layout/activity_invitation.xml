@@ -55,7 +55,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="20dp"
             android:drawableBottom="@mipmap/icon_invite"
-            android:text="123456"
             android:textColor="@color/title"
             android:textSize="20sp" />
     </LinearLayout>

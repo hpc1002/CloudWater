@@ -54,8 +54,6 @@ public class PayDetailActivity extends BaseActivity {
     TextView tvDetailAddress;
     @BindView(R.id.order_number)
     TextView orderNumber;
-    @BindView(R.id.pay_status)
-    TextView payStatus;
     //    @BindView(R.id.iv_bucket)
 //    ImageView ivBucket;
 //    @BindView(R.id.tv_water_name)
@@ -100,15 +98,9 @@ public class PayDetailActivity extends BaseActivity {
                     tvDetailAddress.setText(orderDetailBean.result.strDetailaddress);
                     tvTime.setText("下单时间: " + DateUtil.toDate(orderDetailBean.result.dtCreatetime));
                     tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney * orderDetailBean.result.nBucketnum / 100));
-                    orderNumber.setText(orderDetailBean.result.strOrdernum);
+                    orderNumber.setText("订单号:" + orderDetailBean.result.strOrdernum);
                     couponCount.setText("使用优惠券" + orderDetailBean.result.nCouponPrice + "张");
                     payTotal.setText("￥" + ((double) orderDetailBean.result.nFactPrice / 100));
-                    int nState = orderDetailBean.result.nState;
-                    if (nState == 2) {
-                        payStatus.setText("未支付");
-                    } else if (nState == 1) {
-                        payStatus.setText("已支付");
-                    }
                     orderListRecycler.setAdapterWithProgress(orderAdapter = new RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods>(PayDetailActivity.this) {
                         @Override
                         public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {

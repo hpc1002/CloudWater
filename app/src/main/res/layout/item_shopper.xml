@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="未配送"
-            android:textColor="@color/greenyellow" />
+            android:textColor="@color/course_learn_state" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -96,7 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="实付款:￥26.00" />
-
 
         <Button
             android:id="@+id/btn_toSend"

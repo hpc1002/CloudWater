@@ -145,7 +145,7 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
         recyclerCoupon.setAdapterWithProgress(couponAdapter = new RecyclerArrayAdapter<CouponListBean.Result.DataList>(this) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                CouponListViewHolder couponListViewHolder = new CouponListViewHolder(parent);
+                CouponListViewHolder couponListViewHolder = new CouponListViewHolder(parent,nFullPrice);
                 couponListViewHolder.setCallBack(new CouponListViewHolder.allCheck() {
                     @Override
                     public void OnItemClickListener(CouponListBean.Result.DataList data) {

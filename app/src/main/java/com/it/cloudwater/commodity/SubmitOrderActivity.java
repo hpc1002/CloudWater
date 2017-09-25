@@ -2,7 +2,6 @@ package com.it.cloudwater.commodity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SubmitOrderActivity extends BaseActivity implements View.OnClickListener {
 
@@ -148,9 +146,9 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                                 }
                             });
                             orderAdapter.addAll(orderGoodses);
-                            totalOrder.setText(((double) orderDetailBean.result.orderGoods.get(0).nGoodsTotalPrice / 100) + "元");
-                            tvDiscount.setText("-" + ((double) orderDetailBean.result.nCouponPrice / 100 + "元"));
-                            totalPay.setText(((double) orderDetailBean.result.nFactPrice / 100) + "元");
+                            totalOrder.setText("商品总价￥" + ((double) orderDetailBean.result.nTotalprice / 100));
+                            tvDiscount.setText("-￥" + ((double) orderDetailBean.result.nCouponPrice / 100));
+                            totalPay.setText(("￥" + (double) orderDetailBean.result.nFactPrice / 100));
                             ticketCount.setText(orderDetailBean.result.nTotalWatertickets + "");
                         } else if (resCode.equals("-1")) {
                             String resultData = jsonObject.getString("result");
@@ -167,7 +165,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                         JSONObject jsonObject = new JSONObject(body2);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-                            ToastManager.show("结算完成，去付款吧");
+//                            ToastManager.show("结算完成，去付款吧");
                             String orderId = jsonObject.getString("result");
                             Intent intent = new Intent(SubmitOrderActivity.this, PayDetailActivity.class);
                             intent.putExtra("orderId", orderId + "");
@@ -188,7 +186,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void setListener() {
-        toolbarTitle.setText("提交订单");
+        toolbarTitle.setText("订单结算");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,14 +280,15 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("strInvoiceheader", invoice);
                 settlementParams.put("strRemarks", remarks);
                 if (discount_amount != null) {
-                    factPrice= orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) + bucketCount * orderDetailBean.result.nBucketmoney;
+                    factPrice = orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) + bucketCount * orderDetailBean.result.nBucketmoney;
                     settlementParams.put("nFactPrice", factPrice);
                     settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
                     settlementParams.put("lMyCouponId", orderDetailBean.result.lMyCouponId);
                 } else {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice+ bucketCount * orderDetailBean.result.nBucketmoney);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney);
                     settlementParams.put("nCouponPrice", 0);
                 }
+                settlementParams.put("nBucketnum",bucketCount);
                 settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice + bucketCount * orderDetailBean.result.nBucketmoney);
 
 
@@ -324,7 +323,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.rl_discount:
                 Intent intent1 = new Intent(SubmitOrderActivity.this, CouponActivity.class);
-                intent1.putExtra("nFullPrice",orderDetailBean.result.nFactPrice + "");
+                intent1.putExtra("nFullPrice", orderDetailBean.result.nFactPrice + "");
                 startActivityForResult(intent1, REQUEST_CODE2);
                 break;
         }

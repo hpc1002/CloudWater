@@ -21,10 +21,11 @@ public class CloudApi {
     public final static String NET_FAIL = App.getInstance().getString(R.string.gank_net_fail);
     private static final String TAG = "CloudApi";
 
-    public static void getSmsCode(final int what, final String phone, final MyCallBack myCallBack) {
+    public static void getSmsCode(final int what, final String phone, Integer type, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.SENDSMS_URL)
                 .tag(App.getInstance())
                 .params("strMobile", phone)
+                .params("type", type)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -39,12 +40,13 @@ public class CloudApi {
                 });
     }
 
-    public static void Register(final int what, String phone, String password, String smsCode, final MyCallBack myCallBack) {
+    public static void Register(final int what, String phone, String password, String smsCode, String strInvitecode, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.REGISTER_URL)
                 .tag(App.getInstance())
                 .params("strMobile", phone)
                 .params("strPassword", password)
                 .params("strUserSmsCode", smsCode)
+                .params("strInvitecode", strInvitecode)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -99,11 +101,34 @@ public class CloudApi {
                 });
     }
 
-    public static void ChangePassword(final int what, String phone, String password, final MyCallBack myCallBack) {
+    public static void ChangePassword(final int what, String phone, String password, long lUserId, String oldPassword, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.CHANGE_PASSWORD_URL)
                 .tag(App.getInstance())
                 .params("strMobile", phone)
                 .params("strPassword", password)
+                .params("lUserId", lUserId)
+                .params("strPasswordOld", oldPassword)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                        Log.i(TAG, "onSuccess: " + response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+
+    public static void forgetPassword(final int what, String phone, String password, String strUserSmsCode, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.CHANGE_PASSWORD_URL)
+                .tag(App.getInstance())
+                .params("strMobile", phone)
+                .params("strPassword", password)
+                .params("strUserSmsCode", strUserSmsCode)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -230,7 +255,27 @@ public class CloudApi {
                 .params("nPage", nPage)
                 .params("nMaxNum", nMaxNum)
                 .params("lDeliveryid", lDeliveryid)
-                .params("nState", nState)
+                .params("nSendState", nState)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+
+    public static void sendConfirm(final int what, final long lOrderId, final long lDeliveryid, String strDeliveryname, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.ORDER_CONFIRM_URL)
+                .tag(App.getInstance())
+                .params("lOrderId", lOrderId)
+                .params("lDeliveryid", lDeliveryid)
+                .params("strDeliveryname", strDeliveryname)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

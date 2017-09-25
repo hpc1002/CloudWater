@@ -47,6 +47,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText etPassword;
     @BindView(R.id.btn_login)
     Button btnLogin;
+    @BindView(R.id.forget_password)
+    TextView forgetPassword;
     private String phoneNumberInput;
     private String passwordInput;
     private boolean isPhone;
@@ -67,6 +69,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         tvRight.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
         ivLeft.setOnClickListener(this);
+        forgetPassword.setOnClickListener(this);
     }
 
     @Override
@@ -93,6 +96,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.iv_left:
                 finish();
+                break;
+            case R.id.forget_password:
+                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
                 break;
 
             case R.id.btn_login:
@@ -133,12 +139,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             int lId = result.getInt("lId");
                             String strPassword = result.getString("strPassword");
                             int nUserType = result.getInt("nUserType");
+                            if (nUserType == 0) {
+                                String userName = result.getString("strUsername");
+                                StorageUtil.setKeyValue(LoginActivity.this, "userName", userName);
+                            }
                             String strMobile = result.getString("strMobile");
+
+                            String strInvitecode = result.getString("strInvitecode");
                             int nState = result.getInt("nState");
                             int nBucketnum = result.getInt("nBucketnum");
                             StorageUtil.setKeyValue(LoginActivity.this, "userId", lId + "");
                             StorageUtil.setKeyValue(LoginActivity.this, "userType", nUserType + "");
                             StorageUtil.setKeyValue(LoginActivity.this, "userPhone", strMobile);
+
+                            StorageUtil.setKeyValue(LoginActivity.this, "invitation_code", strInvitecode);
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         } else if (resCode.equals("1")) {
                             String result = loginData.getString("result");
@@ -164,4 +178,5 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onDestroy();
 
     }
+
 }

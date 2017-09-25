@@ -13,6 +13,7 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.user.AddressActivity;
 import com.it.cloudwater.user.BucketActivity;
 import com.it.cloudwater.user.CouponActivity;
+import com.it.cloudwater.user.Distribution2Activity;
 import com.it.cloudwater.user.DistributionActivity;
 import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.LoginActivity;
@@ -182,7 +183,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.rl_distribution_my:
-                intent = new Intent(getActivity(), DistributionActivity.class);
+                intent = new Intent(getActivity(), Distribution2Activity.class);
                 startActivity(intent);
                 break;
 

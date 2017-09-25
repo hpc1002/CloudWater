@@ -2,7 +2,9 @@ package com.it.cloudwater.user.more;
 
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +34,7 @@ public class TermsActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.terms_content)
-    TextView termsContent;
+    WebView termsContent;
 
     @Override
     protected void processLogic() {
@@ -50,7 +52,7 @@ public class TermsActivity extends BaseActivity {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             String content = jsonObject.getString("result");
-                            termsContent.setText(content);
+                            termsContent.loadDataWithBaseURL(null, content, "text/html" , "utf-8", null);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

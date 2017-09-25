@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.it.cloudwater.user.more.AboutUsActivity">
-<include layout="@layout/toolbar"/>
-    <TextView
+
+    <include layout="@layout/toolbar" />
+
+    <WebView
         android:id="@+id/aboutUs_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:text="公司介绍"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

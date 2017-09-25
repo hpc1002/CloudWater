@@ -45,7 +45,7 @@ public class CheckAdapter extends BasicAdapter<AddressListBean.Result.DataList> 
                 mCallBack.OnItemDeleteClickListener(man.lId);
             }
         });
-        holder.getView(R.id.checkbox).setOnClickListener(new View.OnClickListener() {
+        holder.getView(R.id.ll_total).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallBack.onItemClickListener(man);

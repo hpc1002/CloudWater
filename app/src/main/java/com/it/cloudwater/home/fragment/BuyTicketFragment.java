@@ -72,7 +72,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
         userId = StorageUtil.getUserId(getActivity());
-        return inflater.inflate(R.layout.fr_tick_my, container, false);
+        return inflater.inflate(R.layout.fr_tick_buy, container, false);
     }
 
     @Override
@@ -95,6 +95,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                 case 0x001:
                     String body = result.body();
                     try {
+                        dataLists = new ArrayList<>();
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("1")) {
@@ -103,7 +104,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                         } else if (resCode.equals("0")) {
                             BuyTicketListBean myTicketListBean = new Gson().fromJson(body, BuyTicketListBean.class);
 
-                            dataLists = new ArrayList<>();
+
                             for (int i = 0; i < myTicketListBean.result.dataList.size(); i++) {
                                 dataLists.add(myTicketListBean.result.dataList.get(i));
 
@@ -147,7 +148,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                         tv_price.setText("￥" + ((double) data.nPrice / 100));
                         ori_price.setText("原价￥" + ((double) data.nOldPrice / 100));
                         Glide.with(getContext())
-                                .load(Constant.IMAGE_URL + "0/" + data.lId)
+                                .load(Constant.IMAGE_URL + "0/" + data.lGoodsid)
                                 .placeholder(R.mipmap.home_load_error)
                                 .bitmapTransform(new CenterCrop(getContext()))
                                 .into(ticketImg);

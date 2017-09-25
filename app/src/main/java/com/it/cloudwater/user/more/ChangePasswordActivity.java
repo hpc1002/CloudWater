@@ -2,7 +2,6 @@ package com.it.cloudwater.user.more;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.it.cloudwater.home.HomeActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.CheckUtil;
+import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
 
@@ -24,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener {
 
@@ -56,6 +55,11 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     EditText etPwdTwo;
     @BindView(R.id.btn_preservation)
     Button btnPreservation;
+    @BindView(R.id.tv_old_password)
+    TextView tvOldPassword;
+    @BindView(R.id.et_old_password)
+    EditText etOldPassword;
+    private String userId;
 
     @Override
     protected void processLogic() {
@@ -65,6 +69,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     @Override
     protected void setListener() {
         toolbarTitle.setText("修改密码");
+        userId = StorageUtil.getUserId(this);
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,9 +130,11 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 //                String smsCode = etSmsCode.getText().toString();
                 String password = etNewPassword.getText().toString();
                 String pwdTwo = etPwdTwo.getText().toString();
+                String oldPassword = etOldPassword.getText().toString();
                 boolean isPhone = CheckUtil.isMobile(phone);
                 boolean isPwd = CheckUtil.isPassword(password);
                 boolean isPwdTwo = CheckUtil.isPassword(pwdTwo);
+                boolean isPwdOld = CheckUtil.isPassword(oldPassword);
                 if (phone.equals("")) {
                     ToastManager.show("手机号不能为空");
                     return;
@@ -136,11 +143,22 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     ToastManager.show("手机号输入不对");
                     return;
                 }
+                if (oldPassword.equals("")) {
+                    ToastManager.show("旧密码不能为空");
+                }
+                if (!isPwdOld) {
+                    ToastManager.show("旧密码输入格式输入不对");
+                    return;
+                }
                 if (password.equals("")) {
                     ToastManager.show("密码不能为空");
                 }
                 if (!isPwd) {
                     ToastManager.show("密码输入格式输入不对");
+                    return;
+                }
+                if (oldPassword.equals(password)) {
+                    ToastManager.show("新旧密码不能一样");
                     return;
                 }
                 if (pwdTwo.equals("")) {
@@ -154,7 +172,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     ToastManager.show("两次输入密码不一致,请重新输入");
                     return;
                 }
-                CloudApi.ChangePassword(0x001, phone, password, myCallBack);
+                CloudApi.ChangePassword(0x001, phone, password, Long.parseLong(userId), oldPassword, myCallBack);
                 break;
         }
     }

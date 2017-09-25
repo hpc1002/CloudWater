@@ -80,8 +80,8 @@
             android:layout_toRightOf="@+id/tv_sms_code"
             android:background="@null"
             android:hint="输入密码"
-            android:textColor="@color/course_name"
             android:inputType="textPassword"
+            android:textColor="@color/course_name"
             android:textColorHint="@color/course_learn_number"
             android:textSize="14sp" />
     </RelativeLayout>
@@ -103,5 +103,19 @@
         android:text="@string/app_login"
         android:textColor="@color/white"
         android:textSize="18sp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x40"
+        android:layout_marginTop="@dimen/y60">
 
+        <TextView
+            android:id="@+id/forget_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="忘记密码"
+            android:textColor="@color/course_learn_number" />
+    </RelativeLayout>
 </LinearLayout>

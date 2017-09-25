@@ -15,6 +15,7 @@
         android:layout_below="@+id/good_img" />
 
     <TextView
+        android:layout_marginTop="30dp"
         android:id="@+id/good_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="30dp"
         android:layout_toRightOf="@+id/good_name"
         android:text="1.8L"
         android:textColor="@color/title"
@@ -38,28 +40,6 @@
         android:id="@+id/good_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="￥49" />
+        android:layout_alignParentRight="true" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/barrel_deposit"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/good_name"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_toRightOf="@+id/good_img"-->
-        <!--android:text="桶押金:10.00"-->
-        <!--android:textColor="@color/word_second" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/barrel_count"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_below="@+id/good_name"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:text="×1"-->
-        <!--android:textColor="@color/word_second" />-->
 </RelativeLayout>

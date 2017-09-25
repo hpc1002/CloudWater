@@ -34,7 +34,7 @@ import butterknife.BindView;
 /**
  * 我的水票
  */
-public class TicketActivity extends BaseActivity implements RecyclerArrayAdapter.OnLoadMoreListener{
+public class TicketActivity extends BaseActivity implements RecyclerArrayAdapter.OnLoadMoreListener {
 
 
     @BindView(R.id.recyclerView)
@@ -69,6 +69,7 @@ public class TicketActivity extends BaseActivity implements RecyclerArrayAdapter
             }
         }
     };
+
     @Override
     protected void processLogic() {
         if (!userId.equals("")) {
@@ -130,7 +131,7 @@ public class TicketActivity extends BaseActivity implements RecyclerArrayAdapter
         recyclerView.setAdapterWithProgress(ticketAdapter = new RecyclerArrayAdapter<MyTicketListBean.Result.DataList>(this) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new MyTicketListViewHolder(parent);
+                return new MyTicketListViewHolder(parent, TicketActivity.this);
             }
 
         });
@@ -150,7 +151,8 @@ public class TicketActivity extends BaseActivity implements RecyclerArrayAdapter
         return this;
     }
 
-    int page=1;
+    int page = 1;
+
     @Override
     public void onLoadMore() {
         if (!userId.equals("")) {

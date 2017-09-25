@@ -45,8 +45,7 @@
                 android:id="@+id/tv_detail_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_consignee"
-                />
+                android:layout_below="@+id/tv_consignee" />
         </RelativeLayout>
 
         <View
@@ -85,54 +84,47 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/title" />
 
-            <TextView
-                android:id="@+id/pay_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/colorPrimary" />
+
         </RelativeLayout>
 
         <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="40dp">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp">-->
 
-            <!--<ImageView-->
-                <!--android:id="@+id/iv_bucket"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@mipmap/ic_launcher"-->
-                <!--android:layout_marginLeft="10dp" />-->
+        <!--<ImageView-->
+        <!--android:id="@+id/iv_bucket"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@mipmap/ic_launcher"-->
+        <!--android:layout_marginLeft="10dp" />-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/tv_water_name"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_toRightOf="@+id/iv_bucket"-->
-                <!--android:text="雀巢(优活)"-->
-                <!--android:textColor="@color/title" />-->
+        <!--<TextView-->
+        <!--android:id="@+id/tv_water_name"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_toRightOf="@+id/iv_bucket"-->
+        <!--android:text="雀巢(优活)"-->
+        <!--android:textColor="@color/title" />-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/tv_number"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:layout_toLeftOf="@+id/tv_price"-->
-                <!--android:text="╳ 1" />-->
+        <!--<TextView-->
+        <!--android:id="@+id/tv_number"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_toLeftOf="@+id/tv_price"-->
+        <!--android:text="╳ 1" />-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/tv_price"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:text="￥26.00"-->
-                <!--android:textColor="@color/title" />-->
+        <!--<TextView-->
+        <!--android:id="@+id/tv_price"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:text="￥26.00"-->
+        <!--android:textColor="@color/title" />-->
         <!--</RelativeLayout>-->
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/order_list_recycler"
@@ -140,6 +132,7 @@
             android:layout_height="wrap_content">
 
         </com.jude.easyrecyclerview.EasyRecyclerView>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp">
@@ -200,11 +193,22 @@
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/btn_pay"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="付款" />
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btn_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/course_learn_state"
+                android:text="付款"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 

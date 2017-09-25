@@ -29,6 +29,7 @@
                     android:id="@+id/water_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/title"
                     android:text="雀巢优活" />
 
                 <TextView

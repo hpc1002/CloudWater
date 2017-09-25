@@ -15,7 +15,8 @@ public class BuyTicketListBean {
         public int nTotal;
 
         public class DataList {
-            public int lId;
+            public long lId;
+            public long lGoodsid;
             public String strGoodsName;
             public String strGoodsimgurl;
             public String strRemarks;

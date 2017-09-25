@@ -3,6 +3,7 @@ package com.it.cloudwater.home.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,10 +37,12 @@ import butterknife.Unbinder;
  * Created by hpc on 2017/6/19.
  */
 
-public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener {
+public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recyclerView)
     EasyRecyclerView recyclerView;
     Unbinder unbinder;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
     private String userId;
     private ArrayList<MyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<MyTicketListBean.Result.DataList> ticketAdapter;
@@ -53,7 +56,7 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
                     recyclerView.setRefreshing(false);
                     break;
                 case SWIPE_REFRESH_COMPLETE:
-//                    swipeRefresh.setRefreshing(false);
+                    swipeRefresh.setRefreshing(false);
                     break;
             }
         }
@@ -69,7 +72,11 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
     @Override
     protected void initListener() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        if (!userId.equals("")) {
+            CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        }
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
     }
 
     @Override
@@ -80,9 +87,7 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
                 return new MyTicketViewHolder(parent);
             }
         });
-        if (!userId.equals("")) {
-            CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
-        }
+
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -91,6 +96,7 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
             switch (what) {
                 case 0x001:
                     String body = result.body();
+                    mHandler.sendEmptyMessage(SWIPE_REFRESH_COMPLETE);
                     try {
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
@@ -126,7 +132,7 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
         recyclerView.setAdapterWithProgress(ticketAdapter = new RecyclerArrayAdapter<MyTicketListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new MyTicketListViewHolder(parent);
+                return new MyTicketListViewHolder(parent, getActivity());
             }
 
         });
@@ -162,6 +168,13 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
             } else {
                 ticketAdapter.stopMore();
             }
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!userId.equals("")) {
+            CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
         }
     }
 }

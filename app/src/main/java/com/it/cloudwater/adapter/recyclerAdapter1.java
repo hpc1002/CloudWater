@@ -60,6 +60,7 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
             good_name = (TextView) itemView.findViewById(R.id.good_name);
             good_capacity = (TextView) itemView.findViewById(R.id.good_capacity);
             good_price = (TextView) itemView.findViewById(R.id.good_price);
+            good_capacity = (TextView) itemView.findViewById(R.id.good_capacity);
 
         }
     }

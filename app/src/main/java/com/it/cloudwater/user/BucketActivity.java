@@ -1,9 +1,12 @@
 package com.it.cloudwater.user;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +49,7 @@ public class BucketActivity extends BaseActivity {
     Button btnReBack;
     private String userId;
     private int nBucketNum;
+    private String inputName;
 
     @Override
     protected void processLogic() {
@@ -71,7 +75,7 @@ public class BucketActivity extends BaseActivity {
                             nBucketNum = resultObject.getInt("nBucketNum");
                             int nBucketMoney = resultObject.getInt("nBucketMoney");
                             bucketCount.setText(nBucketNum + "");
-                            reBackMoney.setText(((double) nBucketMoney / 100) + "");
+                            reBackMoney.setText("￥"+((double) nBucketMoney * nBucketNum / 100));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -83,9 +87,11 @@ public class BucketActivity extends BaseActivity {
                         JSONObject jsonObject = new JSONObject(body2);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-                            ToastManager.show("退桶成功");
-                            bucketCount.setText(0 + "");
-                            reBackMoney.setText(0.00 + "");
+                            String result1 = jsonObject.getString("result");
+                            ToastManager.show(result1);
+                            if (!userId.equals("")) {
+                                CloudApi.getMyBucket(0x001, Long.parseLong(userId), myCallBack);
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -113,7 +119,29 @@ public class BucketActivity extends BaseActivity {
         btnReBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CloudApi.retreatBucket(0x002, Long.parseLong(userId), "", nBucketNum, myCallBack);
+                final EditText inputServer = new EditText(BucketActivity.this);
+                inputServer.setFocusable(true);
+                AlertDialog.Builder builder = new AlertDialog.Builder(BucketActivity.this);
+                builder.setTitle("请输入退桶个数").setIcon(
+                        R.mipmap.ic_launcher).setView(inputServer).setNegativeButton(
+                        "取消", null);
+                builder.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                inputName = inputServer.getText().toString();
+                                int inputNum = Integer.parseInt(inputName);
+                                if (inputNum <= nBucketNum) {
+                                    CloudApi.retreatBucket(0x002, Long.parseLong(userId), "", inputNum, myCallBack);
+                                } else {
+                                    ToastManager.show("请重新输入");
+                                }
+                            }
+                        });
+                builder.show();
+
+
             }
         });
     }

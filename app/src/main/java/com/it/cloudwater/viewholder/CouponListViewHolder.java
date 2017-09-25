@@ -2,7 +2,6 @@ package com.it.cloudwater.viewholder;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.it.cloudwater.R;
@@ -20,10 +19,12 @@ public class CouponListViewHolder extends BaseViewHolder<CouponListBean.Result.D
     private TextView dExpire;
     private TextView price;
     private View fl_coupon;
+    private String comState;
 
 
-    public CouponListViewHolder(ViewGroup itemView) {
+    public CouponListViewHolder(ViewGroup itemView, String state) {
         super(itemView, R.layout.item_coupon);
+        this.comState = state;
         coupon_name = $(R.id.coupon_name);
         dExpire = $(R.id.dExpire);
         price = $(R.id.price);
@@ -44,8 +45,8 @@ public class CouponListViewHolder extends BaseViewHolder<CouponListBean.Result.D
                 mCallBack.OnItemClickListener(data);
             }
         });
-        if (nDataFlag == 0) {
-            fl_coupon.setBackgroundResource(R.color.gray);
+        if (comState != null && nDataFlag == 0) {
+            fl_coupon.setBackgroundResource(R.color.qianhui);
         }
     }
 

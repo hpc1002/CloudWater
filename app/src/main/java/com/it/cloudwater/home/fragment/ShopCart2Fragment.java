@@ -18,7 +18,6 @@ import com.it.cloudwater.bean.ShopCartListBean;
 import com.it.cloudwater.commodity.SubmitOrderActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
-import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -77,7 +76,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
     @Override
     protected void initListener() {
         shoppingCartAdapter = new ShoppingCartAdapter(getActivity());
-
+        rlBottom.setVisibility(View.GONE);
         btHeaderRight.setOnClickListener(this);
         ckAll.setOnClickListener(this);
         tvSettlement.setOnClickListener(this);
@@ -99,15 +98,19 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
             switch (what) {
                 case 0x001:
                     String body = result.body();
+                    shoppingCartBeanList = new ArrayList<>();
                     try {
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
+                            rlBottom.setVisibility(View.VISIBLE);
                             ShopCartListBean shopCartListBean = new Gson().fromJson(body, ShopCartListBean.class);
-                            shoppingCartBeanList = new ArrayList<>();
+
                             for (int i = 0; i < shopCartListBean.result.dataList.size(); i++) {
                                 shoppingCartBeanList.add(shopCartListBean.result.dataList.get(i));
                             }
+                            initUi(shoppingCartBeanList);
+                        } else if (resCode.equals("1")) {
                             initUi(shoppingCartBeanList);
                         }
                     } catch (JSONException e) {
@@ -120,7 +123,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
                         JSONObject jsonObject = new JSONObject(body2);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-                            ToastManager.show("提交订单成功");
+                            rlBottom.setVisibility(View.GONE);
                             int orderId = jsonObject.getInt("result");
                             Intent intent = new Intent(getActivity(), SubmitOrderActivity.class);
                             intent.putExtra("order_Id", orderId + "");
@@ -182,7 +185,7 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
                     maps.add(orderParams);
                 }
             }
-            ToastManager.show("总价：" + totalPrice / 100);
+//            ToastManager.show("总价：" + totalPrice / 100);
             //订单参数包装
             Map<String, Object> params = new HashMap<>();
             params.put("lBuyerid", userId);

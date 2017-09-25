@@ -1,7 +1,9 @@
 package com.it.cloudwater.home.fragment;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,16 +29,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by hpc on 2017/6/19.
  */
 
-public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener {
+public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
 
-    @BindView(R.id.rv_order)
-    EasyRecyclerView rvOrder;
+    @BindView(R.id.erv_order_un_com)
+    EasyRecyclerView ervOrderUnCom;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
+    Unbinder unbinder;
     private View view;
     private String userId;
     private Integer nState = 3;//已支付
@@ -50,10 +57,10 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case REFRESH_COMPLETE:
-                    rvOrder.setRefreshing(false);
+                    ervOrderUnCom.setRefreshing(false);
                     break;
                 case SWIPE_REFRESH_COMPLETE:
-//                    swipeRefresh.setRefreshing(false);
+                    swipeRefresh.setRefreshing(false);
                     break;
             }
         }
@@ -61,7 +68,7 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.fr_order_com, container, false);
+        View view = inflater.inflate(R.layout.fr_order_uncom, container, false);
         userId = StorageUtil.getUserId(getActivity());
         return view;
 
@@ -70,7 +77,9 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
 
     @Override
     protected void initListener() {
-        rvOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        ervOrderUnCom.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override
@@ -87,7 +96,7 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
             switch (what) {
                 case 0x001:
                     String body = result.body();
-
+                    mHandler.sendEmptyMessage(SWIPE_REFRESH_COMPLETE);
                     try {
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
@@ -121,10 +130,10 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
     };
 
     private void initUi(ArrayList<OrderListBean.Result.DataList> orderList) {
-        rvOrder.setAdapterWithProgress(orderListAdapter = new RecyclerArrayAdapter<OrderListBean.Result.DataList>(getActivity()) {
+        ervOrderUnCom.setAdapterWithProgress(orderListAdapter = new RecyclerArrayAdapter<OrderListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new OrderListViewHolder(parent,getActivity());
+                return new OrderListViewHolder(parent, getActivity(), "orderState");
             }
         });
         orderListAdapter.addAll(orderList);
@@ -147,6 +156,27 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
             } else {
                 orderListAdapter.stopMore();
             }
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!userId.equals("")) {
+            CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
         }
     }
 }

@@ -15,8 +15,8 @@ public class OrderListBean {
         public int nTotal;
 
         public class DataList {
-            public int lId;
-            public int lDeliveryid;
+            public long lId;
+            public long lDeliveryid;
             public String strOrdernum;
             public int nState;
             public int nSendState;

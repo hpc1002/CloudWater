@@ -10,6 +10,7 @@ import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.utils.StorageUtil;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
@@ -55,6 +56,8 @@ public class InvitationActivity extends BaseActivity {
                 finish();
             }
         });
+        String invitation_code = StorageUtil.getValue(this, "invitation_code");
+        inventNumber.setText(invitation_code);
     }
 
     @Override

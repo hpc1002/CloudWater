@@ -144,19 +144,38 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     break;
                 case 0x003:
                     String body3 = result.body();
-                    BannerBean bannerBean = new Gson().fromJson(body3, BannerBean.class);
-                    ArrayList<BannerBean.Result.DataList> dataLists = new ArrayList<>();
-                    for (int i = 0; i < bannerBean.result.dataList.size(); i++) {
-                        dataLists.add(bannerBean.result.dataList.get(i));
+                    try {
+                        JSONObject jsonObject = new JSONObject(body3);
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            BannerBean bannerBean = new Gson().fromJson(body3, BannerBean.class);
+                            ArrayList<BannerBean.Result.DataList> dataLists = new ArrayList<>();
+                            for (int i = 0; i < bannerBean.result.dataList.size(); i++) {
+                                dataLists.add(bannerBean.result.dataList.get(i));
+                            }
+                            BGABannerAdapter bgaBannerAdapter = new BGABannerAdapter(getActivity());
+                            homeRecommendBanner.setAdapter(bgaBannerAdapter);
+                            ArrayList<String> bannerTitle = new ArrayList<>();
+                            ArrayList<String> bannerImage = new ArrayList<>();
+                            for (int i = 0; i < dataLists.size(); i++) {
+                                bannerTitle.add(dataLists.get(i).strActivityName);
+                                bannerImage.add(Constant.IMAGE_URL + "1/" + dataLists.get(i).lId);
+                            }
+                            homeRecommendBanner.setData(bannerImage, bannerTitle);
+                            homeRecommendBanner.setOnItemClickListener(new BGABanner.OnItemClickListener() {
+                                @Override
+                                public void onBannerItemClick(BGABanner banner, View view, Object model, int position) {
+
+                                }
+                            });
+                        } else if (resCode.equals("1")) {
+                            ToastManager.show("暂无活动");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    homeRecommendBanner.setAdapter(new BGABannerAdapter(getActivity()));
-                    ArrayList<String> bannerTitle = new ArrayList<>();
-                    ArrayList<String> bannerImage = new ArrayList<>();
-                    for (int i = 0; i < dataLists.size(); i++) {
-                        bannerTitle.add(dataLists.get(i).strActivityName);
-                        bannerImage.add(Constant.IMAGE_URL + "1/" + dataLists.get(i).lId);
-                    }
-                    homeRecommendBanner.setData(bannerImage, bannerTitle);
+
+
                     break;
             }
         }

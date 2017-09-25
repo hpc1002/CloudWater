@@ -15,7 +15,8 @@ public class MyTicketListBean {
         public int nTotal;
 
         public class DataList {
-            public int lId;
+            public long lId;
+            public long lGoodsid;
             public int nRemainingCount;
             public String strTicketName;
             public String strExpire;

@@ -1,9 +1,10 @@
 package com.it.cloudwater.user.more;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class AboutUsActivity extends BaseActivity {
 
@@ -35,7 +35,7 @@ public class AboutUsActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.aboutUs_content)
-    TextView aboutUsContent;
+    WebView aboutUsContent;
 
     @Override
     protected void processLogic() {
@@ -53,7 +53,8 @@ public class AboutUsActivity extends BaseActivity {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             String content = jsonObject.getString("result");
-                            aboutUsContent.setText(content);
+//                            aboutUsContent.loadData(content, "text/html" , "utf-8");//中文乱码
+                            aboutUsContent.loadDataWithBaseURL(null, content, "text/html" , "utf-8", null);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
