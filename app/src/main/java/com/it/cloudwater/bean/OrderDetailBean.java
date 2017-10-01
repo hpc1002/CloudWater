@@ -25,6 +25,7 @@ public class OrderDetailBean {
         public int nTotalWaterticketsPrice;
         public long dtCreatetime;
         public long dtPaytime;
+        public long dtFinishtime;
         public String strReceiptusername;
         public String strDetailaddress;
         public String strLocation;

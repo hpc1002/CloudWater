@@ -43,7 +43,6 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
 
     @BindView(R.id.recyclerView)
     EasyRecyclerView recyclerView;
-    private String userId;
     private ArrayList<BuyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<BuyTicketListBean.Result.DataList> ticketAdapter;
     private TextView water_name;
@@ -54,6 +53,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
     private TextView buy;
     private ImageView ticketImg;
     private int nTotal;
+    private String userId;
     private static final int REFRESH_COMPLETE = 0X110;
     private static final int SWIPE_REFRESH_COMPLETE = 0X111;
     private Handler mHandler = new Handler() {
@@ -71,21 +71,18 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
-        userId = StorageUtil.getUserId(getActivity());
         return inflater.inflate(R.layout.fr_tick_buy, container, false);
     }
 
     @Override
     protected void initListener() {
+        userId=StorageUtil.getUserId(getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override
     protected void initData() {
-        if (!userId.equals("")) {
-            CloudApi.getBuyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
-        }
-
+            CloudApi.getBuyTicketList(0x001, 1, 8, myCallBack);
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -103,7 +100,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                             ToastManager.show(result1);
                         } else if (resCode.equals("0")) {
                             BuyTicketListBean myTicketListBean = new Gson().fromJson(body, BuyTicketListBean.class);
-
+                            nTotal=myTicketListBean.result.nTotal;
 
                             for (int i = 0; i < myTicketListBean.result.dataList.size(); i++) {
                                 dataLists.add(myTicketListBean.result.dataList.get(i));
@@ -155,6 +152,10 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                         buy.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (userId.equals("")){
+                                    ToastManager.show("请先登录");
+                                    return;
+                                }
                                 Intent intent = new Intent(getActivity(), TicketDetailActivity.class);
                                 intent.putExtra("ticketId", data.lId + "");
                                 startActivity(intent);
@@ -177,14 +178,12 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
 
     @Override
     public void onLoadMore() {
-        if (!userId.equals("")) {
 
             if (page < (nTotal / 8 + 1)) {
                 page++;
-                CloudApi.getBuyTicketList(0x001, 1, 8 * page, Integer.parseInt(userId), myCallBack);
+                CloudApi.getBuyTicketList(0x001, 1, 8 * page, myCallBack);
             } else {
                 ticketAdapter.stopMore();
             }
-        }
     }
 }

@@ -54,11 +54,13 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
     LinearLayout rlBottom;
     //    @BindView(R.id.btn_back)
 //    Button btnBack;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
     @BindView(R.id.bt_header_right)
     TextView btHeaderRight;
     Unbinder unbinder;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.unLogin)
+    TextView unLogin;
     private String userId;
     private ArrayList<ShopCartListBean.Result.DataList> shoppingCartBeanList;
     private double totalPrice = 0.00;// 购买的商品总价
@@ -87,7 +89,12 @@ public class ShopCart2Fragment extends BaseFragment implements View.OnClickListe
     protected void initData() {
         userId = StorageUtil.getUserId(getActivity());
         if (!userId.equals("")) {
+            unLogin.setVisibility(View.GONE);
+            listShoppingCart.setVisibility(View.VISIBLE);
             CloudApi.getShopList(0x001, Long.parseLong(userId), myCallBack);
+        } else {
+            unLogin.setVisibility(View.VISIBLE);
+            listShoppingCart.setVisibility(View.GONE);
         }
 
     }

@@ -85,6 +85,13 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
         rlChangePwd.setOnClickListener(this);
         logout.setOnClickListener(this);
         userId = StorageUtil.getUserId(this);
+        if (userId.equals("")) {
+            logout.setVisibility(View.GONE);
+            rlChangePwd.setVisibility(View.GONE);
+        } else {
+            logout.setVisibility(View.VISIBLE);
+            rlChangePwd.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -113,7 +120,9 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(new Intent(MoreActivity.this, TermsActivity.class));
                 break;
             case R.id.logout:
-                CloudApi.Logout(0x001, Long.parseLong(userId), myCallBack);
+                if (!userId.equals("")) {
+                    CloudApi.Logout(0x001, Long.parseLong(userId), myCallBack);
+                }
                 break;
             default:
                 break;

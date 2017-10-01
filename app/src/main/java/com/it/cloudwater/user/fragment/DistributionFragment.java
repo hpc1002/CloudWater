@@ -1,5 +1,6 @@
 package com.it.cloudwater.user.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.OrderListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.OrderDetailActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.OrderListViewHolder;
@@ -129,7 +131,34 @@ public class DistributionFragment extends BaseFragment implements RecyclerArrayA
         ervOrderUnCom.setAdapterWithProgress(orderListAdapter = new RecyclerArrayAdapter<OrderListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new OrderListViewHolder(parent, getActivity(), "distributionState");
+                OrderListViewHolder distributionState = new OrderListViewHolder(parent, getActivity(), "distributionState");
+                distributionState.setCallBack(new OrderListViewHolder.allCheck() {
+                    @Override
+                    public void OnItemClickListener(OrderListBean.Result.DataList data) {
+                        long lId = data.lId;
+                        int nSendState = data.nSendState;
+                        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                        intent.putExtra("orderId", lId + "");
+                        intent.putExtra("order_sendState", nSendState + "");
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void OnToSettleClickListener(OrderListBean.Result.DataList data) {
+
+                    }
+
+                    @Override
+                    public void OnDistributionItemClickListener(OrderListBean.Result.DataList data) {
+
+                    }
+
+                    @Override
+                    public void OnItemDeleteClickListener(OrderListBean.Result.DataList data) {
+
+                    }
+                });
+                return distributionState;
             }
         });
         orderListAdapter.addAll(orderList);

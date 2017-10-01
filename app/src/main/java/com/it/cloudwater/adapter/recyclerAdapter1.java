@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.it.cloudwater.R;
 import com.it.cloudwater.bean.OrderListBean;
 import com.it.cloudwater.constant.Constant;
+import com.it.cloudwater.viewholder.OrderListViewHolder;
 
 import java.util.ArrayList;
 

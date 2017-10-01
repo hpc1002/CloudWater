@@ -1,12 +1,12 @@
-package com.it.cloudwater.pay;
+package com.it.cloudwater.user;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,9 +14,13 @@ import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.OrderDetailBean;
+import com.it.cloudwater.commodity.SubmitOrderActivity;
+import com.it.cloudwater.commodity.XuzhiActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.DateUtil;
+import com.it.cloudwater.utils.StorageUtil;
+import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.OrderViewHolder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
@@ -29,8 +33,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class PayDetailActivity extends BaseActivity {
+public class OrderDetailActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -54,25 +59,26 @@ public class PayDetailActivity extends BaseActivity {
     TextView tvDetailAddress;
     @BindView(R.id.order_number)
     TextView orderNumber;
-    //    @BindView(R.id.iv_bucket)
-//    ImageView ivBucket;
-//    @BindView(R.id.tv_water_name)
-//    TextView tvWaterName;
-//    @BindView(R.id.tv_number)
-//    TextView tvNumber;
-//    @BindView(R.id.tv_price)
-//    TextView tvPrice;
     @BindView(R.id.tv_deposit)
     TextView tvDeposit;
     @BindView(R.id.pay_total)
     TextView payTotal;
     @BindView(R.id.coupon_count)
     TextView couponCount;
-    @BindView(R.id.btn_pay)
-    Button btnPay;
     @BindView(R.id.order_list_recycler)
     EasyRecyclerView orderListRecycler;
+    @BindView(R.id.tag1)
+    TextView tag1;
+    @BindView(R.id.tv_pay_time)
+    TextView tvPayTime;
+    @BindView(R.id.tv_complete_time)
+    TextView tvCompleteTime;
+    @BindView(R.id.sure_send)
+    TextView sureSend;
+    @BindView(R.id.tv_xuzhi)
+    TextView tvXuzhi;
     private String orderId;
+    private String order_sendState;
     private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
     private OrderDetailBean orderDetailBean;
 
@@ -97,11 +103,16 @@ public class PayDetailActivity extends BaseActivity {
                     tvPhone.setText(orderDetailBean.result.strReceiptmobile);
                     tvDetailAddress.setText(orderDetailBean.result.strDetailaddress);
                     tvTime.setText("下单时间: " + DateUtil.toDate(orderDetailBean.result.dtCreatetime));
-                    tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney/ 100));
+                    tvPayTime.setText("支付时间: " + DateUtil.toDate(orderDetailBean.result.dtPaytime));
+                    if ((orderDetailBean.result.dtFinishtime + "") != null) {
+                        tvCompleteTime.setText("完成时间: " + DateUtil.toDate(orderDetailBean.result.dtFinishtime));
+                    }
+
+                    tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney / 100));
                     orderNumber.setText("订单号:" + orderDetailBean.result.strOrdernum);
                     couponCount.setText("使用优惠券" + orderDetailBean.result.nCouponPrice + "张");
                     payTotal.setText("￥" + ((double) orderDetailBean.result.nFactPrice / 100));
-                    orderListRecycler.setAdapterWithProgress(orderAdapter = new RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods>(PayDetailActivity.this) {
+                    orderListRecycler.setAdapterWithProgress(orderAdapter = new RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods>(OrderDetailActivity.this) {
                         @Override
                         public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
                             return new OrderViewHolder(parent);
@@ -110,17 +121,11 @@ public class PayDetailActivity extends BaseActivity {
                     orderAdapter.addAll(orderGoodses);
                     break;
                 case 0x002:
-                    String body2 = result.body();
                     try {
-                        JSONObject jsonObject = new JSONObject(body2);
+                        JSONObject jsonObject = new JSONObject(result.body());
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-                            Intent intent = new Intent(PayDetailActivity.this, PaySuccessActivity.class);
-                            intent.putExtra("out_trade_no", orderDetailBean.result.strOrdernum);
-
-                            intent.putExtra("timestamp", DateUtil.toDate(orderDetailBean.result.dtPaytime));
-                            intent.putExtra("total_amount", ((double) orderDetailBean.result.nFactPrice / 100) + "");
-                            startActivity(intent);
+                            ToastManager.show("已确认配送");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -139,6 +144,7 @@ public class PayDetailActivity extends BaseActivity {
     protected void setListener() {
         toolbarTitle.setText("订单详情");
         orderId = getIntent().getStringExtra("orderId");
+        order_sendState = getIntent().getStringExtra("order_sendState");
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,30 +152,38 @@ public class PayDetailActivity extends BaseActivity {
                 finish();
             }
         });
-        btnPay.setOnClickListener(new View.OnClickListener() {
+        orderListRecycler.setLayoutManager(new LinearLayoutManager(this));
+        if (Integer.parseInt(order_sendState) == 0) {
+            sureSend.setVisibility(View.VISIBLE);
+        } else {
+            sureSend.setVisibility(View.GONE);
+        }
+        sureSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (orderDetailBean.result.nFactPrice == 0 && orderDetailBean.result.nTotalWatertickets != 0) {
-                    CloudApi.setPayNstate(0x002, Long.parseLong(orderId), 3, myCallBack);
-                } else {
-                    Intent intent = new Intent(PayDetailActivity.this, PayActivity.class);
-                    intent.putExtra("orderId", orderId + "");
-                    intent.putExtra("payType", "bucket");
-                    startActivity(intent);
-                }
+                String userId = StorageUtil.getUserId(OrderDetailActivity.this);
+                String userName = StorageUtil.getValue(OrderDetailActivity.this, "userName");
+                CloudApi.sendConfirm(0x002, Long.parseLong(orderId), Long.parseLong(userId), userName, myCallBack);
             }
         });
-        orderListRecycler.setLayoutManager(new LinearLayoutManager(this));
+        tvXuzhi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(OrderDetailActivity.this, XuzhiActivity.class);
+                startActivity(intent2);
+            }
+        });
     }
 
     @Override
     protected void loadViewLayout() {
-        setContentView(R.layout.activity_pay_detail);
+        setContentView(R.layout.activity_order_detail);
     }
 
     @Override
     protected Context getActivityContext() {
         return this;
     }
+
 
 }

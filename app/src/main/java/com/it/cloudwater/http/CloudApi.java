@@ -417,12 +417,11 @@ public class CloudApi {
                 });
     }
 
-    public static void getBuyTicketList(final int what, final Integer nPage, final Integer nMaxNum, long lUserId, final MyCallBack myCallBack) {
+    public static void getBuyTicketList(final int what, final Integer nPage, final Integer nMaxNum, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.BUYTICKET_LIST_URL)
                 .tag(App.getInstance())
                 .params("nPage", nPage)
                 .params("nMaxNum", nMaxNum)
-                .params("lUserId", lUserId)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

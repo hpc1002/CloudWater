@@ -62,11 +62,12 @@
         <activity android:name=".user.AddAddressActivity" />
         <activity android:name=".user.OrderActivity" />
         <activity android:name=".user.TicketDetailActivity" />
-        <activity android:name=".user.DistributionActivity"></activity>
+        <activity android:name=".user.DistributionActivity" />
         <activity android:name=".pay.PayFailActivity" />
         <activity android:name=".pay.PaySuccessActivity" />
         <activity android:name=".user.Distribution2Activity" />
-        <activity android:name=".user.ForgetPasswordActivity"/>
+        <activity android:name=".user.ForgetPasswordActivity" />
+        <activity android:name=".user.OrderDetailActivity" />
 
         <!-- alipay sdk begin -->
 
@@ -96,9 +97,10 @@
         <activity-alias
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:targetActivity=".weixin.WXPayCallbackActivity"></activity-alias>
+            android:targetActivity=".weixin.WXPayCallbackActivity" />
 
-        <!--微信支付 end-->
+        <!-- 微信支付 end -->
+        <activity android:name=".commodity.XuzhiActivity"></activity>
     </application>
 
 </manifest>

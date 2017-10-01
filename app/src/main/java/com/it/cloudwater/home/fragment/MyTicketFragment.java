@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.it.cloudwater.R;
@@ -43,6 +45,8 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
     Unbinder unbinder;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.unLogin)
+    LinearLayout unLogin;
     private String userId;
     private ArrayList<MyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<MyTicketListBean.Result.DataList> ticketAdapter;
@@ -73,7 +77,12 @@ public class MyTicketFragment extends BaseFragment implements RecyclerArrayAdapt
     protected void initListener() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (!userId.equals("")) {
+            unLogin.setVisibility(View.GONE);
+            swipeRefresh.setVisibility(View.VISIBLE);
             CloudApi.getMyTicketList(0x001, 1, 8, Integer.parseInt(userId), myCallBack);
+        } else {
+            unLogin.setVisibility(View.VISIBLE);
+            swipeRefresh.setVisibility(View.GONE);
         }
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);

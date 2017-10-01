@@ -1,4 +1,4 @@
-package com.it.cloudwater.user.more;
+package com.it.cloudwater.commodity;
 
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 
-public class TermsActivity extends BaseActivity {
+public class XuzhiActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -32,26 +32,37 @@ public class TermsActivity extends BaseActivity {
     ImageView ivLeft;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.terms_content)
-    WebView termsContent;
+    @BindView(R.id.webView)
+    WebView webView;
 
     @Override
     protected void processLogic() {
-        CloudApi.getMore(0x001, 0, callBack);
+        CloudApi.getMore(0x001, 4, myCallBack);
     }
 
-    private MyCallBack callBack = new MyCallBack() {
+    @Override
+    protected void setListener() {
+        toolbarTitle.setText("押金说明");
+        ivLeft.setVisibility(View.VISIBLE);
+        ivLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+    private MyCallBack myCallBack = new MyCallBack() {
         @Override
         public void onSuccess(int what, Response<String> result) {
             switch (what) {
                 case 0x001:
-                    String body = result.body();
                     try {
-                        JSONObject jsonObject = new JSONObject(body);
+                        JSONObject jsonObject = new JSONObject(result.body());
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             String content = jsonObject.getString("result");
-                            termsContent.loadDataWithBaseURL(null, content, "text/html", "utf-8", null);
+                            webView.loadDataWithBaseURL(null, content, "text/html", "utf-8", null);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -67,20 +78,8 @@ public class TermsActivity extends BaseActivity {
     };
 
     @Override
-    protected void setListener() {
-        toolbarTitle.setText("服务条款");
-        ivLeft.setVisibility(View.VISIBLE);
-        ivLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    @Override
     protected void loadViewLayout() {
-        setContentView(R.layout.activity_terms);
+        setContentView(R.layout.activity_xuzhi);
     }
 
     @Override

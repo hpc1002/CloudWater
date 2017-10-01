@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 public class DateUtil {
     public static String toDate(long number) {
         //时间戳转化为Sting或Date
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String d = format.format(number);
         System.out.println("Format To String(Date):" + d);
         return d;

@@ -1,5 +1,6 @@
 package com.it.cloudwater.user.fragment;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +15,7 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.OrderListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.OrderDetailActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.OrderListViewHolder;
@@ -140,7 +142,12 @@ public class UnDistributionFragment extends BaseFragment implements SwipeRefresh
                 orderListViewHolder.setCallBack(new OrderListViewHolder.allCheck() {
                     @Override
                     public void OnItemClickListener(OrderListBean.Result.DataList data) {
-
+                        long lId = data.lId;
+                        int nSendState = data.nSendState;
+                        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                        intent.putExtra("orderId", lId + "");
+                        intent.putExtra("order_sendState", nSendState + "");
+                        startActivity(intent);
                     }
 
                     @Override
@@ -150,9 +157,9 @@ public class UnDistributionFragment extends BaseFragment implements SwipeRefresh
 
                     @Override
                     public void OnDistributionItemClickListener(OrderListBean.Result.DataList data) {
-                        String userId = StorageUtil.getUserId(getActivity());
-                        String userName = StorageUtil.getValue(getActivity(), "userName");
-                        CloudApi.sendConfirm(0x002, data.lId, Long.parseLong(userId), userName, myCallBack);
+//                        String userId = StorageUtil.getUserId(getActivity());
+//                        String userName = StorageUtil.getValue(getActivity(), "userName");
+//                        CloudApi.sendConfirm(0x002, data.lId, Long.parseLong(userId), userName, myCallBack);
                     }
 
                     @Override

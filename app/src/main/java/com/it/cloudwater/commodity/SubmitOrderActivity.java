@@ -25,8 +25,6 @@ import com.it.cloudwater.user.CouponActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.OrderViewHolder;
-import com.it.cloudwater.widget.button.AnimShopButton;
-import com.it.cloudwater.widget.button.IOnAddDelListener;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
@@ -100,14 +98,16 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     TextView totalPay;
     @BindView(R.id.btn_settlement)
     Button btnSettlement;
-    @BindView(R.id.btnReplenish)
-    AnimShopButton btnReplenish;
     @BindView(R.id.bucket_money)
     TextView bucketMoney;
     @BindView(R.id.tv_location)
     TextView tvLocation;
     @BindView(R.id.tv_addressId)
     TextView tvAddressId;
+    @BindView(R.id.tv_count)
+    TextView tvCount;
+    @BindView(R.id.tv_xuzhi)
+    TextView tvXuzhi;
     private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
 
     private String order_Id;
@@ -116,7 +116,6 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
     private OrderDetailBean orderDetailBean;
 
     private String discount_amount;
-    private int bucketCount;
     private int factPrice;
 
     @Override
@@ -150,6 +149,8 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                             tvDiscount.setText("-￥" + ((double) orderDetailBean.result.nCouponPrice / 100));
                             totalPay.setText(("￥" + (double) orderDetailBean.result.nFactPrice / 100));
                             ticketCount.setText(orderDetailBean.result.nTotalWatertickets + "");
+                            tvCount.setText("x" + orderDetailBean.result.nBucketnum);
+                            bucketMoney.setText("￥" + (double) orderDetailBean.result.nBucketmoney / 100);
                         } else if (resCode.equals("-1")) {
                             String resultData = jsonObject.getString("result");
                             ToastManager.show(resultData);
@@ -195,6 +196,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             }
         });
         rlAddress.setOnClickListener(this);
+        tvXuzhi.setOnClickListener(this);
         userId = StorageUtil.getUserId(this);
         orderRecycler.setLayoutManager(new LinearLayoutManager(this));
         String addressName = StorageUtil.getValue(this, "address_name");
@@ -218,35 +220,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
             tvLocation.setText(strLocation);
         }
         CloudApi.orderPayDetail(0x001, Long.parseLong(order_Id), myCallBack);
-        btnReplenish.setOnAddDelListener(new IOnAddDelListener() {
-            @Override
-            public void onAddSuccess(int count) {
-                bucketCount = count;
-                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-            }
 
-            @Override
-            public void onAddFailed(int count, FailType failType) {
-                bucketCount = count;
-                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-            }
-
-            @Override
-            public void onDelSuccess(int count) {
-                bucketCount = count;
-                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-            }
-
-            @Override
-            public void onDelFaild(int count, FailType failType) {
-                bucketCount = count;
-                bucketMoney.setText(((double) (bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-                totalPay.setText(((double) (orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney) / 100) + "元");
-            }
-        });
         btnSettlement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,16 +254,16 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 settlementParams.put("strInvoiceheader", invoice);
                 settlementParams.put("strRemarks", remarks);
                 if (discount_amount != null) {
-                    factPrice = orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) + bucketCount * orderDetailBean.result.nBucketmoney;
+                    factPrice = orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount);
                     settlementParams.put("nFactPrice", factPrice);
                     settlementParams.put("nCouponPrice", Integer.parseInt(discount_amount));
                     settlementParams.put("lMyCouponId", orderDetailBean.result.lMyCouponId);
                 } else {
-                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice + bucketCount * orderDetailBean.result.nBucketmoney);
+                    settlementParams.put("nFactPrice", orderDetailBean.result.nFactPrice);
                     settlementParams.put("nCouponPrice", 0);
                 }
-                settlementParams.put("nBucketnum",bucketCount);
-                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice + bucketCount * orderDetailBean.result.nBucketmoney);
+                settlementParams.put("nBucketnum", orderDetailBean.result.nBucketnum);
+                settlementParams.put("nTotalprice", orderDetailBean.result.nTotalprice);
 
 
                 settlementParams.put("orderGoods", orderGoods);
@@ -323,8 +297,12 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.rl_discount:
                 Intent intent1 = new Intent(SubmitOrderActivity.this, CouponActivity.class);
-                intent1.putExtra("nFullPrice", orderDetailBean.result.nFactPrice + "");
+                intent1.putExtra("nFullPrice", orderDetailBean.result.nFactPrice - orderDetailBean.result.nBucketmoney + "");
                 startActivityForResult(intent1, REQUEST_CODE2);
+                break;
+            case R.id.tv_xuzhi:
+                Intent intent2 = new Intent(SubmitOrderActivity.this, XuzhiActivity.class);
+                startActivity(intent2);
                 break;
         }
     }
@@ -354,7 +332,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
             discount_amount = data.getExtras().getString("discount_amount");
             tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100) + "元");
-            totalPay.setText(((double) (orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount) + bucketCount * 5000) / 100) + "元");
+            totalPay.setText(((double) (orderDetailBean.result.nFactPrice - Integer.parseInt(discount_amount)) / 100) + "元");
         }
     }
 

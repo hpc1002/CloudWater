@@ -1,6 +1,7 @@
 package com.it.cloudwater.viewholder;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
     private TextView barrelCount;
     private TextView barrel_deposit;
     private TextView order_delete;
+    private CardView cardView;
     private EasyRecyclerView goods_recyclerView;
     private recyclerAdapter1 adapter;
     private Context context;
@@ -45,6 +47,7 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         order_delete = $(R.id.order_delete);
         barrel_deposit = $(R.id.barrel_deposit);
         barrelCount = $(R.id.barrel_count);
+        cardView = $(R.id.cardView);
     }
 
     @Override
@@ -71,11 +74,12 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         if (orderState.equals("distributionState") && data.nSendState == 0) {
             payState.setVisibility(View.GONE);
             quickPay.setVisibility(View.VISIBLE);
-            quickPay.setText("立即配送");
             order_delete.setVisibility(View.GONE);
+            quickPay.setText("查看详情");
         } else if (orderState.equals("distributionState") && data.nSendState == 1) {
             payState.setVisibility(View.GONE);
-            quickPay.setVisibility(View.GONE);
+            quickPay.setText("查看详情");
+            quickPay.setVisibility(View.VISIBLE);
             order_delete.setVisibility(View.GONE);
         }
         actualPay.setText("实付款: ￥" + ((double) data.nTotalprice / 100));
@@ -86,7 +90,7 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
             @Override
             public void onClick(View view) {
                 if (orderState.equals("distributionState") && data.nSendState == 0) {
-                    mCallBack.OnDistributionItemClickListener(data);
+                    mCallBack.OnItemClickListener(data);
                 } else if (orderState.equals("orderState") && data.nState != 3) {
                     if (data.nState == 0) {
                         //去结算
@@ -96,9 +100,13 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
                     }
 
                 }
+                if (orderState.equals("distributionState") && data.nSendState == 1) {
+                    mCallBack.OnItemClickListener(data);
+                }
 
             }
         });
+
         order_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
