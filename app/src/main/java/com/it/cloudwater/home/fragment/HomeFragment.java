@@ -202,7 +202,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
 //        CloudApi.getLunbo(0x003, myCallBack);
-        CloudApi.getGoodsListData(0x001, 1, 8, myCallBack);
+        CloudApi.getGoodsListData(0x001, 1, 1000, myCallBack);
 
     }
 }

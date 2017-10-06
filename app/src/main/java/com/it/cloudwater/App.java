@@ -3,6 +3,7 @@ package com.it.cloudwater;
 import android.app.Activity;
 import android.app.Application;
 
+import com.it.cloudwater.utils.PushUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -30,11 +31,11 @@ public class App extends Application {
     private List<Activity> activities = new ArrayList<Activity>();
     //记录需要一次性关闭的页面
     private List<Activity> activitys = new ArrayList<Activity>();
-    private String tokenId;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        PushUtil.initCloudService(this);
         instance = this;
         initOkGo();
         initLeakCanary();

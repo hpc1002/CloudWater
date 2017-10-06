@@ -46,6 +46,12 @@ android {
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 //        }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
 }
 
 dependencies {
@@ -75,4 +81,5 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.aliyun.ams:alicloud-android-push:2.3.7'
 }

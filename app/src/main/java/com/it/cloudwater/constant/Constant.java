@@ -51,7 +51,7 @@ public class Constant {
     public static final String ALIPAY_URL = BASE_URL + "pay/alipay.do";//阿里支付
 
 
-    public static final String WE_APP_ID = "wx45a19a6c3853e403";//微信appid
+    public static final String WX_APP_ID = "wx32196df1f871cc29";//微信appid
 
 
 }

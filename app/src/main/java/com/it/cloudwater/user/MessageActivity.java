@@ -1,10 +1,14 @@
 package com.it.cloudwater.user;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,6 +20,7 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.MessageListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.push.ZJMessageReceiver;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.MessageListViewHolder;
@@ -36,7 +41,7 @@ import butterknife.BindView;
  */
 public class MessageActivity extends BaseActivity implements RecyclerArrayAdapter.OnLoadMoreListener {
 
-
+    private static final String TAG = "MessageActivity";
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.tv_right)
@@ -92,6 +97,7 @@ public class MessageActivity extends BaseActivity implements RecyclerArrayAdapte
                         } else if (resCode.equals("0")) {
                             //解析数据并展示
                             MessageListBean messageListBean = new Gson().fromJson(body, MessageListBean.class);
+                            nTotal=messageListBean.result.nTotal;
                             ArrayList<MessageListBean.Result.DataList> dataLists = new ArrayList<>();
                             for (int i = 0; i < messageListBean.result.dataList.size(); i++) {
                                 dataLists.add(messageListBean.result.dataList.get(i));
@@ -136,8 +142,24 @@ public class MessageActivity extends BaseActivity implements RecyclerArrayAdapte
             }
         });
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        regMessageReceiver();
     }
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            for (BaseFragment fragment : fragments) {
+//                if (fragment instanceof MessageFragment) {
+//                    fragment.reload();
+//                }
+//            }
+            Log.i(TAG, "onReceive: "+intent);
+        }
+    };
 
+    private void regMessageReceiver() {
+        IntentFilter filter = new IntentFilter(ZJMessageReceiver.ZJ_NOTIFICATION);
+        registerReceiver(receiver, filter);
+    }
     @Override
     protected void loadViewLayout() {
         setContentView(R.layout.activity_message);

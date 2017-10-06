@@ -19,15 +19,19 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
+import com.it.cloudwater.constant.Constant;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.ToastManager;
+import com.it.cloudwater.weixin.WXPay;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
+
+import static android.R.attr.name;
 
 public class PayActivity extends BaseActivity {
 
@@ -65,8 +69,11 @@ public class PayActivity extends BaseActivity {
     private String orderId;
     private String payType;
     private String timestamp;
+    private String timestamps;
     private String out_trade_no;
     private String total_amount;
+    private String nFactPrice;
+    private String strOrdernum;
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
@@ -97,7 +104,6 @@ public class PayActivity extends BaseActivity {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         Toast.makeText(PayActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(PayActivity.this, PaySuccessActivity.class);
-//                        intent.putExtra("course_name", name);
                         intent.putExtra("total_amount", total_amount);
                         intent.putExtra("out_trade_no", out_trade_no);
                         intent.putExtra("timestamp", timestamp);
@@ -169,6 +175,11 @@ public class PayActivity extends BaseActivity {
 
                 } else {
                     ToastManager.show("微信支付");
+                    if (payType.equals("ticket")) {
+                        CloudApi.AliPay(0x002, Long.parseLong(orderId), 1, 1, myCallBack);
+                    } else if (payType.equals("bucket")) {
+                        CloudApi.AliPay(0x002, Long.parseLong(orderId), 0, 1, myCallBack);
+                    }
                 }
             }
         });
@@ -205,6 +216,23 @@ public class PayActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     break;
+                case 0x002:
+                    try {
+                        JSONObject jsonObject = new JSONObject(result.body());
+                        String resCode = jsonObject.getString("resCode");
+                        if (resCode.equals("0")) {
+                            JSONObject weChatResult = jsonObject.getJSONObject("result");
+                            doWXPay(weChatResult);
+                            nFactPrice = weChatResult.getString("nFactPrice");
+
+                            strOrdernum = weChatResult.getString("strOrdernum");
+                            timestamps = weChatResult.getString("timestamp");
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
 
@@ -213,6 +241,45 @@ public class PayActivity extends BaseActivity {
 
         }
     };
+
+    private void doWXPay(JSONObject pay_param) {
+        WXPay.init(this, Constant.WX_APP_ID);
+        WXPay.getInstance().doPay(pay_param, new WXPay.WXPayResultCallBack() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getApplication(), "支付成功", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PayActivity.this, PaySuccessActivity.class);
+                intent.putExtra("total_amount", nFactPrice+"");
+                intent.putExtra("out_trade_no", strOrdernum);
+                intent.putExtra("timestamp", timestamps+"");
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(int error_code) {
+                switch (error_code) {
+                    case WXPay.NO_OR_LOW_WX:
+                        Toast.makeText(getApplication(), "未安装微信或微信版本过低", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case WXPay.ERROR_PAY_PARAM:
+                        Toast.makeText(getApplication(), "参数错误", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case WXPay.ERROR_PAY:
+                        Toast.makeText(getApplication(), "支付失败", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(getApplication(), "支付取消", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PayActivity.this, PayFailActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
     @Override
     protected void loadViewLayout() {
