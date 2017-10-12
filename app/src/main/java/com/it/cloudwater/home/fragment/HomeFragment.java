@@ -24,6 +24,7 @@ import com.it.cloudwater.home.bean.BannerDto;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.user.LoginActivity;
+import com.it.cloudwater.user.ShareActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -149,7 +150,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             BannerBean bannerBean = new Gson().fromJson(body3, BannerBean.class);
-                            ArrayList<BannerBean.Result.DataList> dataLists = new ArrayList<>();
+                            final ArrayList<BannerBean.Result.DataList> dataLists = new ArrayList<>();
                             for (int i = 0; i < bannerBean.result.dataList.size(); i++) {
                                 dataLists.add(bannerBean.result.dataList.get(i));
                             }
@@ -165,7 +166,17 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             homeRecommendBanner.setOnItemClickListener(new BGABanner.OnItemClickListener() {
                                 @Override
                                 public void onBannerItemClick(BGABanner banner, View view, Object model, int position) {
-
+                                    Intent intent = new Intent(getActivity(), ShareActivity.class);
+//                                    String strActivityName = dataLists.get(position).strActivityName;
+                                    String strUrl = dataLists.get(position).strUrl;
+                                    long strId = dataLists.get(position).lId;
+                                    String strActivityName = dataLists.get(position).strActivityName;
+                                    String strRemarks = dataLists.get(position).strRemarks;
+                                    intent.putExtra("strUrl", strUrl);
+                                    intent.putExtra("strId", strId + "");
+                                    intent.putExtra("strActivityName", strActivityName);
+                                    intent.putExtra("strRemarks", strRemarks);
+                                    startActivity(intent);
                                 }
                             });
                         } else if (resCode.equals("1")) {

@@ -20,7 +20,6 @@
 #-------------------------------------------定制化区域----------------------------------------------
 #---------------------------------1.实体类---------------------------------
 -keep class com.it.cloudwater.bean.** { *; }
--keep class com.it.cloudwater.bean.** { *; }
 
 
 #-------------------------------------------------------------------------
@@ -42,10 +41,20 @@
 -keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
 -keep class com.alipay.sdk.app.PayTask{ public *;}
 -keep class com.alipay.sdk.app.AuthTask{ public *;}
+-dontwarn com.alipay.**
 
 
+#微信混淆
+#-keep class com.tencent.mm.opensdk.** {
+#   *;
+#}
+#-keep class com.tencent.wxop.** {
+#   *;
+#}
+#-keep class com.tencent.mm.sdk.** {
+#   *;
+#}
 -keep class com.tencent.** { *;}
-
 -keep class com.google.**
 -dontwarn com.google.**
 
@@ -85,7 +94,27 @@
 -keep public class * extends android.app.Fragment
 
 -ignorewarnings
-
+-keepclasseswithmembernames class ** {
+    native <methods>;
+}
+-keepattributes Signature
+-keep class sun.misc.Unsafe { *; }
+-keep class com.taobao.** {*;}
+-keep class com.alibaba.** {*;}
+-keep class com.alipay.** {*;}
+-dontwarn com.taobao.**
+-dontwarn com.alibaba.**
+-dontwarn com.alipay.**
+-keep class com.ut.** {*;}
+-dontwarn com.ut.**
+-keep class com.ta.** {*;}
+-dontwarn com.ta.**
+-keep class anet.**{*;}
+-keep class org.android.spdy.**{*;}
+-keep class org.android.agoo.**{*;}
+-dontwarn anet.**
+-dontwarn org.android.spdy.**
+-dontwarn org.android.agoo.**
 #-------------------------------------------------------------------------
 
 #---------------------------------3.与js互相调用的类------------------------
@@ -112,7 +141,6 @@
 -printmapping proguardMapping.txt
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 -keepattributes *Annotation*,InnerClasses
--keepattributes Signature
 -keepattributes SourceFile,LineNumberTable
 #----------------------------------------------------------------------------
 
@@ -128,9 +156,7 @@
 -keep public class com.android.vending.licensing.ILicensingService
 -keep class android.support.** {*;}
 
--keepclasseswithmembernames class * {
-    native <methods>;
-}
+
 -keepclassmembers class * extends android.app.Activity{
     public void *(android.view.View);
 }
@@ -182,25 +208,3 @@
 #----------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------
 
-
--keepclasseswithmembernames class ** {
-    native <methods>;
-}
--keepattributes Signature
--keep class sun.misc.Unsafe { *; }
--keep class com.taobao.** {*;}
--keep class com.alibaba.** {*;}
--keep class com.alipay.** {*;}
--dontwarn com.taobao.**
--dontwarn com.alibaba.**
--dontwarn com.alipay.**
--keep class com.ut.** {*;}
--dontwarn com.ut.**
--keep class com.ta.** {*;}
--dontwarn com.ta.**
--keep class anet.**{*;}
--keep class org.android.spdy.**{*;}
--keep class org.android.agoo.**{*;}
--dontwarn anet.**
--dontwarn org.android.spdy.**
--dontwarn org.android.agoo.**

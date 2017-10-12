@@ -59,16 +59,19 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
         barrel_deposit.setText("桶押金:￥" + ((double) data.nBucketmoney * data.nBucketnum / 100));
         barrelCount.setText("x" + data.nBucketnum);
         if (orderState.equals("orderState") && data.nState != 3) {
+            order_delete.setVisibility(View.VISIBLE);
+            order_delete.setText("删除订单");
             if (data.nState == 0) {
                 quickPay.setText("去结算");
-            } else if (data.nState == 1) {
+            } else {
                 quickPay.setText("立即支付");
             }
             payState.setText("未支付");
 
         } else if (orderState.equals("orderState") && data.nState == 3) {
             payState.setText("已支付");
-            quickPay.setVisibility(View.GONE);
+            quickPay.setVisibility(View.VISIBLE);
+            quickPay.setText("订单跟踪");
             order_delete.setVisibility(View.GONE);
         }
         if (orderState.equals("distributionState") && data.nSendState == 0) {
@@ -95,10 +98,12 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
                     if (data.nState == 0) {
                         //去结算
                         mCallBack.OnToSettleClickListener(data);
-                    } else if (data.nState == 1) {
+                    } else {
                         mCallBack.OnItemClickListener(data);
                     }
 
+                }else if(orderState.equals("orderState") && data.nState == 3){
+                    mCallBack.OnItemClickListener(data);
                 }
                 if (orderState.equals("distributionState") && data.nSendState == 1) {
                     mCallBack.OnItemClickListener(data);

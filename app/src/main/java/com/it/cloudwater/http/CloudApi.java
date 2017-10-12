@@ -62,11 +62,12 @@ public class CloudApi {
                 });
     }
 
-    public static void Login(final int what, String phone, String password, final MyCallBack myCallBack) {
+    public static void Login(final int what, String phone, String password, Integer nDeviceType, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.LOGIN_URL)
                 .tag(App.getInstance())
                 .params("strMobile", phone)
                 .params("strPassword", password)
+                .params("nDeviceType", nDeviceType)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -235,6 +236,23 @@ public class CloudApi {
         OkGo.<String>post(Constant.ORDER_DELETE_URL)
                 .tag(App.getInstance())
                 .params("lOrderId", lOrderId)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+
+    public static void orderTrack(final int what, long lOrderId, final MyCallBack myCallBack) {
+        OkGo.<String>get(Constant.ORDER_TRACK_URL + lOrderId)
+                .tag(App.getInstance())
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -777,6 +795,26 @@ public class CloudApi {
                 .params("lId", lId)
                 .params("nOrderType", nOrderType)
                 .params("nPayType", nPayType)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
+
+    public static void setDevice(final int what, long lUserId, Integer nDeviceType, String strDeviceId, final MyCallBack myCallBack) {
+        OkGo.<String>post(Constant.SET_DEVICE_URL)
+                .tag(App.getInstance())
+                .params("lUserId", lUserId)
+                .params("nDeviceType", nDeviceType)
+                .params("strDeviceId", strDeviceId)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

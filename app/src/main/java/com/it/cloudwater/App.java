@@ -2,7 +2,12 @@ package com.it.cloudwater;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.it.cloudwater.utils.PushUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
@@ -27,6 +32,7 @@ import okhttp3.OkHttpClient;
  */
 
 public class App extends Application {
+    private static final String TAG = "App";
     //记录当前栈里所有activity
     private List<Activity> activities = new ArrayList<Activity>();
     //记录需要一次性关闭的页面
@@ -35,10 +41,31 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        PushUtil.initCloudService(this);
         instance = this;
+        PushUtil.initCloudService(this);
+//        initCloudChannel(this);
+
+
         initOkGo();
         initLeakCanary();
+    }
+
+    private void initCloudChannel(Context applicationContext) {
+        PushServiceFactory.init(applicationContext);
+        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        pushService.register(applicationContext, new CommonCallback() {
+            @Override
+            public void onSuccess(String response) {
+                Log.d(TAG, "init cloudchannel success");
+            }
+            @Override
+            public void onFailed(String errorCode, String errorMessage) {
+                Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
+            }
+        });
+//        MiPushRegister.register(applicationContext, "XIAOMI_ID", "XIAOMI_KEY"); // 初始化小米辅助推送
+//        HuaWeiRegister.register(applicationContext); // 接入华为辅助推送
+//        GcmRegister.register(applicationContext, "send_id", "application_id"); // 接入FCM/GCM初始化推送
     }
 
     private void initOkGo() {

@@ -49,6 +49,11 @@ public class Constant {
     public static final String LUNBO_URL = BASE_URL + "activity/list";//获取轮播图片
     public static final String LOGOUT_URL = BASE_URL + "buyer/logout";//退出登录
     public static final String ALIPAY_URL = BASE_URL + "pay/alipay.do";//阿里支付
+    public static final String SET_DEVICE_URL = BASE_URL + "buyer/setDevice";//保存设备信息
+    public static final String ORDER_TRACK_URL = BASE_URL + "order/statusDetail/";//订单跟踪
+
+
+    public static final String TAG = "1297608492";//这是我的QQ，有什么问题或者好的想法可以给我留言
 
 
     public static final String WX_APP_ID = "wx32196df1f871cc29";//微信appid

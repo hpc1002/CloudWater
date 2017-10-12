@@ -17,6 +17,7 @@ import com.it.cloudwater.user.more.AboutUsActivity;
 import com.it.cloudwater.user.more.ChangePasswordActivity;
 import com.it.cloudwater.user.more.FeedbackActivity;
 import com.it.cloudwater.user.more.TermsActivity;
+import com.it.cloudwater.utils.PushUtil;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -140,6 +141,7 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             ToastManager.show("退出登录成功");
+                            PushUtil.unBindAccount();
                             StorageUtil.deteteUserId(MoreActivity.this);
                             StorageUtil.deteteUserPhone(MoreActivity.this);
                             Intent intent = new Intent(MoreActivity.this, HomeActivity.class);

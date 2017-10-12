@@ -19,7 +19,7 @@ public class PaySuccessActivity extends BaseActivity {
 
     @BindView(R.id.order_price)
     TextView orderPrice;
-//    @BindView(R.id.order_name)
+    //    @BindView(R.id.order_name)
 //    TextView orderName;
     @BindView(R.id.order_number)
     TextView orderNumber;
@@ -49,9 +49,13 @@ public class PaySuccessActivity extends BaseActivity {
         String total_amount = getIntent().getStringExtra("total_amount");
         String out_trade_no = getIntent().getStringExtra("out_trade_no");
         String timestamp = getIntent().getStringExtra("timestamp");
-        orderPrice.setText(total_amount);
+        String tag = getIntent().getStringExtra("tag");
+        if (tag.equals("ali")) {
+            orderPrice.setText(total_amount);
+        } else if (tag.equals("wechat")) {
+            orderPrice.setText(((double) Long.parseLong(total_amount) / 100) + "");
+        }
         orderTime.setText(timestamp);
-//        orderName.setText(course_name);
         orderNumber.setText(out_trade_no);
     }
 

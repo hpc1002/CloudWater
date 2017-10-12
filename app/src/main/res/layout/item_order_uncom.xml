@@ -178,7 +178,6 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/frame_pay"
                 android:padding="5dp"
-                android:text="订单删除"
                 android:textColor="@color/colorPrimary" />
 
 
@@ -190,7 +189,6 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/frame_pay"
                 android:padding="5dp"
-                android:text="立即支付"
                 android:textColor="@color/colorPrimary" />
         </RelativeLayout>
     </LinearLayout>

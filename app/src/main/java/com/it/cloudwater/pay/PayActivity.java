@@ -29,6 +29,9 @@ import com.lzy.okgo.model.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.BindView;
 
 import static android.R.attr.name;
@@ -107,10 +110,11 @@ public class PayActivity extends BaseActivity {
                         intent.putExtra("total_amount", total_amount);
                         intent.putExtra("out_trade_no", out_trade_no);
                         intent.putExtra("timestamp", timestamp);
+                        intent.putExtra("tag", "ali");
                         startActivity(intent);
                     } else {
-                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Toast.makeText(PayActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Intent intent = new Intent(PayActivity.this, PayFailActivity.class);
                         startActivity(intent);
                     }
@@ -251,7 +255,10 @@ public class PayActivity extends BaseActivity {
                 Intent intent = new Intent(PayActivity.this, PaySuccessActivity.class);
                 intent.putExtra("total_amount", nFactPrice+"");
                 intent.putExtra("out_trade_no", strOrdernum);
-                intent.putExtra("timestamp", timestamps+"");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+                intent.putExtra("timestamp", date);
+                intent.putExtra("tag", "wechat");
                 startActivity(intent);
             }
 

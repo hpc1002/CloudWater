@@ -206,6 +206,9 @@ public class DetailActivity extends BaseActivity {
                             Intent intent = new Intent(DetailActivity.this, SubmitOrderActivity.class);
                             intent.putExtra("order_Id", orderId + "");
                             startActivity(intent);
+                        } else if (resCode.equals("1")) {
+                            String result = jsonObject.getString("result");
+                            ToastManager.show(result);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

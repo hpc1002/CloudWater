@@ -15,6 +15,7 @@ import com.it.cloudwater.home.HomeActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
 import com.it.cloudwater.utils.CheckUtil;
+import com.it.cloudwater.utils.PushUtil;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.lzy.okgo.model.Response;
@@ -118,7 +119,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     ToastManager.show("密码输入格式有误");
                     return;
                 }
-                CloudApi.Login(0x001, phoneNumberInput, passwordInput, myCallBack);
+                CloudApi.Login(0x001, phoneNumberInput, passwordInput, 1, myCallBack);
             default:
                 break;
         }
@@ -135,6 +136,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         String resCode = loginData.getString("resCode");
                         if (resCode.equals("0")) {
                             ToastManager.show("登录成功");
+                            PushUtil.bindAccount(LoginActivity.this);
                             JSONObject result = loginData.getJSONObject("result");
                             int lId = result.getInt("lId");
                             String strPassword = result.getString("strPassword");

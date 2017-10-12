@@ -20,7 +20,7 @@ import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.MessageListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
-import com.it.cloudwater.push.ZJMessageReceiver;
+import com.it.cloudwater.push.MyMessageReceiver;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.MessageListViewHolder;
@@ -152,12 +152,15 @@ public class MessageActivity extends BaseActivity implements RecyclerArrayAdapte
 //                    fragment.reload();
 //                }
 //            }
+            if (!userId.equals("")) {
+                CloudApi.getMessageList(0x001, 1, 10, Long.parseLong(userId), myCallBack);
+            }
             Log.i(TAG, "onReceive: "+intent);
         }
     };
 
     private void regMessageReceiver() {
-        IntentFilter filter = new IntentFilter(ZJMessageReceiver.ZJ_NOTIFICATION);
+        IntentFilter filter = new IntentFilter(MyMessageReceiver.REC_TAG);
         registerReceiver(receiver, filter);
     }
     @Override
@@ -184,4 +187,5 @@ public class MessageActivity extends BaseActivity implements RecyclerArrayAdapte
             }
         }
     }
+
 }

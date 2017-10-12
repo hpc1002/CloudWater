@@ -1,5 +1,6 @@
 package com.it.cloudwater.home.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import com.it.cloudwater.base.BaseFragment;
 import com.it.cloudwater.bean.OrderListBean;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
+import com.it.cloudwater.user.OrderTracjActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
 import com.it.cloudwater.viewholder.OrderListViewHolder;
@@ -84,7 +86,7 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
 
     @Override
     protected void initData() {
-        orderList = new ArrayList<>();
+
         if (!userId.equals("")) {
             CloudApi.orderList(0x001, 1, 8, Long.parseLong(userId), nState, myCallBack);
         }
@@ -96,6 +98,7 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
             switch (what) {
                 case 0x001:
                     String body = result.body();
+                    orderList = new ArrayList<>();
                     mHandler.sendEmptyMessage(SWIPE_REFRESH_COMPLETE);
                     try {
                         JSONObject jsonObject = new JSONObject(body);
@@ -133,7 +136,31 @@ public class ComOrderFragment extends BaseFragment implements RecyclerArrayAdapt
         ervOrderUnCom.setAdapterWithProgress(orderListAdapter = new RecyclerArrayAdapter<OrderListBean.Result.DataList>(getActivity()) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                return new OrderListViewHolder(parent, getActivity(), "orderState");
+                OrderListViewHolder orderState = new OrderListViewHolder(parent, getActivity(), "orderState");
+                orderState.setCallBack(new OrderListViewHolder.allCheck() {
+                    @Override
+                    public void OnItemClickListener(OrderListBean.Result.DataList data) {
+                        Intent intent = new Intent(getActivity(), OrderTracjActivity.class);
+                        intent.putExtra("order_Id", data.lId + "");
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void OnToSettleClickListener(OrderListBean.Result.DataList data) {
+
+                    }
+
+                    @Override
+                    public void OnDistributionItemClickListener(OrderListBean.Result.DataList data) {
+
+                    }
+
+                    @Override
+                    public void OnItemDeleteClickListener(OrderListBean.Result.DataList data) {
+
+                    }
+                });
+                return orderState;
             }
         });
         orderListAdapter.addAll(orderList);

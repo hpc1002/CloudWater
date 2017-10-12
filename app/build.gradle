@@ -57,8 +57,10 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //以下三个选择添加，okrx和okrx2不能同时使用
+
     //    compile 'com.lzy.net:okrx:1.0.2'
     compile files('libs/alipaySdk-20170725.jar')
+    //    compile 'com.aliyun.ams:alicloud-android-push:2.3.7'
     compile 'com.lzy.net:okrx2:2.0.2'
     compile 'com.lzy.net:okserver:2.0.2'
     compile 'com.android.support:appcompat-v7:26.+'
@@ -81,5 +83,4 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile 'com.aliyun.ams:alicloud-android-push:2.3.7'
 }
