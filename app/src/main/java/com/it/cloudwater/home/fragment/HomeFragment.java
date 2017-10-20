@@ -90,44 +90,53 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 case 0x001:
                     mHandler.sendEmptyMessage(REFRESH_COMPLETE);
                     String body = result.body();
-                    GoodsListBean goodsListBean = new Gson().fromJson(body, GoodsListBean.class);
-                    goodList = new ArrayList<GoodsListBean.Result.DataList>();
-                    if (goodsListBean != null) {
-                        int size = goodsListBean.result.dataList.size();
-                        for (int i = 0; i < size; i++) {
-                            goodList.add(goodsListBean.result.dataList.get(i));
-                        }
-                    }
-                    GoodListAdapter adapter = new GoodListAdapter(R.layout.item_goods, goodList);
-                    recyclerViewCommend.setAdapter(adapter);
-                    adapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            Intent intent = new Intent(getActivity(), DetailActivity.class);
-                            intent.putExtra("goodsLid", goodList.get(position).lId + "");
-                            startActivity(intent);
-                        }
-                    });
-                    adapter.setCallBack(new GoodListAdapter.OnMyClickListener() {
-                        @Override
-                        public void OnItemClickListener(Integer price, long id, String strGoodsname, String strGoodsimgurl, String strStandard, long goodId) {
-                            if (userId.equals("")) {
-                                ToastManager.show("请先去登录");
-                                startActivity(new Intent(getActivity(), LoginActivity.class));
-                                return;
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(body);
+                        String resCode = jsonObject1.getString("resCode");
+                        if (resCode.equals("0")) {
+                            GoodsListBean goodsListBean = new Gson().fromJson(body, GoodsListBean.class);
+                            goodList = new ArrayList<GoodsListBean.Result.DataList>();
+                            if (goodsListBean != null) {
+                                int size = goodsListBean.result.dataList.size();
+                                for (int i = 0; i < size; i++) {
+                                    goodList.add(goodsListBean.result.dataList.get(i));
+                                }
                             }
-                            Map<String, Object> shopParams = new HashMap<>();
-                            shopParams.put("strUserName", "侯鹏成");
-                            shopParams.put("lUserId", userId);
-                            shopParams.put("nPrice", price);
-                            shopParams.put("lGoodsId", goodId);
-                            shopParams.put("strGoodsname", strGoodsname);
-                            shopParams.put("strGoodsimgurl", strGoodsimgurl);
-                            shopParams.put("strStandard", strStandard);
-                            JSONObject shopObject = new JSONObject(shopParams);
-                            CloudApi.addShopCart(0x002, shopObject, myCallBack);
+                            GoodListAdapter adapter = new GoodListAdapter(R.layout.item_goods, goodList);
+                            recyclerViewCommend.setAdapter(adapter);
+                            adapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                                    intent.putExtra("goodsLid", goodList.get(position).lId + "");
+                                    startActivity(intent);
+                                }
+                            });
+                            adapter.setCallBack(new GoodListAdapter.OnMyClickListener() {
+                                @Override
+                                public void OnItemClickListener(Integer price, long id, String strGoodsname, String strGoodsimgurl, String strStandard, long goodId) {
+                                    if (userId.equals("")) {
+                                        ToastManager.show("请先去登录");
+                                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                                        return;
+                                    }
+                                    Map<String, Object> shopParams = new HashMap<>();
+                                    shopParams.put("strUserName", "侯鹏成");
+                                    shopParams.put("lUserId", userId);
+                                    shopParams.put("nPrice", price);
+                                    shopParams.put("lGoodsId", goodId);
+                                    shopParams.put("strGoodsname", strGoodsname);
+                                    shopParams.put("strGoodsimgurl", strGoodsimgurl);
+                                    shopParams.put("strStandard", strStandard);
+                                    JSONObject shopObject = new JSONObject(shopParams);
+                                    CloudApi.addShopCart(0x002, shopObject, myCallBack);
+                                }
+                            });
                         }
-                    });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
                 case 0x002:
                     String body2 = result.body();

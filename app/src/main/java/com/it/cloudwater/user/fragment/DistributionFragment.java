@@ -82,7 +82,7 @@ public class DistributionFragment extends BaseFragment implements RecyclerArrayA
 
     @Override
     protected void initData() {
-        orderList = new ArrayList<>();
+
         if (!userId.equals("")) {
             CloudApi.distributionList(0x001, 1, 8, Long.parseLong(userId), 1, myCallBack);
         }
@@ -99,7 +99,7 @@ public class DistributionFragment extends BaseFragment implements RecyclerArrayA
                         JSONObject jsonObject = new JSONObject(body);
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
-
+                            orderList = new ArrayList<>();
                             orderListBean = new Gson().fromJson(body, OrderListBean.class);
                             int size = orderListBean.result.dataList.size();
 

@@ -141,9 +141,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         try {
                             String body = data.body();
                             JSONObject sendData = new JSONObject(body);
-                            String result = sendData.getString("result");
+
 
                             resCode = sendData.getString("resCode");
+                            String result = sendData.getString("result");
+                            if (resCode.equals("1")) {
+                                ToastManager.show(result);
+                            } else if (resCode.equals("0")) {
+                                ToastManager.show(result);
+                            }
 
                             Log.i(TAG, "SendCode: ---------" + "result" + result + "resCode" + resCode);
                         } catch (JSONException e) {

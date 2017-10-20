@@ -5,7 +5,8 @@ package com.it.cloudwater.constant;
  */
 
 public class Constant {
-    public static final String BASE_URL = "http://59.110.235.32:8080/api/app/";//基本URL
+    public static final String BASE_URL = "http://39.106.40.182/api/app/";//基本URL
+//    public static final String BASE_URL = "http://59.110.235.32:8080/api/app/";//基本URL
     //    public static final String BASE_URL = "http://www.fuzhents.com/api/app/";//基本URL
     public static final String LOGIN_URL = BASE_URL + "buyer/login";//买家登录
     public static final String REGISTER_URL = BASE_URL + "buyer/register";//买家注册

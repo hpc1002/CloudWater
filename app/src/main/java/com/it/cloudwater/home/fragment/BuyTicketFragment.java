@@ -1,8 +1,10 @@
 package com.it.cloudwater.home.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,15 +36,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by hpc on 2017/6/19.
  */
 
-public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener {
+public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.recyclerView)
     EasyRecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
+    Unbinder unbinder;
     private ArrayList<BuyTicketListBean.Result.DataList> dataLists;
     private RecyclerArrayAdapter<BuyTicketListBean.Result.DataList> ticketAdapter;
     private TextView water_name;
@@ -63,7 +70,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                     recyclerView.setRefreshing(false);
                     break;
                 case SWIPE_REFRESH_COMPLETE:
-//                    swipeRefresh.setRefreshing(false);
+                    swipeRefresh.setRefreshing(false);
                     break;
             }
         }
@@ -76,13 +83,17 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
 
     @Override
     protected void initListener() {
-        userId=StorageUtil.getUserId(getActivity());
+        userId = StorageUtil.getUserId(getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
     }
 
     @Override
     protected void initData() {
+        if (!userId.equals("")) {
             CloudApi.getBuyTicketList(0x001, 1, 8, myCallBack);
+        }
     }
 
     private MyCallBack myCallBack = new MyCallBack() {
@@ -91,6 +102,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
             switch (what) {
                 case 0x001:
                     String body = result.body();
+                    mHandler.sendEmptyMessage(SWIPE_REFRESH_COMPLETE);
                     try {
                         dataLists = new ArrayList<>();
                         JSONObject jsonObject = new JSONObject(body);
@@ -100,7 +112,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                             ToastManager.show(result1);
                         } else if (resCode.equals("0")) {
                             BuyTicketListBean myTicketListBean = new Gson().fromJson(body, BuyTicketListBean.class);
-                            nTotal=myTicketListBean.result.nTotal;
+                            nTotal = myTicketListBean.result.nTotal;
 
                             for (int i = 0; i < myTicketListBean.result.dataList.size(); i++) {
                                 dataLists.add(myTicketListBean.result.dataList.get(i));
@@ -152,7 +164,7 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
                         buy.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (userId.equals("")){
+                                if (userId.equals("")) {
                                     ToastManager.show("请先登录");
                                     return;
                                 }
@@ -178,12 +190,34 @@ public class BuyTicketFragment extends BaseFragment implements RecyclerArrayAdap
 
     @Override
     public void onLoadMore() {
-
+        if (!userId.equals("")) {
             if (page < (nTotal / 8 + 1)) {
                 page++;
                 CloudApi.getBuyTicketList(0x001, 1, 8 * page, myCallBack);
             } else {
                 ticketAdapter.stopMore();
             }
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!userId.equals("")) {
+            CloudApi.getBuyTicketList(0x001, 1, 8, myCallBack);
+        }
     }
 }

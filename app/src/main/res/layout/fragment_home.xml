@@ -44,18 +44,25 @@
                         android:background="@color/grey"
                         android:visibility="invisible" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerView_commend"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:descendantFocusability="blocksDescendants">
 
-                    </android.support.v7.widget.RecyclerView>
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView_commend"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </android.support.v7.widget.RecyclerView>
+                    </RelativeLayout>
+
 
                     <!--<Button-->
-                        <!--android:id="@+id/next"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="NEXT" />-->
+                    <!--android:id="@+id/next"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="NEXT" />-->
                 </LinearLayout>
             </LinearLayout>
 
