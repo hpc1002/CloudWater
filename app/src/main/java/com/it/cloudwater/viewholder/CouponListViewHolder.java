@@ -35,7 +35,7 @@ public class CouponListViewHolder extends BaseViewHolder<CouponListBean.Result.D
     @Override
     public void setData(final CouponListBean.Result.DataList data) {
         super.setData(data);
-        coupon_name.setText(data.strUserName);
+        coupon_name.setText(data.strCouponName);
         dExpire.setText("有效期至: " + DateUtil.toDate(data.dExpire));
         price.setText("￥" + ((double) data.nPrice / 100) + "元");
         int nDataFlag = data.nDataFlag;

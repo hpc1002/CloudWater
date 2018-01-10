@@ -97,6 +97,15 @@ public class CouponActivity extends BaseActivity implements RecyclerArrayAdapter
         userId = StorageUtil.getUserId(this);
         toolbarTitle.setText("优惠券");
         ivLeft.setVisibility(View.VISIBLE);
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText("使用规则");
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CouponActivity.this, CouponXuzhiActivity.class);
+                startActivity(intent);
+            }
+        });
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

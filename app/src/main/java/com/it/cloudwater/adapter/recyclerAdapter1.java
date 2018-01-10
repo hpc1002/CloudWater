@@ -80,7 +80,7 @@ public class recyclerAdapter1 extends RecyclerView.Adapter<recyclerAdapter1.MyHo
         holder.getGoodCapacity().setText(1.8 + "");
         holder.getGoodPrice().setText("￥" + ((double) cbeanList.get(position).nGoodsFactPrice / 100));
         Glide.with(context)
-                .load(Constant.IMAGE_URL + "0/" + cbeanList.get(position).lGoodsid)
+                .load(Constant.IMAGE_URL + "0/" + cbeanList.get(position).lGoodsid+"?date="+System.currentTimeMillis())
                 .centerCrop()
                 .placeholder(R.mipmap.home_load_error)
                 .into(holder.getGoodImg());

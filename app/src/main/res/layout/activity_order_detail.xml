@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
     android:orientation="vertical"
     tools:context="com.it.cloudwater.pay.PayDetailActivity">
 
@@ -52,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:background="@color/part_line" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp">
@@ -129,16 +131,18 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="桶押金" />
+
             <TextView
                 android:id="@+id/tv_xuzhi"
-                android:layout_toRightOf="@+id/tag_bucket"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/tag_bucket"
+                android:text="押金说明"
                 android:textColor="@color/course_learn_state"
-                android:textSize="12sp"
-                android:text="押金说明" />
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/tv_deposit"
                 android:layout_width="wrap_content"
@@ -161,8 +165,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:text="押桶个数" />
+
+            <TextView
+                android:id="@+id/tv_deposit_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/pay_total"
-                android:text="订单合计:" />
+                android:text="实付款:" />
 
             <TextView
                 android:id="@+id/pay_total"
@@ -184,19 +213,26 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:text="使用优惠券:0张" />
+                android:text="使用优惠券" />
 
+            <TextView
+                android:id="@+id/coupon_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp" />
         </RelativeLayout>
+
         <TextView
             android:id="@+id/sure_send"
-            android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/frame_pay"
-            android:textColor="@color/course_learn_state"
-            android:padding="5dp"
             android:layout_gravity="center_horizontal"
-            android:text="确认配送"/>
+            android:layout_marginTop="20dp"
+            android:background="@drawable/frame_pay"
+            android:padding="5dp"
+            android:text="确认配送"
+            android:textColor="@color/course_learn_state" />
 
     </LinearLayout>
 

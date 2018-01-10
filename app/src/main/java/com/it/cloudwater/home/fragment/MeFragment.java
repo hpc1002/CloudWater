@@ -19,6 +19,7 @@ import com.it.cloudwater.user.InvitationActivity;
 import com.it.cloudwater.user.LoginActivity;
 import com.it.cloudwater.user.MoreActivity;
 import com.it.cloudwater.user.OrderActivity;
+import com.it.cloudwater.user.ReceiveCenterActivity;
 import com.it.cloudwater.user.TicketActivity;
 import com.it.cloudwater.utils.StorageUtil;
 import com.it.cloudwater.utils.ToastManager;
@@ -82,6 +83,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     TextView tvOrderMy;
     @BindView(R.id.rl_order_my)
     RelativeLayout rlOrderMy;
+    @BindView(R.id.rl_receive_center_my)
+    RelativeLayout rlReceiveCenterMy;
     @BindView(R.id.iv_distribution_my)
     ImageView ivDistributionMy;
     @BindView(R.id.tv_distribution_my)
@@ -134,6 +137,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         rlOrderMy.setOnClickListener(this);
         rlTicketMy.setOnClickListener(this);
         rlDistributionMy.setOnClickListener(this);
+        rlReceiveCenterMy.setOnClickListener(this);
         rlMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,6 +188,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.rl_distribution_my:
                 intent = new Intent(getActivity(), Distribution2Activity.class);
+                startActivity(intent);
+                break;
+                case R.id.rl_receive_center_my:
+                intent = new Intent(getActivity(), ReceiveCenterActivity.class);
                 startActivity(intent);
                 break;
 

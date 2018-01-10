@@ -113,7 +113,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         phoneNumberInput = etMobileNumber.getText().toString();
         smscodeInput = etSmsCode.getText().toString();
 
-        inwenteCode = tvInventCode.getText().toString();
+        inwenteCode = etInventCode.getText().toString();
         password = etPassword.getText().toString();
         isPhone = CheckUtil.isMobile(phoneNumberInput);
         isPwd = CheckUtil.isPassword(password);

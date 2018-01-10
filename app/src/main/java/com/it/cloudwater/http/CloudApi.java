@@ -733,7 +733,22 @@ public class CloudApi {
                     }
                 });
     }
+    public static void getRules(final int what, Integer nType, final MyCallBack myCallBack) {
+        OkGo.<String>get(Constant.MORE_URL + nType)
+                .tag(App.getInstance())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        myCallBack.onSuccess(what, response);
+                    }
 
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        myCallBack.onFail(what, response);
+                    }
+                });
+    }
     public static void feedback(final int what, long lUserId, String content, final MyCallBack myCallBack) {
         OkGo.<String>post(Constant.FEEDBACK_URL)
                 .tag(App.getInstance())

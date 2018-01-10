@@ -42,6 +42,7 @@ public class OrderDetailBean {
             public int lGoodsid;
             public int nPrice;
             public int nCount;
+            public int nGoodsType;
             public int nGoodsFactPrice;
             public int nGoodsTotalPrice;
             public int nWatertickets;

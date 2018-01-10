@@ -152,7 +152,7 @@
         <service
             android:name="com.taobao.accs.ChannelService$KernelService"
             android:exported="false"
-            android:process=":channel"></service>
+            android:process=":channel" />
         <service
             android:name="com.taobao.accs.data.MsgDistributeService"
             android:exported="true">
@@ -256,7 +256,7 @@
             android:finishOnTaskLaunch="false"
             android:launchMode="singleInstance"
             android:process=":channel"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <!-- 消息接收监听器 （用户可自主扩展） -->
         <receiver
             android:name=".push.MyMessageReceiver"
@@ -273,7 +273,9 @@
         </receiver>
 
         <activity android:name=".user.ShareActivity" />
-        <activity android:name=".user.OrderTracjActivity"></activity>
+        <activity android:name=".user.OrderTracjActivity" />
+        <activity android:name=".user.CouponXuzhiActivity" />
+        <activity android:name=".user.ReceiveCenterActivity"></activity>
     </application>
 
 </manifest>

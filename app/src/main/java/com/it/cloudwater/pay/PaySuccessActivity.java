@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.home.HomeActivity;
-import com.it.cloudwater.user.OrderActivity;
 
 import butterknife.BindView;
 
@@ -25,8 +24,6 @@ public class PaySuccessActivity extends BaseActivity {
     TextView orderNumber;
     @BindView(R.id.order_time)
     TextView orderTime;
-    @BindView(R.id.look_order)
-    TextView lookOrder;
     @BindView(R.id.return_home)
     TextView returnHome;
     @BindView(R.id.toolbar_title)
@@ -50,10 +47,12 @@ public class PaySuccessActivity extends BaseActivity {
         String out_trade_no = getIntent().getStringExtra("out_trade_no");
         String timestamp = getIntent().getStringExtra("timestamp");
         String tag = getIntent().getStringExtra("tag");
-        if (tag.equals("ali")) {
+        if (tag != null && tag.equals("ali")) {
             orderPrice.setText(total_amount);
-        } else if (tag.equals("wechat")) {
+        } else if (tag != null && tag.equals("wechat")) {
             orderPrice.setText(((double) Long.parseLong(total_amount) / 100) + "");
+        }else{
+            orderPrice.setText("0");
         }
         orderTime.setText(timestamp);
         orderNumber.setText(out_trade_no);
@@ -67,13 +66,6 @@ public class PaySuccessActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 finish();
-            }
-        });
-        lookOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PaySuccessActivity.this, OrderActivity.class);
-                startActivity(intent);
             }
         });
         returnHome.setOnClickListener(new View.OnClickListener() {

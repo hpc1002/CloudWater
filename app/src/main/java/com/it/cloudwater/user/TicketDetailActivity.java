@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -71,10 +72,11 @@ public class TicketDetailActivity extends BaseActivity {
     private RecyclerArrayAdapter<TicketDetailBean.Result.TicketContents> ticketListAdapter;
     private String userId;
     private TicketDetailBean ticketDetailBean;
-
+    ArrayList<CheckBox> ticketContentsesCheckBox = new ArrayList<CheckBox>();
     private TicketDetailBean.Result.TicketContents TicketDatas;
     private String discount_amount;
-
+//    private  int allPrice=0;
+//    ArrayList<TicketDetailBean.Result.TicketContents> ticketContentsesCheck = new ArrayList<TicketDetailBean.Result.TicketContents>();
     @Override
     protected void processLogic() {
 
@@ -95,21 +97,28 @@ public class TicketDetailActivity extends BaseActivity {
         eyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         CloudApi.getTicketDetail(0x001, Long.parseLong(ticketId), myCallBack);
         totalPrice.setText("￥" + 0);
-        rlCouponMy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TicketDetailActivity.this, CouponActivity.class);
-                intent.putExtra("nFullPrice", ticketDetailBean.result.nPrice + "");
-                startActivityForResult(intent, REQUEST_CODE3);
-            }
-        });
+//        rlCouponMy.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(TicketDetailActivity.this, CouponActivity.class);
+//                intent.putExtra("nFullPrice", ticketDetailBean.result.nPrice + "");
+//                startActivityForResult(intent, REQUEST_CODE3);
+//            }
+//        });
         toPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Map<String, Object> ticketParams = new HashMap<>();
                 ticketParams.put("lUserid", userId);
-                ticketParams.put("lTicketConId", TicketDatas.lId);
-                ticketParams.put("nFactPrice", TicketDatas.nPrice);
+                if (TicketDatas.lId > 0) {
+                    ticketParams.put("lTicketConId", TicketDatas.lId);
+                }
+                if (discount_amount != null) {
+                    ticketParams.put("nFactPrice", TicketDatas.nPrice - Integer.parseInt(discount_amount));
+                } else {
+                    ticketParams.put("nFactPrice", TicketDatas.nPrice);
+                }
+
                 ticketParams.put("nCount", TicketDatas.nCount);
 
                 JSONObject ticketObject = new JSONObject(ticketParams);
@@ -127,24 +136,67 @@ public class TicketDetailActivity extends BaseActivity {
                     ticketDetailBean = new Gson().fromJson(body, TicketDetailBean.class);
                     bucketName.setText(ticketDetailBean.result.strGoodsName);
                     Glide.with(TicketDetailActivity.this)
-                            .load(Constant.IMAGE_URL + "0/" + ticketDetailBean.result.lId)
+                            .load(Constant.IMAGE_URL + "0/" + ticketDetailBean.result.lGoodsid)
                             .centerCrop()
                             .placeholder(R.mipmap.home_load_error)
                             .into(bucketImg);
                     bucketPrice.setText("￥" + ((double) ticketDetailBean.result.nPrice / 100));
                     ArrayList<TicketDetailBean.Result.TicketContents> ticketContentses = new ArrayList<>();
                     for (int i = 0; i < ticketDetailBean.result.ticketcontents.size(); i++) {
+                        ticketDetailBean.result.ticketcontents.get(i).setIndexNum(i);
                         ticketContentses.add(ticketDetailBean.result.ticketcontents.get(i));
                     }
                     eyRecyclerView.setAdapterWithProgress(ticketListAdapter = new RecyclerArrayAdapter<TicketDetailBean.Result.TicketContents>(TicketDetailActivity.this) {
                         @Override
                         public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                            TicketDetailListViewHolder ticketDetailListViewHolder = new TicketDetailListViewHolder(parent);
+                            TicketDetailListViewHolder ticketDetailListViewHolder = new TicketDetailListViewHolder(parent,ticketContentsesCheckBox);
                             ticketDetailListViewHolder.setCallBack(new TicketDetailListViewHolder.allCheck() {
                                 @Override
-                                public void OnItemClickListener(TicketDetailBean.Result.TicketContents data) {
-                                    TicketDatas = data;
-                                    totalPrice.setText("￥" + ((double) data.nPrice / 100));
+                                public void OnItemClickListener(final TicketDetailBean.Result.TicketContents data,boolean isChecked) {
+//                                    allPrice=0;
+//                                    if (isChecked){
+//                                        ticketContentsesCheck.add(data);
+//
+//                                    }else{
+//                                        for (int i=0;i<ticketContentsesCheck.size();i++){
+//                                            TicketDetailBean.Result.TicketContents checkData = ticketContentsesCheck.get(i);
+//                                            if (checkData.lId==data.lId){
+//                                                ticketContentsesCheck.remove(i);
+//                                            }
+//                                        }
+//
+//                                    }
+//
+//                                    for (int i=0;i<ticketContentsesCheck.size();i++){
+//                                        allPrice+=ticketContentsesCheck.get(i).nPrice;
+//                                    }
+                                    int indexNum=data.indexNum;//获取数据所在集合的索引即checkbox所在集合索引
+                                    for (int i = 0; i < ticketContentsesCheckBox.size(); i++) {
+                                        CheckBox checkBox=ticketContentsesCheckBox.get(i);
+                                        if(i!=indexNum||!isChecked){//如果不是当前处理数据或者当前数据处理的isCheckked为false就取消选中
+                                            checkBox.setChecked(false);
+                                        }
+                                    }
+
+                                    if(isChecked){
+                                        TicketDatas = data;
+                                        totalPrice.setText("￥" + ((double) data.nPrice / 100));
+                                    }else{
+                                        TicketDatas = null;
+                                        totalPrice.setText("￥0.00");
+                                    }
+//                                    TicketDatas = data;
+//                                    totalPrice.setText("￥" + ((double) data.nPrice / 100));
+
+
+                                    rlCouponMy.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(TicketDetailActivity.this, CouponActivity.class);
+                                            intent.putExtra("nFullPrice", data.nPrice + "");
+                                            startActivityForResult(intent, REQUEST_CODE3);
+                                        }
+                                    });
                                 }
                             });
                             return ticketDetailListViewHolder;
@@ -184,7 +236,8 @@ public class TicketDetailActivity extends BaseActivity {
 
             discount_amount = data.getExtras().getString("discount_amount");
             tvDiscount.setText(((double) Integer.parseInt(discount_amount) / 100) + "元");
-            totalPrice.setText("￥" + ((double) (ticketDetailBean.result.nPrice - Integer.parseInt(discount_amount)) / 100));
+//            totalPrice.setText("￥" + ((double) (ticketDetailBean.result.nPrice - Integer.parseInt(discount_amount)) / 100));
+            totalPrice.setText("￥" + ((double) (TicketDatas.nPrice - Integer.parseInt(discount_amount)) / 100));
         }
     }
 

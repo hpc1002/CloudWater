@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseQuickAdapter;
 import com.it.cloudwater.base.BaseViewHolder;
@@ -26,8 +27,10 @@ public class GoodListAdapter extends BaseQuickAdapter<GoodsListBean.Result.DataL
     @Override
     protected void convert(BaseViewHolder helper, final GoodsListBean.Result.DataList item) {
         Glide.with(mContext)
-                .load(Constant.IMAGE_URL + "0/" + item.lId)
+                .load(Constant.IMAGE_URL + "0/" + item.lId+"?date="+System.currentTimeMillis())
                 .crossFade()
+                .signature(new StringSignature("02"))
+                .skipMemoryCache(true)
                 .placeholder(R.mipmap.home_load_error)
                 .into((ImageView) helper.getView(R.id.bucketImg));
         helper.setText(R.id.bucket_name, item.strGoodsname);

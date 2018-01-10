@@ -2,6 +2,7 @@ package com.it.cloudwater.pay;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PayDetailActivity extends BaseActivity {
 
@@ -62,8 +64,6 @@ public class PayDetailActivity extends BaseActivity {
 //    TextView tvNumber;
 //    @BindView(R.id.tv_price)
 //    TextView tvPrice;
-    @BindView(R.id.tv_deposit)
-    TextView tvDeposit;
     @BindView(R.id.pay_total)
     TextView payTotal;
     @BindView(R.id.coupon_count)
@@ -72,6 +72,10 @@ public class PayDetailActivity extends BaseActivity {
     Button btnPay;
     @BindView(R.id.order_list_recycler)
     EasyRecyclerView orderListRecycler;
+    @BindView(R.id.tv_deposit)
+    TextView tvDeposit;
+    @BindView(R.id.tv_deposit_count)
+    TextView tvDepositCount;
     private String orderId;
     private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
     private OrderDetailBean orderDetailBean;
@@ -97,9 +101,10 @@ public class PayDetailActivity extends BaseActivity {
                     tvPhone.setText(orderDetailBean.result.strReceiptmobile);
                     tvDetailAddress.setText(orderDetailBean.result.strDetailaddress);
                     tvTime.setText("下单时间: " + DateUtil.toDate(orderDetailBean.result.dtCreatetime));
-                    tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney/ 100));
+                    tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney / 100));
+                    tvDepositCount.setText(orderDetailBean.result.nBucketnum + "");
                     orderNumber.setText("订单号:" + orderDetailBean.result.strOrdernum);
-                    couponCount.setText("使用优惠券" + orderDetailBean.result.nCouponPrice + "张");
+                    couponCount.setText("使用优惠券" + (double) orderDetailBean.result.nCouponPrice / 100 + "元");
                     payTotal.setText("￥" + ((double) orderDetailBean.result.nFactPrice / 100));
                     orderListRecycler.setAdapterWithProgress(orderAdapter = new RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods>(PayDetailActivity.this) {
                         @Override
@@ -172,4 +177,10 @@ public class PayDetailActivity extends BaseActivity {
         return this;
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

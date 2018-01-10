@@ -39,7 +39,7 @@ public class OrderViewHolder extends BaseViewHolder<OrderDetailBean.Result.Order
         unit_price.setText("￥" + ((double) data.nPrice / 100));
         count.setText("x" + data.nCount);
         Glide.with(getContext())
-                .load(Constant.IMAGE_URL + "0/" + data.lGoodsid)
+                .load(Constant.IMAGE_URL + "0/" + data.lGoodsid+"?date="+System.currentTimeMillis())
                 .placeholder(R.mipmap.home_load_error)
                 .bitmapTransform(new CenterCrop(getContext()))
                 .into(img_water);

@@ -40,7 +40,7 @@ public class MyTicketListViewHolder extends BaseViewHolder<MyTicketListBean.Resu
         time.setText("有效期至:" + data.strExpire);
         number.setText(data.nRemainingCount + "张");
         Glide.with(context)
-                .load(Constant.IMAGE_URL + "0/" + data.lGoodsid)
+                .load(Constant.IMAGE_URL + "0/" + data.lGoodsid+"?date="+System.currentTimeMillis())
                 .crossFade()
                 .placeholder(R.mipmap.home_load_error)
                 .into(iv_ticket);

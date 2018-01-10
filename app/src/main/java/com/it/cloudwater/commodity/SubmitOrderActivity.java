@@ -117,6 +117,7 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
 
     private String discount_amount;
     private int factPrice;
+    private int nGoodsType;
 
     @Override
     protected void processLogic() {
@@ -134,6 +135,9 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             orderDetailBean = new Gson().fromJson(body, OrderDetailBean.class);
+
+                            nGoodsType = orderDetailBean.result.orderGoods.get(0).nGoodsType;
+
                             ArrayList<OrderDetailBean.Result.OrderGoods> orderGoodses = new ArrayList<>();
                             for (int i = 0; i < orderDetailBean.result.orderGoods.size(); i++) {
                                 orderGoodses.add(orderDetailBean.result.orderGoods.get(i));
@@ -297,6 +301,10 @@ public class SubmitOrderActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.rl_discount:
                 Intent intent1 = new Intent(SubmitOrderActivity.this, CouponActivity.class);
+                if (nGoodsType == 1) {
+                    ToastManager.show("水桶不可使用优惠券");
+                    return;
+                }
                 intent1.putExtra("nFullPrice", orderDetailBean.result.nFactPrice - orderDetailBean.result.nBucketmoney + "");
                 startActivityForResult(intent1, REQUEST_CODE2);
                 break;

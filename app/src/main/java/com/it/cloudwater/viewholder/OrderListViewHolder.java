@@ -63,10 +63,16 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
             order_delete.setText("删除订单");
             if (data.nState == 0) {
                 quickPay.setText("去结算");
+                payState.setText("未支付");
             } else {
                 quickPay.setText("立即支付");
+                payState.setText("未支付");
             }
-            payState.setText("未支付");
+            if (data.nState == 4) {
+                quickPay.setVisibility(View.INVISIBLE);
+                payState.setText("超时关闭");
+            }
+
 
         } else if (orderState.equals("orderState") && data.nState == 3) {
             payState.setText("已支付");
@@ -102,7 +108,7 @@ public class OrderListViewHolder extends BaseViewHolder<OrderListBean.Result.Dat
                         mCallBack.OnItemClickListener(data);
                     }
 
-                }else if(orderState.equals("orderState") && data.nState == 3){
+                } else if (orderState.equals("orderState") && data.nState == 3) {
                     mCallBack.OnItemClickListener(data);
                 }
                 if (orderState.equals("distributionState") && data.nSendState == 1) {

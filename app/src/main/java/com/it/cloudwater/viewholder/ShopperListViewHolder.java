@@ -58,7 +58,7 @@ public class ShopperListViewHolder extends BaseViewHolder<OrderListBean.Result.D
             send_status.setText("未配送");
         }
         Glide.with(getContext())
-                .load(Constant.IMAGE_URL + "0/" + data.orderGoods.get(0).lGoodsid)
+                .load(Constant.IMAGE_URL + "0/" + data.orderGoods.get(0).lGoodsid+"?date="+System.currentTimeMillis())
                 .placeholder(R.mipmap.home_load_error)
                 .bitmapTransform(new CenterCrop(getContext()))
                 .into(bucket_image);

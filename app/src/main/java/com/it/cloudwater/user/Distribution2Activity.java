@@ -38,6 +38,7 @@ public class Distribution2Activity extends BaseActivity {
     ImageView ivLeft;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    private SmartTabLayout viewPagerTab;
 
     @Override
     protected void processLogic() {
@@ -56,7 +57,7 @@ public class Distribution2Activity extends BaseActivity {
             }
         });
         tab.addView(LayoutInflater.from(this).inflate(R.layout.tab_top_layout, tab, false));
-        SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+        viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
         FragmentPagerItems pages = new FragmentPagerItems(this);
         pages.add(FragmentPagerItem.of("未配送", UnDistributionFragment.class));
         pages.add(FragmentPagerItem.of("已配送", DistributionFragment.class));
@@ -75,5 +76,16 @@ public class Distribution2Activity extends BaseActivity {
         return this;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+//        setListener();
+        FragmentPagerItems pages = new FragmentPagerItems(this);
+        pages.add(FragmentPagerItem.of("未配送", UnDistributionFragment.class));
+        pages.add(FragmentPagerItem.of("已配送", DistributionFragment.class));
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), pages);
+        viewpager.setAdapter(adapter);
+        viewPagerTab.setViewPager(viewpager);
+    }
 }

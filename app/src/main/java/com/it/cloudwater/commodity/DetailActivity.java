@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.constant.Constant;
@@ -245,14 +246,18 @@ public class DetailActivity extends BaseActivity {
                 salesVolume.setText("已售" + nMothnumber);
                 price.setText("￥" + ((double) nPrice / 100));
                 Glide.with(this)
-                        .load(Constant.IMAGE_URL + "0/" + lId)
+                        .load(Constant.IMAGE_URL + "0/" + lId+"?date="+System.currentTimeMillis())
                         .placeholder(R.mipmap.home_load_error)
                         .crossFade()
+                        .signature(new StringSignature("03"))
+                        .skipMemoryCache(true)
                         .into((ImageView) findViewById(R.id.commodity_pictures));
                 Glide.with(this)
-                        .load(Constant.IMAGE_URL + "2/" + lId)
+                        .load(Constant.IMAGE_URL + "2/" + lId+"?date="+System.currentTimeMillis())
                         .placeholder(R.mipmap.home_load_error)
                         .crossFade()
+                        .signature(new StringSignature("04"))
+                        .skipMemoryCache(true)
                         .into((ImageView) findViewById(R.id.commodity_introduction));
             }
         } catch (JSONException e) {

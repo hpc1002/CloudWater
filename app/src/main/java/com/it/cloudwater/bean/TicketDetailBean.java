@@ -12,6 +12,7 @@ public class TicketDetailBean {
 
     public class Result {
         public long lId;
+        public long lGoodsid;
         public long dExpire;
         public int nPrice;
         public String strGoodsName;
@@ -22,8 +23,17 @@ public class TicketDetailBean {
             public long lId;
             public int nCount;
             public int nPrice;
+            public int indexNum;
             public String strRemarks;
             public String strTicketname;
+
+            public void setIndexNum(int indexNum) {
+                this.indexNum = indexNum;
+            }
+
+            public int getIndexNum() {
+                return indexNum;
+            }
         }
     }
 }

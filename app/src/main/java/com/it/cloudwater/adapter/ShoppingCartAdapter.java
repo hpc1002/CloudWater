@@ -113,7 +113,7 @@ public class ShoppingCartAdapter extends BaseAdapter {
         holder.tvCommodityShowNum.setText(shoppingCartBean.nGoodsCount + "");
 //        ImageLoader.getInstance().displayImage(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId, holder.ivShowPic);
         Glide.with(context)
-                .load(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId)
+                .load(Constant.IMAGE_URL + "0/" + shoppingCartBean.lGoodsId+"?date="+System.currentTimeMillis())
                 .placeholder(R.mipmap.home_load_error)
                 .centerCrop()
                 .crossFade()

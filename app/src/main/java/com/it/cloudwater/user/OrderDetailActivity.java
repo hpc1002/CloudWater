@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 import com.it.cloudwater.R;
 import com.it.cloudwater.base.BaseActivity;
 import com.it.cloudwater.bean.OrderDetailBean;
-import com.it.cloudwater.commodity.SubmitOrderActivity;
 import com.it.cloudwater.commodity.XuzhiActivity;
 import com.it.cloudwater.http.CloudApi;
 import com.it.cloudwater.http.MyCallBack;
@@ -77,6 +76,10 @@ public class OrderDetailActivity extends BaseActivity {
     TextView sureSend;
     @BindView(R.id.tv_xuzhi)
     TextView tvXuzhi;
+    @BindView(R.id.tv_deposit_count)
+    TextView tvDepositCount;
+    @BindView(R.id.coupon_price)
+    TextView couponPrice;
     private String orderId;
     private String order_sendState;
     private RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods> orderAdapter;
@@ -109,8 +112,9 @@ public class OrderDetailActivity extends BaseActivity {
                     }
 
                     tvDeposit.setText("￥" + ((double) orderDetailBean.result.nBucketmoney / 100));
+                    tvDepositCount.setText(orderDetailBean.result.nBucketnum + "");
                     orderNumber.setText("订单号:" + orderDetailBean.result.strOrdernum);
-                    couponCount.setText("使用优惠券" + orderDetailBean.result.nCouponPrice + "张");
+                    couponPrice.setText("￥" + ((double) orderDetailBean.result.nCouponPrice / 100));
                     payTotal.setText("￥" + ((double) orderDetailBean.result.nFactPrice / 100));
                     orderListRecycler.setAdapterWithProgress(orderAdapter = new RecyclerArrayAdapter<OrderDetailBean.Result.OrderGoods>(OrderDetailActivity.this) {
                         @Override
@@ -126,6 +130,9 @@ public class OrderDetailActivity extends BaseActivity {
                         String resCode = jsonObject.getString("resCode");
                         if (resCode.equals("0")) {
                             ToastManager.show("已确认配送");
+
+//                            startActivity(new Intent(OrderDetailActivity.this, Distribution2Activity.class));
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -186,4 +193,10 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

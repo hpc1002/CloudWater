@@ -75,7 +75,7 @@ public class BucketActivity extends BaseActivity {
                             nBucketNum = resultObject.getInt("nBucketNum");
                             int nBucketMoney = resultObject.getInt("nBucketMoney");
                             bucketCount.setText(nBucketNum + "");
-                            reBackMoney.setText("￥"+((double) nBucketMoney * nBucketNum / 100));
+                            reBackMoney.setText("￥"+((double) nBucketMoney/ 100));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
